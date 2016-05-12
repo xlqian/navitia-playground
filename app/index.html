@@ -1,16 +1,26 @@
 <html>
 <head>
+    <meta charset="UTF-8">
+    <title>APiHM</title>
     <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="img/favicon.ico">
 </head>
 <body>
     <div> Hello World! Hello Navitia!</div>
 
-    <img src='img/navio_logo.png'>
+    <img src="img/navio_logo.png">
+
     <div id="request">
       <div id="api"></div>
       <div id="token"></div>
-      <div id="route"></div>
-      <div id="parameters">parameters: </div>
+      <div id="route">
+        route:
+        <span><button class="add" onclick="insertRoute(this)">+</button></span>
+      </div>
+      <div id="parameters">
+        parameters:<span id="parameterList"></span>
+        <button class="add" onclick="insertParam()">+</button>
+      </div>
     </div>
     <div id="response">
       <div id="status"></div>
