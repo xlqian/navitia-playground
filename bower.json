@@ -1,0 +1,25 @@
+{
+  "name": "apihm",
+  "description": "ApiHm",
+  "main": "js/request.js",
+  "authors": [
+    "Kisio Digital"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "js-url": "^2.3.0",
+    "sass-core": "^0.1.7",
+    "html5shiv": "^3.7.3",
+    "renderjson": "^1.2.2"
+  },
+  "devDependencies": {}
+}
