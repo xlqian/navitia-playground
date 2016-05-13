@@ -32,7 +32,6 @@ function submit() {
 
   $("#route input.route").each(function(){
     finalUrl += '/' + this.value;
-    return;
   });
 
   finalUrl += '?';
@@ -42,12 +41,11 @@ function submit() {
     if (this.className == 'key') {
       finalUrl += '=';
     }if (this.className == 'value') {
-      finalUrl += '%26'; // &
+      finalUrl += '&';
     }
-    return;
   });
-  window.location = '/?request={0}&token={1}'.format(finalUrl, token);
-  return;
+  window.location =
+    '/?request={0}&token={1}'.format(encodeURIComponent(finalUrl), token);
 }
 
 $(document).ready(function() {
@@ -70,7 +68,6 @@ $(document).ready(function() {
         api = api + '/' + r;
         vxxFound = /^v\d+$/.test(r);
       }
-      return;
     })
     $("#api input.api").attr('value', api);
 
