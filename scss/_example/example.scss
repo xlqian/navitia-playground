@@ -1,8 +1,67 @@
 body {
-    background-color: lightblue;
+    background-color: #F5F5F5;
+    margin: 0em;
+    font-family: sans-serif;
+    font-size: 100%;
+    color: #353535; 
+}
+
+header{
+	width: 100%;
+	background-color: #ffffff;
+	margin: 0em;
 }
 
 img {
     display: block;
-    margin: 0 auto;
+}
+
+h2{
+	margin: 0em;
+	padding-top: 1.25em;
+	width: 100%;
+	text-align: center; 
+	height: 2.5em;
+	background: #F5F5F5;
+}
+
+
+#token, #route, #api, #parameters, #response{
+	margin: 0em;
+	padding: 0em 0em 0em 3em;
+	font-weight: bold;
+	background: #FFFFFF;
+}
+
+.token{
+	width: 22em;
+}
+
+.inputgrp{
+	border-bottom: 0.15em solid #56B6BD;
+	padding: 0.9em 0em 0.9em 0em;
+}
+
+#api input, #token input{
+	border-style: none;
+}
+
+input{
+	height: 6.5ex;
+	width: 12em;
+	border: 0.1em solid #FFF;
+	margin: 1em;
+	padding: 0em 0.2em 0em 0.2em; 
+	color: #353535;
+	border-bottom: 0.2em solid #56B6BD;
+}
+
+button{
+	height: 5ex;
+	width: 5ex;
+	background: #efefef;
+	margin: 0.2ex;
+	border: none;
+	border-radius: 0.25em;
+	color: #353535;
 }
