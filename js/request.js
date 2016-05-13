@@ -58,6 +58,6 @@ $(document).ready(function() {
     }
     
     if ($.url("?token")) {
-        $("input[name=token]").attr('value', token);
+        $("#urlFormToken").attr('value', token);
     }
 });
