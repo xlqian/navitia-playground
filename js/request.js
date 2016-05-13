@@ -26,6 +26,31 @@ function insertParam() {
     $("#parameterList").append(makeParam('', ''));
 }
 
+function submit() {
+  var token = $('#token input.token').val();
+  var finalUrl = $('#api input.api').val();
+
+  $("#route input.route").each(function(){
+    finalUrl += '/' + this.value;
+    return;
+  });
+
+  finalUrl += '?';
+
+  $('#parameters input.key, #parameters input.value').each(function(){
+    finalUrl += this.value;
+    if (this.className == 'key') {
+      finalUrl += '=';
+    }if (this.className == 'value') {
+      finalUrl += '&';
+    }
+    return;
+  });
+  window.location = '/?request={r}&token={t}'.replace('{r}', finalUrl)
+                                             .replace('{t}', token);
+  return;
+}
+
 $(document).ready(function() {
     var token = $.url("?token");
     if (isUndefined(token)) { token = ''; }
