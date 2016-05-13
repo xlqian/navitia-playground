@@ -2,28 +2,28 @@ function removeParent(elt) {
     $(elt).parent().remove();
 }
 
-function createDeleteButton() {
+function makeDeleteButton() {
     return '<button class="delete" onclick="removeParent(this)">-</button>';
 }
 
 function insertRoute(val) {
-    $(val).parent().after(createRoute(''));
+    $(val).parent().after(makeRoute(''));
 }
 
-function createRoute(val) {
+function makeRoute(val) {
     return '<span> <input type="text" class="route" value="' + val + '">' +
-        createDeleteButton() + ' ' +
+        makeDeleteButton() + ' ' +
         '<button class="add" onclick="insertRoute(this)">+</button></span>';
 }
 
-function createParam(key, val) {
+function makeParam(key, val) {
     return ' <span><input type="text" class="key" value="' + key + '" />=' +
         '<input class="value" value="' + val + '" />' +
-        createDeleteButton() + '</span>'
+        makeDeleteButton() + '</span>'
 }
 
 function insertParam() {
-    $("#parameterList").append(createParam('', ''));
+    $("#parameterList").append(makeParam('', ''));
 }
 
 $(document).ready(function() {
@@ -40,7 +40,7 @@ $(document).ready(function() {
     for (var i in route) {
         if (! route[i]) { continue; }
         if (vxxFound) {
-            $("#route").append(createRoute(route[i]));
+            $("#route").append(makeRoute(route[i]));
         } else {
             api = api + '/' + route[i];
             vxxFound = /^v\d+$/.test(route[i]);
@@ -52,7 +52,7 @@ $(document).ready(function() {
     if (! isUndefined(params)) {
         var param_elt = $("#parameterList");
         for (var key in params) {
-            param_elt.append(createParam(key, params[key]));
+            param_elt.append(makeParam(key, params[key]));
         }
     }
 });
