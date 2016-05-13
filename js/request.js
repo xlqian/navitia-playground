@@ -53,6 +53,7 @@ $(document).ready(function() {
     var token = $.url("?token");
     if (isUndefined(token)) { token = ''; }
     $("#token input.token").attr('value', token);
+    $("#urlFormToken").attr('value', token);
 
     var request = $.url("?request");
     if (isUndefined(request)) { return; }
