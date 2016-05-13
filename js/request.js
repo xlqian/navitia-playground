@@ -45,7 +45,8 @@ function submit() {
     }
   });
   window.location =
-    '/?request={0}&token={1}'.format(encodeURIComponent(finalUrl), token);
+    '/?request={0}&token={1}'.format(encodeURIComponent(finalUrl),
+                                     encodeURIComponent(token));
 }
 
 $(document).ready(function() {
