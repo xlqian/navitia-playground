@@ -46,8 +46,7 @@ function submit() {
     }
     return;
   });
-  window.location = '/?request={r}&token={t}'.replace('{r}', finalUrl)
-                                             .replace('{t}', token);
+  window.location = '/?request={0}&token={1}'.format(finalUrl, token);
   return;
 }
 
