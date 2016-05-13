@@ -1,28 +1,28 @@
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APiHM</title>
-  <link href="css/style.css" rel="stylesheet">
-  <link rel="icon" href="img/favicon.ico">
+    <link href="css/style.css" rel="stylesheet"> <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <div> Hello World! Hello Navitia!</div>
+<header>
+  <img src='img/logo_apiihm.png'>
+</header>
+  <H2>Create your request</H2>
 
-  <img src="img/navio_logo.png">
-
-  <div id="request">
-    <div id="api">API: <input type="text" class="api" value=""></div>
-    <div id="token">token: <input type="text" class="token" value=""></div>
-    <div id="route">
-      route:
-      <span><button class="add" onclick="insertRoute(this)">+</button></span>
+    <div id="request">
+      <div id="api"><span class="inputgrp">API <input type="text" class="api" value=""></span></div>
+      <div id="token"><span class="inputgrp">Token <input type="text" class="token" value=""></span></div>
+      <div id="route">
+        Route
+        <span><button class="add" onclick="insertRoute(this)">+</button></span>
+      </div>
     </div>
+
     <div id="parameters">
-      parameters:<span id="parameterList"></span>
+      Parameters<span id="parameterList"></span>
       <button class="add" onclick="insertParam()">+</button>
     </div>
   </div>
+
   <div id="response">
     <div id="status"></div>
     <div id="data">Loading...</div>
