@@ -56,4 +56,8 @@ $(document).ready(function() {
             param_elt.append(makeParam(key, params[key]));
         }
     }
+    
+    if ($.url("?token")) {
+        $("input[name=token]").attr('value', token);
+    }
 });
