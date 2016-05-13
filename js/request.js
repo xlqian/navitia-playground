@@ -30,6 +30,7 @@ $(document).ready(function() {
     var token = $.url("?token");
     if (isUndefined(token)) { token = ''; }
     $("#token input.token").attr('value', token);
+    $("#urlFormToken").attr('value', token);
 
     var request = $.url("?request");
     if (isUndefined(request)) { return; }
@@ -55,9 +56,5 @@ $(document).ready(function() {
         for (var key in params) {
             param_elt.append(makeParam(key, params[key]));
         }
-    }
-    
-    if ($.url("?token")) {
-        $("#urlFormToken").attr('value', token);
     }
 });
