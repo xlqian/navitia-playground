@@ -29,11 +29,12 @@ function insertParam() {
 $(document).ready(function() {
     var token = $.url("?token");
     if (isUndefined(token)) { token = ''; }
-    $("#token").html('token: <input type="text" class="token" value="' + token + '">');
+    $("#token input.token").attr('value', token);
 
     var request = $.url("?request");
+    if (isUndefined(request)) { return; }
 
-    var api = isUndefined(request) ? '' : request.replace(/^(.*\/\/[^\/]*)\/.*$/g, "$1");
+    var api = request.replace(/^(.*\/\/[^\/]*)\/.*$/g, "$1");
     var path = $.url('path', request);
     var route = isUndefined(path) ? [] : $.url('path', request).split('/');
     var vxxFound = false;
@@ -46,7 +47,7 @@ $(document).ready(function() {
             vxxFound = /^v\d+$/.test(route[i]);
         }
     }
-    $("#api").html('API: <input type="text" class="api" value="' + api + '">');
+    $("#api input.api").attr('value', api);
 
     var params = $.url("?", request);
     if (! isUndefined(params)) {
