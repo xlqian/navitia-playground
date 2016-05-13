@@ -60,17 +60,18 @@ $(document).ready(function() {
 
     var api = request.replace(/^(.*\/\/[^\/]*)\/.*$/g, "$1");
     var path = $.url('path', request);
-    var route = isUndefined(path) ? [] : $.url('path', request).split('/');
+    var routes = isUndefined(path) ? [] : $.url('path', request).split('/');
     var vxxFound = false;
-    for (var i in route) {
-        if (! route[i]) { continue; }
-        if (vxxFound) {
-            $("#route").append(makeRoute(route[i]));
-        } else {
-            api = api + '/' + route[i];
-            vxxFound = /^v\d+$/.test(route[i]);
-        }
-    }
+    routes.forEach(function(r) {
+      if (!r) { return; }
+      if (vxxFound) {
+        $("#route").append(makeRoute(r));
+      } else {
+        api = api + '/' + r;
+        vxxFound = /^v\d+$/.test(r);
+      }
+      return;
+    })
     $("#api input.api").attr('value', api);
 
     var params = $.url("?", request);
