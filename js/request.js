@@ -42,7 +42,7 @@ function submit() {
     if (this.className == 'key') {
       finalUrl += '=';
     }if (this.className == 'value') {
-      finalUrl += '&';
+      finalUrl += '%26'; // &
     }
     return;
   });
