@@ -1,23 +1,34 @@
 <html>
 <head>
-    <link href="css/style.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APiHM</title>
+  <link href="css/style.css" rel="stylesheet">
+  <link rel="icon" href="img/favicon.ico">
 </head>
 <body>
-    <div> Hello World! Hello Navitia!</div>
+  <div> Hello World! Hello Navitia!</div>
 
-    <img src='img/navio_logo.png'>
-    <div id="request">
-      <div id="api"></div>
-      <div id="token"></div>
-      <div id="route"></div>
-      <div id="parameters">parameters: </div>
-    </div>
-    <div id="response">
-      <div id="status"></div>
-      <div id="data">Loading...</div>
-    </div>
+  <img src="img/navio_logo.png">
 
-    <script src="lib/lib.min.js"></script>
-    <script src="js/app.min.js"></script>
+  <div id="request">
+    <div id="api">API: <input type="text" class="api" value=""></div>
+    <div id="token">token: <input type="text" class="token" value=""></div>
+    <div id="route">
+      route:
+      <span><button class="add" onclick="insertRoute(this)">+</button></span>
+    </div>
+    <div id="parameters">
+      parameters:<span id="parameterList"></span>
+      <button class="add" onclick="insertParam()">+</button>
+    </div>
+  </div>
+  <div id="response">
+    <div id="status"></div>
+    <div id="data">Loading...</div>
+  </div>
+
+  <script src="lib/lib.min.js"></script>
+  <script src="js/app.min.js"></script>
 </body>
 </html>
