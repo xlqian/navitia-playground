@@ -1,7 +1,8 @@
 body {
     background-color: #F5F5F5;
     margin: 0em;
-    font-family: arial;
+    font-family: sans-serif;
+    font-size: 100%;
     color: #353535; 
 }
 
@@ -15,7 +16,7 @@ img {
     display: block;
 }
 
-H2{
+h2{
 	margin: 0em;
 	padding-top: 1.25em;
 	width: 100%;
@@ -29,7 +30,6 @@ H2{
 	margin: 0em;
 	padding: 0em 0em 0em 3em;
 	font-weight: bold;
-	font-size: 0.75em;
 	background: #FFFFFF;
 }
 
@@ -38,10 +38,13 @@ H2{
 }
 
 .inputgrp{
-		border-bottom: 0.2em solid #56B6BD;
-		padding: 0.9em 0em 0.9em 0em;
+	border-bottom: 0.15em solid #56B6BD;
+	padding: 0.9em 0em 0.9em 0em;
 }
 
+#api input, #token input{
+	border-style: none;
+}
 
 input{
 	height: 6.5ex;
@@ -54,11 +57,11 @@ input{
 }
 
 button{
-	height: 7ex;
-	width: 7ex;
+	height: 5ex;
+	width: 5ex;
 	background: #efefef;
 	margin: 0.2ex;
 	border: none;
-	border-radius: 5px;
+	border-radius: 0.25em;
 	color: #353535;
 }
