@@ -11,14 +11,14 @@ function insertRoute(val) {
 }
 
 function makeRoute(val) {
-    return '<span> <input type="text" class="route" value="' + val + '" onkeyup="disabledUrl()" >' +
+    return '<span> <input type="text" class="route" value="' + val + '" onkeyup="updateUrl()" >' +
         makeDeleteButton() + ' ' +
         '<button class="add" onclick="insertRoute(this)">+</button></span>';
 }
 
 function makeParam(key, val) {
-    return ' <span><input type="text" class="key" value="' + key + '" onkeyup="disabledUrl()" />=' +
-        '<input class="value" value="' + val + '" onkeyup="disabledUrl()" />' +
+    return ' <span><input type="text" class="key" value="' + key + '" onkeyup="updateUrl()" />=' +
+        '<input class="value" value="' + val + '" onkeyup="updateUrl()" />' +
         makeDeleteButton() + '</span>'
 }
 
@@ -53,9 +53,9 @@ function submit() {
                                     encodeURIComponent(token));
 }
 
-function disabledUrl() {
+function updateUrl() {
     var f = finalUrl();
-    $('#disabledUrl').html(finalUrl);
+    $('#requestUrl').html(finalUrl);
 }
 
 $(document).ready(function() {
@@ -89,5 +89,5 @@ $(document).ready(function() {
             param_elt.append(makeParam(key, params[key]));
         }
     }
-    $('#disabledUrl').html(request);
+    $('#requestUrl').html(request);
 });
