@@ -3,8 +3,9 @@ function setStatus(xhr) {
 }
 
 $(document).ready(function() {
-    var request = $.url("?request");
-    var token = $.url("?token");
+    var search = new URI(window.location).search(true);
+    var request = search["request"];
+    var token = search["token"];
     if (isUndefined(request)) {
         $("#data").html("No request");
         return;
