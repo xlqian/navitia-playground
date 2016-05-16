@@ -11,14 +11,14 @@ function insertRoute(val) {
 }
 
 function makeRoute(val) {
-    return '<span> <input type="text" class="route" value="' + val + '" onkeyup="submit()" >' +
+    return '<span> <input type="text" class="route" value="' + val + '" onkeyup="disabledUrl()" >' +
         makeDeleteButton() + ' ' +
         '<button class="add" onclick="insertRoute(this)">+</button></span>';
 }
 
 function makeParam(key, val) {
-    return ' <span><input type="text" class="key" value="' + key + '" onkeyup="submit()" />=' +
-        '<input class="value" value="' + val + '" onkeyup="submit()" />' +
+    return ' <span><input type="text" class="key" value="' + key + '" onkeyup="disabledUrl()" />=' +
+        '<input class="value" value="' + val + '" onkeyup="disabledUrl()" />' +
         makeDeleteButton() + '</span>'
 }
 
@@ -26,27 +26,37 @@ function insertParam() {
     $("#parameterList").append(makeParam('', ''));
 }
 
+function finalUrl() {
+    var finalUrl = $('#api input.api').val();
+  
+    $("#route input.route").each(function(){
+        finalUrl += '/' + this.value;
+    });
+  
+    finalUrl += '?';
+  
+    $('#parameters input.key, #parameters input.value').each(function(){
+        finalUrl += this.value;
+        if (this.className == 'key') {
+            finalUrl += '=';
+        } if (this.className == 'value') {
+            finalUrl += '&';
+        }
+    });
+    return finalUrl;
+}
+
 function submit() {
   var token = $('#token input.token').val();
-  var finalUrl = $('#api input.api').val();
-
-  $("#route input.route").each(function(){
-    finalUrl += '/' + this.value;
-  });
-
-  finalUrl += '?';
-
-  $('#parameters input.key, #parameters input.value').each(function(){
-    finalUrl += this.value;
-    if (this.className == 'key') {
-      finalUrl += '=';
-    }if (this.className == 'value') {
-      finalUrl += '&';
-    }
-  });
+    var f = finalUrl();
   window.location =
-    '?request={0}&token={1}'.format(encodeURIComponent(finalUrl),
+    '?request={0}&token={1}'.format(encodeURIComponent(f),
                                      encodeURIComponent(token));
+}
+
+function disabledUrl() {
+    var f = finalUrl();
+    $('#disabledUrl').val(finalUrl);
 }
 
 $(document).ready(function() {
