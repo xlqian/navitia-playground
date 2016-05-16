@@ -11,3 +11,15 @@ String.prototype.format = String.prototype.f = function() {
     }
     return s;
 };
+
+String.prototype.encodeURI = function() {
+    var s = this;
+
+    return encodeURIComponent(s);
+};
+
+String.prototype.decodeURI = function() {
+    var s = this;
+
+    return decodeURIComponent(s);
+};
