@@ -30,13 +30,13 @@ function finalUrl() {
     var finalUrl = $('#api input.api').val();
   
     $("#route input.route").each(function(){
-        finalUrl += '/' + encodeURIComponent(this.value);
+        finalUrl += '/' + this.value.encodeURI();
     });
   
     finalUrl += '?';
   
     $('#parameters input.key, #parameters input.value').each(function(){
-        finalUrl += encodeURIComponent(this.value);
+        finalUrl += this.value.encodeURI();
         if (this.className == 'key') {
             finalUrl += '=';
         } if (this.className == 'value') {
@@ -49,8 +49,7 @@ function finalUrl() {
 function submit() {
     var token = $('#token input.token').val();
     var f = finalUrl();
-    window.location = '?request={0}&token={1}'.format(encodeURIComponent(f),
-                                    encodeURIComponent(token));
+    window.location = '?request={0}&token={1}'.format(f.encodeURI(), token.encodeURI());
 }
 
 function updateUrl() {
@@ -65,7 +64,7 @@ $(document).ready(function() {
     $("#urlFormToken").attr('value', token);
 
     var request = $.url("?request");
-    console.log(request);
+
     if (isUndefined(request)) { return; }
 
     var api = request.replace(/^(.*\/\/[^\/]*)\/.*$/g, "$1");
@@ -77,20 +76,20 @@ $(document).ready(function() {
     routes.forEach(function(r) {
       if (!r) { return; }
       if (vxxFound) {
-        $("#route").append(makeRoute(decodeURIComponent(r)));
+        $("#route").append(makeRoute(r.decodeURI()));
       } else {
-        api = api + '/' + decodeURIComponent(r);
+        api = api + '/' + r.decodeURI();
         vxxFound = /^v\d+$/.test(r);
       }
     })
     $("#api input.api").attr('value', api);
 
     var params = $.url("?", request);
-    console.log(params);
+
     if (! isUndefined(params)) {
         var param_elt = $("#parameterList");
         for (var key in params) {
-            param_elt.append(makeParam(decodeURIComponent(key), params[key]));
+            param_elt.append(makeParam(key.decodeURI(), params[key]));
         }
     }
     $('#requestUrl').html(request);
