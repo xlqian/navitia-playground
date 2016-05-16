@@ -30,13 +30,13 @@ function finalUrl() {
     var finalUrl = $('#api input.api').val();
   
     $("#route input.route").each(function(){
-        finalUrl += '/' + this.value;
+        finalUrl += '/' + encodeURIComponent(this.value);
     });
   
     finalUrl += '?';
   
     $('#parameters input.key, #parameters input.value').each(function(){
-        finalUrl += this.value;
+        finalUrl += encodeURIComponent(this.value);
         if (this.className == 'key') {
             finalUrl += '=';
         } if (this.className == 'value') {
@@ -65,28 +65,32 @@ $(document).ready(function() {
     $("#urlFormToken").attr('value', token);
 
     var request = $.url("?request");
+    console.log(request);
     if (isUndefined(request)) { return; }
 
     var api = request.replace(/^(.*\/\/[^\/]*)\/.*$/g, "$1");
     var path = $.url('path', request);
+    
     var routes = isUndefined(path) ? [] : $.url('path', request).split('/');
+    
     var vxxFound = false;
     routes.forEach(function(r) {
       if (!r) { return; }
       if (vxxFound) {
-        $("#route").append(makeRoute(r));
+        $("#route").append(makeRoute(decodeURIComponent(r)));
       } else {
-        api = api + '/' + r;
+        api = api + '/' + decodeURIComponent(r);
         vxxFound = /^v\d+$/.test(r);
       }
     })
     $("#api input.api").attr('value', api);
 
     var params = $.url("?", request);
+    console.log(params);
     if (! isUndefined(params)) {
         var param_elt = $("#parameterList");
         for (var key in params) {
-            param_elt.append(makeParam(key, params[key]));
+            param_elt.append(makeParam(decodeURIComponent(key), params[key]));
         }
     }
     $('#requestUrl').html(request);
