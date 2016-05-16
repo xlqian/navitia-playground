@@ -39,7 +39,8 @@ function finalUrl() {
         finalUrl += this.value.encodeURI();
         if (this.className == 'key') {
             finalUrl += '=';
-        } if (this.className == 'value') {
+        } 
+        if (this.className == 'value') {
             finalUrl += '&';
         }
     });
