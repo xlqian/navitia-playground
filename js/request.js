@@ -47,16 +47,15 @@ function finalUrl() {
 }
 
 function submit() {
-  var token = $('#token input.token').val();
+    var token = $('#token input.token').val();
     var f = finalUrl();
-  window.location =
-    '?request={0}&token={1}'.format(encodeURIComponent(f),
-                                     encodeURIComponent(token));
+    window.location = '?request={0}&token={1}'.format(encodeURIComponent(f),
+                                    encodeURIComponent(token));
 }
 
 function disabledUrl() {
     var f = finalUrl();
-    $('#disabledUrl').val(finalUrl);
+    $('#disabledUrl').html(finalUrl);
 }
 
 $(document).ready(function() {
@@ -90,5 +89,5 @@ $(document).ready(function() {
             param_elt.append(makeParam(key, params[key]));
         }
     }
-    $('#disabledUrl').val(request);
+    $('#disabledUrl').html(request);
 });
