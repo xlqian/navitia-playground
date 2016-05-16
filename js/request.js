@@ -3,7 +3,7 @@ function removeParent(elt) {
 }
 
 function makeDeleteButton() {
-    return '<button class="delete" onclick="removeParent(this)">-</button>';
+    return '<button class="delete" onclick="removeParent(this), updateUrl()">-</button>';
 }
 
 function insertRoute(val) {
