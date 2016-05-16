@@ -47,7 +47,6 @@ function submit() {
   window.location =
     '?request={0}&token={1}'.format(encodeURIComponent(finalUrl),
                                      encodeURIComponent(token));
-    $('#disabledUrl').val(finalUrl);
 }
 
 $(document).ready(function() {
@@ -81,4 +80,5 @@ $(document).ready(function() {
             param_elt.append(makeParam(key, params[key]));
         }
     }
+    $('#disabledUrl').val(request);
 });
