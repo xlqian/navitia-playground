@@ -58,22 +58,24 @@ function updateUrl() {
 }
 
 $(document).ready(function() {
-    var token = $.url("?token");
+    var search = new URI(window.location).search(true);
+    var token = search['token'];
     if (isUndefined(token)) { token = ''; }
     $("#token input.token").attr('value', token);
     $("#urlFormToken").attr('value', token);
 
-    var request = $.url("?request");
-
+    var request = search['request'];
     if (isUndefined(request)) { return; }
 
-    var api = request.replace(/^(.*\/\/[^\/]*)\/.*$/g, "$1");
-    var path = $.url('path', request);
-    
-    var routes = isUndefined(path) ? [] : $.url('path', request).split('/');
-    
+    var req_uri = new URI(request);
+    var origin = req_uri.origin();
+    var paths = req_uri.path().split('/');
+    // The first element after a split is an empty string("")
+    if (paths.length == 1) { return; }
+    var api = origin;
+
     var vxxFound = false;
-    routes.forEach(function(r) {
+    paths.slice(1).forEach(function(r) {
       if (!r) { return; }
       if (vxxFound) {
         $("#route").append(makeRoute(r.decodeURI()));
@@ -84,12 +86,20 @@ $(document).ready(function() {
     })
     $("#api input.api").attr('value', api);
 
-    var params = $.url("?", request);
+    var params = req_uri.search(true);
 
     if (! isUndefined(params)) {
         var param_elt = $("#parameterList");
         for (var key in params) {
+          var value = params[key];
+          // a list of params, ex.: forbidded_uris[]
+          if (Array.isArray(value)) {
+              value.forEach(function(v){
+                param_elt.append(makeParam(key.decodeURI(), v.decodeURI()));
+              });
+          } else {
             param_elt.append(makeParam(key.decodeURI(), params[key]));
+          }
         }
     }
     $('#requestUrl').html(request);

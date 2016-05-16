@@ -46,7 +46,7 @@ gulp.task('dev:bower', function() {
     .pipe(gulpFilter([
       '**/dist/jquery.js',
       '**/renderjson.js',
-      '**/js-url/url.js',
+      '**/urijs/src/URI.js',
       '!**/*.min.js']))
     .pipe(concat('lib.js'))
     .pipe(rename('lib.min.js'))
