@@ -12,7 +12,7 @@
   <H2>Create your request</H2>
 
     <div id="request">
-      <div id="api"><span class="inputgrp">API <input type="text" class="api" value=""></span></div>
+      <div id="api"><span class="inputgrp">API <input type="text" class="api" value="" onkeyup="submit()"></span></div>
       <div id="token"><span class="inputgrp">Token <input type="text" class="token" value=""></span></div>
       <div id="route">
         Route
@@ -28,7 +28,9 @@
       <button class="Submit" onclick="submit()">Submit</button>
     </div>
   </div>
-
+    <div id='urlDynamic'>
+      url dynamic: <input type="text" name='request' id='disabledUrl' readonly="readonly">
+    </div>
   <div id="response">
     <div id="status"></div>
     <div id="data">Loading...</div>

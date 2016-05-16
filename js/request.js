@@ -11,14 +11,14 @@ function insertRoute(val) {
 }
 
 function makeRoute(val) {
-    return '<span> <input type="text" class="route" value="' + val + '">' +
+    return '<span> <input type="text" class="route" value="' + val + '" onkeyup="submit()" >' +
         makeDeleteButton() + ' ' +
         '<button class="add" onclick="insertRoute(this)">+</button></span>';
 }
 
 function makeParam(key, val) {
-    return ' <span><input type="text" class="key" value="' + key + '" />=' +
-        '<input class="value" value="' + val + '" />' +
+    return ' <span><input type="text" class="key" value="' + key + '" onkeyup="submit()" />=' +
+        '<input class="value" value="' + val + '" onkeyup="submit()" />' +
         makeDeleteButton() + '</span>'
 }
 
@@ -47,6 +47,7 @@ function submit() {
   window.location =
     '?request={0}&token={1}'.format(encodeURIComponent(finalUrl),
                                      encodeURIComponent(token));
+    $('#disabledUrl').val(finalUrl);
 }
 
 $(document).ready(function() {
