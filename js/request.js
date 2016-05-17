@@ -26,24 +26,24 @@ function insertParam() {
     $("#parameterList").append(makeParam('', ''));
 }
 
-function getFocusedElemValue(elemToTest, focusedElem) {
+function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
     if (focusedElem == elemToTest) {
-        return '<span class="focus_params" style="color:red;font-weight:bold">{0}</span>'
-            .format(elemToTest.value);
+        return '<span class="focus_params" style="color:red">{0}</span>'
+            .format(noEncoding ? elemToTest.value : elemToTest.value.encodeURI());
     }
-    return elemToTest.value;
+    return noEncoding ? elemToTest.value : elemToTest.value.encodeURI();
 }
 
 function finalUrl(focusedElem) {
-    var finalUrl = getFocusedElemValue($('#api input.api')[0], focusedElem);
+    var finalUrl = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
     $("#route input.route").each(function(){
-        finalUrl += '/' + getFocusedElemValue(this, focusedElem).encodeURI();
+        finalUrl += '/' + getFocusedElemValue(this, focusedElem);
     });
 
     finalUrl += '?';
 
     $('#parameters input.key, #parameters input.value').each(function(){
-        finalUrl += getFocusedElemValue(this, focusedElem).encodeURI();
+        finalUrl += getFocusedElemValue(this, focusedElem);
         if (this.className == 'key') {
             finalUrl += '=';
         }
@@ -62,7 +62,7 @@ function submit() {
 
 function updateUrl(focusedElem) {
     var f = finalUrl(focusedElem);
-    $('#urlDynamic span').html(f.decodeURI());
+    $('#urlDynamic span').html(f);
 }
 
 $(document).ready(function() {
@@ -110,5 +110,5 @@ $(document).ready(function() {
           }
         }
     }
-    $('#urlDynamic span').html(request.decodeURI());
+    $('#urlDynamic span').html(request);
 });
