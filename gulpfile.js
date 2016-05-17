@@ -61,6 +61,7 @@ function compile_vendor(env){
         return bower()
         .pipe(gulpFilter([
             '**/dist/jquery.js',
+            '**/jquery-ui.js',
             '**/renderjson.js',
             '**/urijs/src/URI.js',
             '!**/*.min.js']))

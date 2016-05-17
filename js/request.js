@@ -17,9 +17,15 @@ function makeRoute(val) {
 }
 
 function makeParam(key, val) {
-    return ' <span><input type="text" class="key" value="' + key + '" onfocus="updateUrl(this)" onkeyup="updateUrl(this)" />=' +
-        '<input class="value" value="' + val + '" onfocus="updateUrl(this)" onkeyup="updateUrl(this)" />' +
-        makeDeleteButton() + '</span>'
+    var res = $('<span class="param" />');
+    res.append(' ');
+    res.append($('<input type="text" class="key"  onfocus="updateUrl(this)" onkeyup="updateUrl(this)" />').val(key));
+    res.append('=');
+    var valueElt = $('<input type="text" class="value"  onfocus="updateUrl(this)" onkeyup="updateUrl(this)" />').val(val);
+    autocomplete(valueElt);
+    res.append(valueElt);
+    res.append(makeDeleteButton());
+    return res;
 }
 
 function insertParam() {
@@ -44,10 +50,10 @@ function finalUrl(focusedElem) {
 
     $('#parameters input.key, #parameters input.value').each(function(){
         finalUrl += getFocusedElemValue(this, focusedElem);
-        if (this.className == 'key') {
+        if ($(this).hasClass('key')) {
             finalUrl += '=';
         }
-        if (this.className == 'value') {
+        if ($(this).hasClass('value')) {
             finalUrl += '&';
         }
     });
@@ -63,6 +69,52 @@ function submit() {
 function updateUrl(focusedElem) {
     var f = finalUrl(focusedElem);
     $('#urlDynamic span').html(f);
+}
+
+function getCoverage() {
+    var prevIsCoverage = false;
+    var coverage = null;
+    $("#route input.route").each(function() {
+        if (prevIsCoverage) {
+            coverage = this.value.encodeURI();
+        }
+        prevIsCoverage = this.value == "coverage";
+    });
+    return coverage;
+}
+
+function autocomplete(elt) {
+    $(elt).autocomplete({
+        source: function(request, response) {
+            var keyValue = elt.parent().children(".key").val();
+            if ($.inArray(keyValue, ['from', 'to']) == -1) {
+                response([]);
+                return;
+            }
+            var token = $('#token input.token').val();
+            var url = $('#api input.api').val();
+            var cov = getCoverage();
+            if (cov !== null) {
+                url = '{0}/coverage/{1}'.format(url, cov);
+            }
+            $.ajax({
+                url: '{0}/places?q={1}'.format(url, request.term.encodeURI()),
+                headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
+                success: function(data) {
+                    var res = [];
+                    if ('places' in data) {
+                        data['places'].forEach(function(place) {
+                            res.push({ value: place.id, label: place.name });
+                        });
+                    }
+                    response(res);
+                },
+                error: function() {
+                    response([]);
+                }
+            });
+        },
+    });
 }
 
 $(document).ready(function() {

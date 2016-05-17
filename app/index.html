@@ -4,22 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/style.css" rel="stylesheet">
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-  <link rel="icon" href="img/favicon.ico" />
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+  <link rel="icon" href="img/favicon.ico">
 </head>
 <body>
-<header>
-  <img src='img/logo_apiihm.png'>
-</header>
+  <header>
+    <img src="img/logo_apiihm.png">
+  </header>
   <H2>Create your request</H2>
 
-    <div id="request">
-      <div id="api"><span class="inputgrp">API <input type="text" class="api" value="" onfocus="updateUrl(this)" onkeyup="updateUrl(this)"></span></div>
-      <div id="token"><span class="inputgrp">Token <input type="text" class="token" value=""></span></div>
-      <div id="route">
-        Route
-        <span><button class="add" onclick="insertRoute(this)">+</button></span>
-      </div>
+  <div id="request">
+    <div id="api"><span class="inputgrp">API <input type="text" class="api" value="" onfocus="updateUrl(this)" onkeyup="updateUrl(this)"></span></div>
+    <div id="token"><span class="inputgrp">Token <input type="text" class="token" value=""></span></div>
+    <div id="route">
+      Route
+      <span><button class="add" onclick="insertRoute(this)">+</button></span>
     </div>
 
     <div id="parameters">
@@ -30,19 +30,19 @@
       <button class="Submit" onclick="submit()">Submit</button>
     </div>
   </div>
-    <div id='urlDynamic'>
-      url dynamic: <span type="text" name='request' id='requestUrl' />
-    </div>
+  <div id="urlDynamic">
+    url dynamic: <span type="text" name="request" id="requestUrl" />
+  </div>
   <div id="response">
     <div id="status"></div>
     <div id="data">Loading...</div>
   </div>
-  <div id='urlForm'>
-    <form action='' method='get'>
-        url: <input type="text" name='request'>
-        token: <input type="text" name='token' id='urlFormToken'>
-        <button>Submit</button>
-     </form>
+  <div id="urlForm">
+    <form action="" method="get">
+      url: <input type="text" name="request">
+      token: <input type="text" name="token" id="urlFormToken">
+      <button>Submit</button>
+    </form>
   </div>
   <script src="lib/lib.min.js"></script>
   <script src="js/app.min.js"></script>
