@@ -3,7 +3,7 @@ function removeParent(elt) {
 }
 
 function makeDeleteButton() {
-    return '<button class="delete" onclick="removeParent(this), updateUrl()">-</button>';
+    return '<button class="delete" onclick="removeParent(this), updateUrl(this)">-</button>';
 }
 
 function insertRoute(val) {
@@ -11,14 +11,14 @@ function insertRoute(val) {
 }
 
 function makeRoute(val) {
-    return '<span> <input type="text" class="route" value="' + val + '" onkeyup="updateUrl()" >' +
+    return '<span> <input type="text" class="route" value="' + val + '" onfocus="updateUrl(this)" onkeyup="updateUrl(this)" >' +
         makeDeleteButton() + ' ' +
         '<button class="add" onclick="insertRoute(this)">+</button></span>';
 }
 
 function makeParam(key, val) {
-    return ' <span><input type="text" class="key" value="' + key + '" onkeyup="updateUrl()" />=' +
-        '<input class="value" value="' + val + '" onkeyup="updateUrl()" />' +
+    return ' <span><input type="text" class="key" value="' + key + '" onfocus="updateUrl(this)" onkeyup="updateUrl(this)" />=' +
+        '<input class="value" value="' + val + '" onfocus="updateUrl(this)" onkeyup="updateUrl(this)" />' +
         makeDeleteButton() + '</span>'
 }
 
@@ -26,20 +26,27 @@ function insertParam() {
     $("#parameterList").append(makeParam('', ''));
 }
 
-function finalUrl() {
-    var finalUrl = $('#api input.api').val();
-  
+function getFocusedElemValue(elemToTest, focusedElem) {
+    if (focusedElem == elemToTest) {
+        return '<span class="focus_params" style="color:red;font-weight:bold">{0}</span>'
+            .format(elemToTest.value);
+    }
+    return elemToTest.value;
+}
+
+function finalUrl(focusedElem) {
+    var finalUrl = getFocusedElemValue($('#api input.api')[0], focusedElem);
     $("#route input.route").each(function(){
-        finalUrl += '/' + this.value.encodeURI();
+        finalUrl += '/' + getFocusedElemValue(this, focusedElem).encodeURI();
     });
-  
+
     finalUrl += '?';
-  
+
     $('#parameters input.key, #parameters input.value').each(function(){
-        finalUrl += this.value.encodeURI();
+        finalUrl += getFocusedElemValue(this, focusedElem).encodeURI();
         if (this.className == 'key') {
             finalUrl += '=';
-        } 
+        }
         if (this.className == 'value') {
             finalUrl += '&';
         }
@@ -49,13 +56,13 @@ function finalUrl() {
 
 function submit() {
     var token = $('#token input.token').val();
-    var f = finalUrl();
+    var f = finalUrl(); // finalUrl can be called without any args
     window.location = '?request={0}&token={1}'.format(f.encodeURI(), token.encodeURI());
 }
 
-function updateUrl() {
-    var f = finalUrl();
-    $('#requestUrl').html(finalUrl);
+function updateUrl(focusedElem) {
+    var f = finalUrl(focusedElem);
+    $('#urlDynamic span').html(f.decodeURI());
 }
 
 $(document).ready(function() {
@@ -103,5 +110,5 @@ $(document).ready(function() {
           }
         }
     }
-    $('#requestUrl').html(request);
+    $('#urlDynamic span').html(request.decodeURI());
 });
