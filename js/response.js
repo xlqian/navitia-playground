@@ -25,14 +25,10 @@ function defaultSummary(json) {
 function responseSummary(json) {
     var key = ''
     var objs = [];
+    var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes'];
     for (var k in json) {
-        if ($.isArray(json[k])
-            && k != 'disruptions'
-            && k != 'links'
-            && k != 'feed_publishers'
-            && k != 'tickets'
-            && k != 'exceptions'
-            && k != 'notes') {
+        if ($.isArray(json[k]) &&
+            $.inArray(k, notCollectionKeys) == -1) {
             objs = json[k];
             key = k;
         }
