@@ -25,7 +25,7 @@ module.exports = {
       server: {
         baseDir: [prod, build, src]
       },
-      port: 80,
+      port: 4243,
       files: [
         prod + '/css/*.css',
         prod + '/js/*.js',
