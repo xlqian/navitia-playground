@@ -10,7 +10,25 @@ function insertRoute(val) {
 }
 
 function makeRoute(val) {
-    return $('<span/>')
+    if (currentRouteValue == 'coverage') {
+        var res = $('<span/>')
+        .addClass('toDelete')
+        .addClass('routeElt')
+        .append(' ')
+        .append($('<span/>')
+                .addClass('pathElt')
+                .append($('<input/>')
+                        .attr({id: 'inputCov',
+			       type: 'text',
+                               onfocus: 'updateUrl(this)',
+                               onkeyup: 'updateUrl(this)'})
+                        .addClass('route')
+                .append(makeDeleteButton()))
+        .append('<button class="add" onclick="insertRoute(this)">+</button>')        
+	listCoverage(val);
+        return res;
+    } else {
+        return $('<span/>')
         .addClass('toDelete')
         .addClass('routeElt')
         .append(' ')
@@ -24,6 +42,7 @@ function makeRoute(val) {
                         .val(val))
                 .append(makeDeleteButton()))
         .append('<button class="add" onclick="insertRoute(this)">+</button>')
+    }
 }
 
 function makeParam(key, val) {
@@ -56,6 +75,33 @@ function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
             .format(noEncoding ? elemToTest.value : elemToTest.value.encodeURI());
     }
     return noEncoding ? elemToTest.value : elemToTest.value.encodeURI();
+}
+
+function listCoverage(val) {
+    var search = new URI(window.location).search(true);
+    var api = $("#api input.api").attr('value');
+    var request =  api + "/coverage";
+    var token = search["token"];
+    var res = [];
+
+    $.ajax({
+        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token + ":" ) },
+        dataType: "json",
+        url: request,
+        success: function(data) {
+                for (var dict in data) {
+                    for (var cov = 0; cov < data[dict].length; cov++) {
+                        res.push(data[dict][cov].id);
+                    }
+                    if (val) { $("#inputCov").val(val); }
+                    var auto = $("#inputCov").autocomplete({source: res, minLength: 0, scroll: true});
+                    auto.focus(function() {
+                        auto.autocomplete("search", '');
+                    });
+                    return auto;
+                }
+            }
+    });
 }
 
 function finalUrl(focusedElem) {
@@ -156,13 +202,13 @@ $(document).ready(function() {
     paths.slice(1).forEach(function(r) {
       if (!r) { return; }
       if (vxxFound) {
-        $("#route").append(makeRoute(r.decodeURI()));
+        $("#route").append(makeRoute(r.decodeURI(), currentRouteValue)));
       } else {
         api = api + '/' + r.decodeURI();
         vxxFound = /^v\d+$/.test(r);
+    	$("#api input.api").attr('value', api);
       }
     })
-    $("#api input.api").attr('value', api);
 
     var params = req_uri.search(true);
 
