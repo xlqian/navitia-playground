@@ -19,9 +19,15 @@ function makeRoute(val) {
 function makeParam(key, val) {
     var res = $('<span class="param" />');
     res.append(' ');
-    res.append($('<input type="text" class="key"  onfocus="updateUrl(this)" onkeyup="updateUrl(this)" />').val(key));
+
+    var attr = {type: 'text', onfocus: 'updateUrl(this)', onkeyup: '"updateUrl(this)"'};
+
+    var intputKeyAttr = Object.assign(attr, {class: 'key', value: key});
+    res.append($('<input/>', intputKeyAttr));
     res.append('=');
-    var valueElt = $('<input type="text" class="value"  onfocus="updateUrl(this)" onkeyup="updateUrl(this)" />').val(val);
+    var inputValAttr = Object.assign(attr, {class: 'value', value: val});
+    var valueElt = $('<input/>', inputValAttr);
+
     autocomplete(valueElt);
     res.append(valueElt);
     res.append(makeDeleteButton());
