@@ -46,32 +46,54 @@ gulp.task('prod:sass', compile_sass('prod'));
 function compile_js(env) {
     return function () {
         return gulp.src('js/**/*.js')
-        .pipe(concat('app.js'))
+        .pipe(concat('app.min.js'))
         .pipe(gulpif(isProd(env), uglify()))
-        .pipe(rename('app.min.js'))
         .pipe(gulp.dest(config[env] + '/js'));
     }
 }
 gulp.task('dev:scripts', compile_js('dev'));
 gulp.task('prod:scripts', compile_js('prod'));
 
-// Concatenate & Minify vendor lib
-function compile_vendor(env){
+// Concatenate & Minify vendor js
+function compile_vendor_js(env){
     return function(){
         return bower()
         .pipe(gulpFilter([
             '**/dist/jquery.js',
+            '**/jquery-ui.js',
             '**/renderjson.js',
             '**/urijs/src/URI.js',
             '!**/*.min.js']))
-            .pipe(concat('lib.js'))
+            .pipe(concat('lib.min.js'))
             .pipe(gulpif(isProd(env),uglify()))
-            .pipe(rename('lib.min.js'))
             .pipe(gulp.dest(config[env] + '/lib'));
     }
 }
-gulp.task('dev:bower', compile_vendor('dev'));
-gulp.task('prod:bower', compile_vendor('prod'));
+gulp.task('dev:bowerJs', compile_vendor_js('dev'));
+gulp.task('prod:bowerJs', compile_vendor_js('prod'));
+
+// Concatenate & Minify vendor css
+function compile_vendor_css(env){
+    return function(){
+        return bower()
+        .pipe(gulpFilter([
+            '**/jquery-ui/themes/smoothness/jquery-ui.css']))
+            .pipe(concat('vendor.min.css'))
+            .pipe(gulpif(isProd(env),cleanCSS()))
+            .pipe(gulp.dest(config[env] + '/css'));
+    }
+}
+gulp.task('dev:bowerCss', compile_vendor_css('dev'));
+gulp.task('prod:bowerCss', compile_vendor_css('prod'));
+
+
+gulp.task('dev:bower', function(cb){
+    runSequence(['dev:bowerJs', 'dev:bowerCss'], cb);
+});
+
+gulp.task('prod:bower', function(cb){
+    runSequence(['prod:bowerJs', 'prod:bowerCss'], cb);
+});
 
 // Compress img
 function compress_img(env) {

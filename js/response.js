@@ -83,7 +83,7 @@ $(document).ready(function() {
     }
     renderjson.set_show_to_level(1);
     $.ajax({
-        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token + ":" ) },
+        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
         url: request,
         dataType: "json",
     }).then(
