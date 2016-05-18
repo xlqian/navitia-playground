@@ -78,15 +78,7 @@ function updateUrl(focusedElem) {
 }
 
 function getCoverage() {
-    var prevIsCoverage = false;
-    var coverage = null;
-    $("#route input.route").each(function() {
-        if (prevIsCoverage) {
-            coverage = this.value.encodeURI();
-        }
-        prevIsCoverage = this.value == "coverage";
-    });
-    return coverage;
+    return $('.route', $('#route input.route[value="coverage"]').parent().next()).val();
 }
 
 function autocomplete(elt) {
