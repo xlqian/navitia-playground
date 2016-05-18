@@ -3,7 +3,7 @@ function setStatus(xhr) {
 }
 
 function defaultSummary(json) {
-    var result = $('<span/>');
+    var result = $('<span class="summary_text" />');
     if ('label' in json) {
         result.html(json['label']);
     } else if ('code' in json) {

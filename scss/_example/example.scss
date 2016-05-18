@@ -1,9 +1,9 @@
 body {
     background-color: #F5F5F5;
     margin: 0em;
-    font-family: sans-serif;
+    font-family: 'OpenSans', sans-serif;
     font-size: 100%;
-    color: #353535; 
+    color: #4e4e4e;
 }
 
 header{
@@ -17,51 +17,96 @@ img {
 }
 
 h2{
-	margin: 0em;
-	padding-top: 1.25em;
-	width: 100%;
-	text-align: center; 
-	height: 2.5em;
-	background: #F5F5F5;
+	line-height: 1em;
+	padding: 1.5em 0em 1em 0.5em;
+	margin: 0em; 
 }
 
-
-#token, #route, #api, #parameters, #response{
-	margin: 0em;
-	padding: 0em 0em 0em 3em;
-	font-weight: bold;
-	background: #FFFFFF;
+#colun{
+	background: #EFEFEF;
+	float: left;
+	margin: 1em 0.5 1em 1em;
+	padding: 1em;
 }
 
-.token{
-	width: 22em;
+#coldeux{
+	float: left; 
 }
 
-.inputgrp{
-	border-bottom: 0.15em solid #56B6BD;
-	padding: 0.9em 0em 0.9em 0em;
-}
-
-#api input, #token input{
-	border-style: none;
+#api, #token, #route, #parameterList, span, input.key, input.value {
+	display: list-item;
+	list-style-type: none;
 }
 
 input{
-	height: 6.5ex;
-	width: 12em;
-	border: 0.1em solid #FFF;
-	margin: 1em;
-	padding: 0em 0.2em 0em 0.2em; 
-	color: #353535;
-	border-bottom: 0.2em solid #56B6BD;
+	height: 5ex;
+	padding: 0em 0em 0em 0.5em;
+	margin-bottom: 0.5em;
 }
 
-button.add, button.delete{
-	height: 5ex;
-	width: 5ex;
-	background: #efefef;
-	margin: 0.2ex;
+button{
+	height: 4.5ex;
+	width: 4.5ex;
+	background: #56b5db;
+	margin: 0em 0.5em 1em 0.5em;
 	border: none;
 	border-radius: 0.25em;
-	color: #353535;
+	color: #fff;
+}
+
+button.submit, input{
+	width: 100%;
+}
+
+input.route{
+	width: 87%; 
+}
+
+#seeurl{
+	background: #EFEFEF;
+	margin: 1em;
+	padding: 1em;
+}
+
+#requestUrl, #urlDynamic{
+	display: inline-block;
+}
+
+#requestUrl{
+	color: #56b5db;  
+}
+
+#response{
+	margin: 0em 1em 0em 1em;
+	background: #FFF;
+}
+
+#status{
+	text-align: center; 
+	margin: 1em 0em 1em 0em;
+	padding: 2em 0em 1em;
+	font-weight: bold;
+}
+
+li{
+	list-style-type: none;
+	margin-left: -2.5em;
+}
+
+div.head, span.summary_text{
+	margin: 0em 1em 0em 1em;
+}
+
+span.name{
+	width: 87%;
+}
+
+span.name, button.code, button.summary{
+display: inline-table;
+}
+
+div.render{
+	border: 1px solid #dedede;
+	margin: 0.5em;
+	padding: 0.5em 0em 0.5em 0em;
 }
