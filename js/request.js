@@ -6,10 +6,11 @@ function makeDeleteButton() {
 }
 
 function insertRoute(val) {
-    $(val).parent().after(makeRoute(''));
+    var currentRouteValue = $('.route', $(val).parent()).val();
+    $(val).parent().after(makeRoute('', currentRouteValue));
 }
 
-function makeRoute(val) {
+function makeRoute(val, currentRouteValue) {
     if (currentRouteValue == 'coverage') {
         var res = $('<span/>')
         .addClass('toDelete')
@@ -22,10 +23,10 @@ function makeRoute(val) {
 			       type: 'text',
                                onfocus: 'updateUrl(this)',
                                onkeyup: 'updateUrl(this)'})
-                        .addClass('route')
+                        .addClass('route'))
                 .append(makeDeleteButton()))
-        .append('<button class="add" onclick="insertRoute(this)">+</button>')        
-	listCoverage(val);
+        .append('<button class="add" onclick="insertRoute(this)">+</button>')       
+        listCoverage(val);
         return res;
     } else {
         return $('<span/>')
@@ -106,7 +107,7 @@ function listCoverage(val) {
 
 function finalUrl(focusedElem) {
     var finalUrl = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
-    $("#route input.route").each(function(){
+    $("#route .route").each(function(){
         finalUrl += '/' + getFocusedElemValue(this, focusedElem);
     });
 
@@ -202,7 +203,8 @@ $(document).ready(function() {
     paths.slice(1).forEach(function(r) {
       if (!r) { return; }
       if (vxxFound) {
-        $("#route").append(makeRoute(r.decodeURI(), currentRouteValue)));
+        var currentRouteValue = $('#route span .route').last().val();
+        $("#route").append(makeRoute(r.decodeURI(), currentRouteValue));
       } else {
         api = api + '/' + r.decodeURI();
         vxxFound = /^v\d+$/.test(r);
