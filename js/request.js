@@ -1,9 +1,8 @@
-function removeParent(elt) {
-    $(elt).parent().remove();
-}
-
 function makeDeleteButton() {
-    return '<button class="delete" onclick="removeParent(this), updateUrl(this)">-</button>';
+    return $('<button/>')
+        .addClass('delete')
+        .click(function() { $(this).closest('.toDelete').remove(); updateUrl(this); })
+        .text('-');
 }
 
 function insertRoute(val) {
@@ -11,14 +10,27 @@ function insertRoute(val) {
 }
 
 function makeRoute(val) {
-    return '<span> <input type="text" class="route" value="' + val + '" onfocus="updateUrl(this)" onkeyup="updateUrl(this)" >' +
-        makeDeleteButton() + ' ' +
-        '<button class="add" onclick="insertRoute(this)">+</button></span>';
+    return $('<span/>')
+        .addClass('toDelete')
+        .addClass('routeElt')
+        .append(' ')
+        .append($('<span/>')
+                .addClass('pathElt')
+                .append($('<input/>')
+                        .attr({type: 'text',
+                               onfocus: 'updateUrl(this)',
+                               onkeyup: 'updateUrl(this)'})
+                        .addClass('route')
+                        .val(val))
+                .append(makeDeleteButton()))
+        .append('<button class="add" onclick="insertRoute(this)">+</button>')
 }
 
 function makeParam(key, val) {
-    var res = $('<span class="param" />');
-    res.append(' ');
+    var res = $('<span/>')
+        .addClass('param')
+        .addClass('toDelete')
+        .append(' ');
 
     var attr = {type: 'text', onfocus: 'updateUrl(this)', onkeyup: '"updateUrl(this)"'};
 
@@ -78,7 +90,15 @@ function updateUrl(focusedElem) {
 }
 
 function getCoverage() {
-    return $('.route', $('#route input.route[value="coverage"]').parent().next()).val();
+    var prevIsCoverage = false;
+    var coverage = null;
+    var covElt = $("#route input.route").each(function() {
+        if (prevIsCoverage) {
+            coverage = $(this).val();
+        }
+        prevIsCoverage = $(this).val() == 'coverage';
+    });
+    return coverage;
 }
 
 function autocomplete(elt) {
