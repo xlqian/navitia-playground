@@ -25,6 +25,7 @@ h2{
 #colun{
 	background: #EFEFEF;
 	float: left;
+	width: 17.5em;
 	margin: 1em 0.5 1em 1em;
 	padding: 1em;
 }
@@ -33,36 +34,37 @@ h2{
 	float: left; 
 }
 
-#api, #token, #route, #parameterList, span, input.key, input.value {
+#api, #token, #route, #parameterList, #requestUrl, input.key, input.value {
 	display: list-item;
 	list-style-type: none;
 }
 
 input{
 	height: 5ex;
+	width: 100%;
 	padding: 0em 0em 0em 0.5em;
 	margin-bottom: 0.5em;
 }
 
 button{
 	height: 4.5ex;
-	width: 4.5ex;
-	background: #56b5db;
-	margin: 0em 0.5em 1em 0.5em;
+	width: 100%;
 	border: none;
 	border-radius: 0.25em;
 	color: #fff;
+	background: #56b5db;
+}
+
+button.code, button.summary, button.delete, button.add{
+	width: 4.5ex;
+	margin: 0em 0em 0.5em 0em;
 }
 
 button.submit, input{
-	width: 100%;
+	margin: 0em 0em 0.5em 0em;
 }
 
-input.route{
-	width: 87%; 
-}
-
-#seeurl{
+#seeurl, #urlForm{
 	background: #EFEFEF;
 	margin: 1em;
 	padding: 1em;
@@ -73,7 +75,7 @@ input.route{
 }
 
 #requestUrl{
-	color: #56b5db;  
+	color: #353535;  
 }
 
 #response{
@@ -98,15 +100,23 @@ div.head, span.summary_text{
 }
 
 span.name{
-	width: 87%;
+	margin: 0em 0.5em 0em 0em;
 }
 
-span.name, button.code, button.summary{
+span.name, button.code, button.summary, span.summary_text{
 display: inline-table;
+}
+
+button.summary, span.summary_text{
+	margin: 0em 0.5em 0em 0.5em;
 }
 
 div.render{
 	border: 1px solid #dedede;
 	margin: 0.5em;
 	padding: 0.5em 0em 0.5em 0em;
+}
+
+#response{
+	text-transform: lowercase;
 }
