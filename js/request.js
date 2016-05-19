@@ -40,9 +40,9 @@ function makeParam(key, val) {
     var inputValAttr = Object.assign(attr, {class: 'value', value: val, onfocus: 'paramsValOnFocus(this)'});
     var valueElt = $('<input/>', inputValAttr);
     if ($.inArray(key, ['from', 'to']) != -1) {
-        autocomplete(valueElt);
-    }else if ($.inArray(key, ['datetime']) != -1) {
-        datetime(valueElt)
+        makeAutocomplete(valueElt);
+    }else if (key.match(/datetime$/) {
+        makeDatetime(valueElt)
     }
     res.append(valueElt);
     res.append(makeDeleteButton());
@@ -51,16 +51,19 @@ function makeParam(key, val) {
 
 function paramsValOnFocus(valInput){
     var key = $('.key', $(valInput).parent()).val();
-    if ($.inArray(key, ['from', 'to']) != -1) {
-        autocomplete(valInput)
-    }else if ($.inArray(key, ['datetime']) != -1 &&
+    if ($.inArray(key, ['from', 'to']) != -1 &&
+        ! $(valInput).attr('class').contains('value ui-autocomplete-input')) {
+        makeAutocomplete(valInput)
+    }else if (key.match(/datetime$/) &&
               ! $(valInput).attr('class').contains('hasDatepicker')) {
-        datetime(valInput)
-    } else if ($(valInput).attr('class') == 'value ui-autocomplete-input') {
+        makeDatetime(valInput)
+    } else if ($(valInput).attr('class').contains('ui-autocomplete-input') ||
+               $(valInput).attr('class').contains('hasDatepicker')) {
+
         // Get the delete_button position and the value of valInput before it's removed
         var delete_button = $('.delete', $(valInput).parent());
         var v = $(valInput).val();
-
+	// Remove the current input
         $(valInput).remove();
         // Create a new input
         var valueElt = $('<input/>', {type: 'text',
@@ -130,7 +133,7 @@ function getCoverage() {
     return coverage;
 }
 
-function autocomplete(elt) {
+function makeAutocomplete(elt) {
     $(elt).autocomplete({
         source: function(request, response) {
 
@@ -160,7 +163,7 @@ function autocomplete(elt) {
     });
 }
 
-function datetime(elt) {
+function makeDatetime(elt) {
     $(elt).datetimepicker({
         dateFormat: 'yymmdd',
         timeFormat: 'HHmmss',
