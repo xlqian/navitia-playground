@@ -32,20 +32,45 @@ function makeParam(key, val) {
         .addClass('toDelete')
         .append(' ');
 
-    var attr = {type: 'text', onfocus: 'updateUrl(this)', onkeyup: '"updateUrl(this)"'};
+    var attr = {type: 'text', onfocus: 'updateUrl(this)', onkeyup: 'updateUrl(this)'};
 
     var intputKeyAttr = Object.assign(attr, {class: 'key', value: key});
     res.append($('<input/>', intputKeyAttr));
     res.append('=');
-    var inputValAttr = Object.assign(attr, {class: 'value', value: val});
+    var inputValAttr = Object.assign(attr, {class: 'value', value: val, onfocus: 'paramsValOnFocus(this)'});
     var valueElt = $('<input/>', inputValAttr);
-
-    autocomplete(valueElt);
+    if ($.inArray(key, ['from', 'to']) != -1) {
+        autocomplete(valueElt);
+    }
     res.append(valueElt);
     res.append(makeDeleteButton());
     return res;
 }
 
+function paramsValOnFocus(valInput){
+    var key = $('.key', $(valInput).parent()).val();
+    if ($.inArray(key, ['from', 'to']) != -1) {
+        autocomplete($(valInput))
+    } else if ($(valInput).attr('class') == 'value ui-autocomplete-input') {
+        // Get the delete_button position and the value of valInput before it's removed
+        var delete_button = $('.delete', $(valInput).parent());
+        var v = $(valInput).val();
+
+        $(valInput).remove();
+        // Create a new input
+        var valueElt = $('<input/>', {type: 'text',
+                                      onfocus: 'updateUrl(this)',
+                                      onkeyup: 'updateUrl(this)',
+                                      onfocus: 'paramsValOnFocus(this)',
+                                      class: 'value',
+                                      value: v});
+                                      
+        valueElt.insertBefore(delete_button);
+        valInput = valueElt;
+    }
+
+    updateUrl(valInput);
+}
 function insertParam() {
     $("#parameterList").append(makeParam('', ''));
 }
@@ -85,6 +110,7 @@ function submit() {
 }
 
 function updateUrl(focusedElem) {
+    console.log("updating url");
     var f = finalUrl(focusedElem);
     $('#urlDynamic span').html(f);
 }
@@ -104,11 +130,7 @@ function getCoverage() {
 function autocomplete(elt) {
     $(elt).autocomplete({
         source: function(request, response) {
-            var keyValue = elt.parent().children(".key").val();
-            if ($.inArray(keyValue, ['from', 'to']) == -1) {
-                response([]);
-                return;
-            }
+
             var token = $('#token input.token').val();
             var url = $('#api input.api').val();
             var cov = getCoverage();
