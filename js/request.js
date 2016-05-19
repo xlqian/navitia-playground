@@ -41,8 +41,8 @@ function makeParam(key, val) {
     var valueElt = $('<input/>', inputValAttr);
     if ($.inArray(key, ['from', 'to']) != -1) {
         makeAutocomplete(valueElt);
-    }else if (key.match(/datetime$/) {
-        makeDatetime(valueElt)
+    }else if (key.match(/datetime$/)) {
+        makeDatetime(valueElt);
     }
     res.append(valueElt);
     res.append(makeDeleteButton());
@@ -53,7 +53,7 @@ function paramsValOnFocus(valInput){
     var key = $('.key', $(valInput).parent()).val();
     if ($.inArray(key, ['from', 'to']) != -1 &&
         ! $(valInput).attr('class').contains('value ui-autocomplete-input')) {
-        makeAutocomplete(valInput)
+        makeAutocomplete(valInput);
     }else if (key.match(/datetime$/) &&
               ! $(valInput).attr('class').contains('hasDatepicker')) {
         makeDatetime(valInput)
