@@ -41,6 +41,8 @@ function makeParam(key, val) {
     var valueElt = $('<input/>', inputValAttr);
     if ($.inArray(key, ['from', 'to']) != -1) {
         autocomplete(valueElt);
+    }else if ($.inArray(key, ['datetime']) != -1) {
+        datetime(valueElt)
     }
     res.append(valueElt);
     res.append(makeDeleteButton());
@@ -50,7 +52,10 @@ function makeParam(key, val) {
 function paramsValOnFocus(valInput){
     var key = $('.key', $(valInput).parent()).val();
     if ($.inArray(key, ['from', 'to']) != -1) {
-        autocomplete($(valInput))
+        autocomplete(valInput)
+    }else if ($.inArray(key, ['datetime']) != -1 &&
+              ! $(valInput).attr('class').contains('hasDatepicker')) {
+        datetime(valInput)
     } else if ($(valInput).attr('class') == 'value ui-autocomplete-input') {
         // Get the delete_button position and the value of valInput before it's removed
         var delete_button = $('.delete', $(valInput).parent());
@@ -64,7 +69,6 @@ function paramsValOnFocus(valInput){
                                       onfocus: 'paramsValOnFocus(this)',
                                       class: 'value',
                                       value: v});
-                                      
         valueElt.insertBefore(delete_button);
         valInput = valueElt;
     }
@@ -110,7 +114,6 @@ function submit() {
 }
 
 function updateUrl(focusedElem) {
-    console.log("updating url");
     var f = finalUrl(focusedElem);
     $('#urlDynamic span').html(f);
 }
@@ -155,6 +158,17 @@ function autocomplete(elt) {
             });
         },
     });
+}
+
+function datetime(elt) {
+    $(elt).datetimepicker({
+        dateFormat: 'yymmdd',
+        timeFormat: 'HHmmss',
+        timeInput: true,
+        separator: 'T',
+        controlType: 'select',
+        oneLine: true,
+    }).focus();
 }
 
 $(document).ready(function() {
