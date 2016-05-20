@@ -11,11 +11,10 @@ function insertRoute(val) {
 }
 
 function makeRoute(val, currentRouteValue) {
-    var input = $('<input/>')
-                        .attr({type: 'text',
-                               onfocus: 'routeValOnFocus(this)',
-                               onkeyup: 'updateUrl(this)'})
-                        .addClass('route')
+    var input = $('<input/>').focus(function(){ routeValOnFocus(this); })
+                             .keyup(function(){ updateUrl(this); })
+                             .attr('type', 'text')
+                             .addClass('route')
     if (currentRouteValue == 'coverage') {
         var res = $('<span/>')
         .addClass('toDelete')
@@ -106,13 +105,13 @@ function makeCoverageList(val, obj) {
     var api = $("#api input.api").attr('value');
     var request =  api + "/coverage";
     var token = search["token"];
-    var res = [];
 
     $.ajax({
         headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token + ":" ) },
         dataType: "json",
         url: request,
         success: function(data) {
+                var res = [];
                 for (var dict in data) {
                     for (var cov = 0; cov < data[dict].length; cov++) {
                         res.push(data[dict][cov].id);
