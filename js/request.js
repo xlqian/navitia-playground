@@ -32,13 +32,21 @@ function makeParam(key, val) {
         .addClass('toDelete')
         .append(' ');
 
-    var attr = {type: 'text', onfocus: 'updateUrl(this)', onkeyup: 'updateUrl(this)'};
+    res.append($('<input/>')
+        .attr('type', 'text')
+        .addClass('key')
+        .val(key)
+        .focus(function(){ updateUrl(this); })
+        .keyup(function(){ updateUrl(this); }));
 
-    var intputKeyAttr = Object.assign(attr, {class: 'key', value: key});
-    res.append($('<input/>', intputKeyAttr));
     res.append('=');
-    var inputValAttr = Object.assign(attr, {class: 'value', value: val, onfocus: 'paramsValOnFocus(this)'});
-    var valueElt = $('<input/>', inputValAttr);
+
+    var valueElt = $('<input/>').attr('type', 'text')
+        .addClass('value')
+        .val(val)
+        .focus(function(){ paramsValOnFocus(this); })
+        .keyup(function(){ updateUrl(this); });
+
     if ($.inArray(key, ['from', 'to']) != -1) {
         makeAutocomplete(valueElt);
     }else if (key.match(/datetime$/)) {
@@ -66,12 +74,10 @@ function paramsValOnFocus(valInput){
         // Remove the current input
         $(valInput).remove();
         // Create a new input
-        var valueElt = $('<input/>', {type: 'text',
-                                      onfocus: 'updateUrl(this)',
-                                      onkeyup: 'updateUrl(this)',
-                                      onfocus: 'paramsValOnFocus(this)',
-                                      class: 'value',
-                                      value: v});
+        var valueElt = $('<input/>').addClass('value').attr('type', 'text')
+            .val(v)
+            .keyup(function(){ updateUrl(this); })
+            .focus(function(){ paramsValOnFocus(this); });
         valueElt.insertBefore(delete_button);
         valInput = valueElt;
     }
