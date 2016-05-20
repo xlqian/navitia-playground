@@ -41,15 +41,16 @@ function makeParam(key, val) {
 
     res.append('=');
 
-    var valueElt = $('<input/>').attr('type', 'text')
+    var valueElt = $('<input/>')
+         .attr('type', 'text')
         .addClass('value')
         .val(val)
         .focus(function(){ paramsValOnFocus(this); })
         .keyup(function(){ updateUrl(this); });
 
-    if ($.inArray(key, ['from', 'to']) != -1) {
+    if (isFromOrTo(key)) {
         makeAutocomplete(valueElt);
-    }else if (key.match(/datetime$/)) {
+    }else if (endsWithDatetime(key)) {
         makeDatetime(valueElt);
     }
     res.append(valueElt);
@@ -60,26 +61,22 @@ function makeParam(key, val) {
 function paramsValOnFocus(valInput){
     var key = $(valInput).prev().val();
 
-    if ($.inArray(key, ['from', 'to']) != -1 &&
-        ! $(valInput).attr('class').contains('ui-autocomplete-input')) {
+    if (isFromOrTo(key)) {
         makeAutocomplete(valInput);
-    }else if (key.match(/datetime$/)) {
+    }else if (endsWithDatetime(key)) {
         makeDatetime(valInput);
-    } else if ($(valInput).attr('class').contains('ui-autocomplete-input') ||
-               $(valInput).attr('class').contains('hasDatepicker')) {
+    } else if (isAutoCompleteInput($(valInput)) ||
+               isDatePicker($(valInput))) {
 
-        // Get the delete_button position and the value of valInput before it's removed
-        var delete_button = $('.delete', $(valInput).parent());
-        var v = $(valInput).val();
-        // Remove the current input
-        $(valInput).remove();
-        // Create a new input
-        var valueElt = $('<input/>').addClass('value').attr('type', 'text')
-            .val(v)
+        var newElt = $('<input/>')
+            .addClass('value')
+            .attr('type', 'text')
+            .val($(valInput).val())
             .keyup(function(){ updateUrl(this); })
             .focus(function(){ paramsValOnFocus(this); });
-        valueElt.insertBefore(delete_button);
-        valInput = valueElt;
+        $(valInput).replaceWith(newElt);
+        newElt.focus();
+        valInput = newElt;
     }
     updateUrl(valInput);
 }
