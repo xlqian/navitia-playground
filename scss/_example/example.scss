@@ -65,3 +65,9 @@ button.add, button.delete{
 	border-radius: 0.25em;
 	color: #353535;
 }
+
+.ui-autocomplete {
+    height:auto;
+    max-height: 30ex;
+    overflow-y:scroll;
+}
