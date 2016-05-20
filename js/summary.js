@@ -1,3 +1,25 @@
+function getTextColor(json) {
+    if ('text_color' in json) {
+        return '#' + json['text_color'];
+    }
+    if ('color' in json) {
+        var c = json.color;
+        function toNum(i) { return +('0x' + c.slice(i, i + 2)); }
+        var grey = 0.21 * toNum(0) + 0.72 * toNum(2) + 0.07 * toNum(4)
+        if (grey < 128) {
+            return 'white';
+        }
+    }
+    return 'black';
+}
+
+function setColors(elt, json) {
+    if ('color' in json) {
+        elt.css('background-color', '#' + json.color);
+        elt.css('color', getTextColor(json));
+    }
+}
+
 function defaultSummary(json) {
     var result = $('<span/>');
     if ('label' in json) {
@@ -9,12 +31,7 @@ function defaultSummary(json) {
     } else if ('id' in json) {
         result.html(json['id']);
     }
-    if ('color' in json) {
-        result.css('background-color', '#' + json.color);
-    }
-    if ('text_color' in json) {
-        result.css('color', '#' + json['text_color']);
-    }
+    setColors(result, json);
     return result;
 }
 
@@ -55,17 +72,17 @@ function journeySummary(json) {
     }
 
     json.sections.forEach(function(s) {
-        console.log(s);
         switch (s.type) {
         case "transfer":
         case "waiting":
             break;
         case "street_network": add(s.mode); break;
         case "public_transport":
-            add($('<span>')
+            var elt = $('<span>')
                 .addClass('line_code')
-                .css('background-color', s.display_informations.color)
-                .append(s.display_informations.code));
+                .append(s.display_informations.code);
+            setColors(elt, s.display_informations);
+            add(elt);
             break;
         default: add(s.type); break;
         }

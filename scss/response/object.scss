@@ -42,5 +42,12 @@ div.object {
     div.not_filled {
         display: none;
     }
+
+    .line_code {
+        border: none;
+        border-radius: 300ex;// a lot to have great circles
+        padding: 1ex;
+    }
+
     @import 'button';
 }
