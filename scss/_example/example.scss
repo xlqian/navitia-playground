@@ -26,11 +26,17 @@ h2{
 }
 
 
-#token, #route, #api, #parameters, #response{
+#token, #route, #api, #parameters, #status{
 	margin: 0em;
 	padding: 0em 0em 0em 3em;
 	font-weight: bold;
 	background: #FFFFFF;
+}
+
+#response {
+    background: #FFFFFF;
+    margin: 0;
+    padding: 3em;
 }
 
 .token{
