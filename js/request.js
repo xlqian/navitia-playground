@@ -130,7 +130,7 @@ function makeCoverageList(val, obj) {
 
 function finalUrl(focusedElem) {
     var finalUrl = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
-    $("#route .route").each(function(){
+    $("#route input.route").each(function(){
         finalUrl += '/' + getFocusedElemValue(this, focusedElem);
     });
 
