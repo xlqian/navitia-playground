@@ -6,11 +6,29 @@ function makeDeleteButton() {
 }
 
 function insertRoute(val) {
-    $(val).parent().after(makeRoute(''));
+    var currentRouteValue = $('.route', $(val).parent()).val();
+    $(val).parent().after(makeRoute('', currentRouteValue));
 }
 
-function makeRoute(val) {
-    return $('<span/>')
+function makeRoute(val, currentRouteValue) {
+    var input = $('<input/>').focus(function(){ routeValOnFocus(this); })
+                             .keyup(function(){ updateUrl(this); })
+                             .attr('type', 'text')
+                             .addClass('route');
+    if (currentRouteValue == 'coverage') {
+        var res = $('<span/>')
+        .addClass('toDelete')
+        .addClass('routeElt')
+        .append(' ')
+        .append($('<span/>')
+                .addClass('pathElt')
+                .append(input)
+                .append(makeDeleteButton()))
+        .append('<button class="add" onclick="insertRoute(this)">+</button>')
+        makeCoverageList(val, input);
+        return res;
+    } else {
+        return $('<span/>')
         .addClass('toDelete')
         .addClass('routeElt')
         .append(' ')
@@ -24,6 +42,25 @@ function makeRoute(val) {
                         .val(val))
                 .append(makeDeleteButton()))
         .append('<button class="add" onclick="insertRoute(this)">+</button>')
+    }
+}
+
+function routeValOnFocus(valInput) {
+    var cov = $('.route', $(valInput).parent().parent().prev()).val();
+
+    if (cov == 'coverage' && ! $(valInput).attr('class').contains('route ui-autocomplete-input')) {
+        makeCoverageList($(valInput).val(), valInput);
+    } else if (cov != 'coverage' && $(valInput).attr('class').contains('route ui-autocomplete-input')) {
+        var valueElt = $('<input/>').addClass('route')
+                                    .attr('type', 'text')
+                                    .val($(valInput).val())
+                                    .focus(function(){ routeValOnFocus(this); })
+                                    .keyup(function(){ updateUrl(this); });
+        $(valInput).replaceWith(valueElt);
+        valueElt.focus();
+        valInput = valueElt;
+    }
+    updateUrl(valInput);
 }
 
 function makeParam(key, val) {
@@ -32,19 +69,52 @@ function makeParam(key, val) {
         .addClass('toDelete')
         .append(' ');
 
-    var attr = {type: 'text', onfocus: 'updateUrl(this)', onkeyup: '"updateUrl(this)"'};
+    res.append($('<input/>')
+        .attr('type', 'text')
+        .addClass('key')
+        .val(key)
+        .focus(function(){ updateUrl(this); })
+        .keyup(function(){ updateUrl(this); }));
 
-    var intputKeyAttr = Object.assign(attr, {class: 'key', value: key});
-    res.append($('<input/>', intputKeyAttr));
-    var inputValAttr = Object.assign(attr, {class: 'value', value: val});
-    var valueElt = $('<input/>', inputValAttr);
+    var valueElt = $('<input/>')
+         .attr('type', 'text')
+        .addClass('value')
+        .val(val)
+        .focus(function(){ paramsValOnFocus(this); })
+        .keyup(function(){ updateUrl(this); });
 
-    autocomplete(valueElt);
+    if (isPlaceType(key)) {
+        makeAutocomplete(valueElt);
+    }else if (isDatetimeType(key)) {
+        makeDatetime(valueElt);
+    }
     res.append(valueElt);
     res.append(makeDeleteButton());
     return res;
 }
 
+function paramsValOnFocus(valInput){
+    var key = $(valInput).prev().val();
+
+    if (isPlaceType(key)) {
+        makeAutocomplete(valInput);
+    }else if (isDatetimeType(key)) {
+        makeDatetime(valInput);
+    } else if (isAutoCompleteInput($(valInput)) ||
+               isDatePicker($(valInput))) {
+
+        var newElt = $('<input/>')
+            .addClass('value')
+            .attr('type', 'text')
+            .val($(valInput).val())
+            .keyup(function(){ updateUrl(this); })
+            .focus(function(){ paramsValOnFocus(this); });
+        $(valInput).replaceWith(newElt);
+        newElt.focus();
+        valInput = newElt;
+    }
+    updateUrl(valInput);
+}
 function insertParam() {
     $("#parameterList").append(makeParam('', ''));
 }
@@ -55,6 +125,32 @@ function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
             .format(noEncoding ? elemToTest.value : elemToTest.value.encodeURI());
     }
     return noEncoding ? elemToTest.value : elemToTest.value.encodeURI();
+}
+
+function makeCoverageList(val, obj) {
+    var api = $("#api input.api").attr('value');
+    var token = $('#token input.token').val();
+    var request =  api + "/coverage";
+    
+    $.ajax({
+        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
+        dataType: "json",
+        url: request,
+        success: function(data) {
+                var res = [];
+                for (var dict in data) {
+                    for (var cov = 0; cov < data[dict].length; cov++) {
+                        res.push(data[dict][cov].id);
+                    }
+                    if (val) { $(obj).val(val); }
+                    var auto = $(obj).autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
+                    auto.focus(function() {
+                        auto.autocomplete("search", '');
+                    });
+                    return auto;
+                }
+            }
+    });
 }
 
 function finalUrl(focusedElem) {
@@ -100,14 +196,10 @@ function getCoverage() {
     return coverage;
 }
 
-function autocomplete(elt) {
+function makeAutocomplete(elt) {
     $(elt).autocomplete({
         source: function(request, response) {
-            var keyValue = elt.parent().children(".key").val();
-            if ($.inArray(keyValue, ['from', 'to']) == -1) {
-                response([]);
-                return;
-            }
+
             var token = $('#token input.token').val();
             var url = $('#api input.api').val();
             var cov = getCoverage();
@@ -134,6 +226,17 @@ function autocomplete(elt) {
     });
 }
 
+function makeDatetime(elt) {
+    $(elt).datetimepicker({
+        dateFormat: 'yymmdd',
+        timeFormat: 'HHmmss',
+        timeInput: true,
+        separator: 'T',
+        controlType: 'select',
+        oneLine: true,
+    });
+}
+
 $(document).ready(function() {
     var search = new URI(window.location).search(true);
     var token = search['token'];
@@ -153,30 +256,31 @@ $(document).ready(function() {
 
     var vxxFound = false;
     paths.slice(1).forEach(function(r) {
-      if (!r) { return; }
-      if (vxxFound) {
-        $("#route").append(makeRoute(r.decodeURI()));
-      } else {
-        api = api + '/' + r.decodeURI();
-        vxxFound = /^v\d+$/.test(r);
-      }
+        if (!r) { return; }
+        if (vxxFound) {
+            var currentRouteValue = $('#route span .route').last().val();
+            $("#route").append(makeRoute(r.decodeURI(), currentRouteValue));
+        } else {
+            api = api + '/' + r.decodeURI();
+            vxxFound = /^v\d+$/.test(r);
+            $("#api input.api").attr('value', api);
+        }
     })
-    $("#api input.api").attr('value', api);
 
     var params = req_uri.search(true);
 
     if (! isUndefined(params)) {
         var param_elt = $("#parameterList");
         for (var key in params) {
-          var value = params[key];
-          // a list of params, ex.: forbidded_uris[]
-          if (Array.isArray(value)) {
-              value.forEach(function(v){
+            var value = params[key];
+            // a list of params, ex.: forbidded_uris[]
+            if (Array.isArray(value)) {
+                value.forEach(function(v){
                 param_elt.append(makeParam(key.decodeURI(), v.decodeURI()));
-              });
-          } else {
-            param_elt.append(makeParam(key.decodeURI(), params[key]));
-          }
+                });
+            } else {
+                param_elt.append(makeParam(key.decodeURI(), params[key]));
+            }
         }
     }
     $('#urlDynamic span').html(request);

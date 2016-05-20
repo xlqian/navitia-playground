@@ -2,74 +2,66 @@ function setStatus(xhr) {
     $("#status").html(xhr.statusText + " (" + xhr.status + ")");
 }
 
-function defaultSummary(json) {
-    var result = $('<span class="summary_text" />');
-    if ('label' in json) {
-        result.html(json['label']);
-    } else if ('code' in json) {
-        result.html(json['code']);
-    }else if ('name' in json) {
-        result.html(json['name']);
-    } else if ('id' in json) {
-        result.html(json['id']);
-    }
-    if ('color' in json) {
-        result.css('background-color', '#' + json.color);
-    }
-    if ('text_color' in json) {
-        result.css('color', '#' + json['text_color']);
-    }
-    return result;
-}
-
-function responseSummary(json) {
-    var key = ''
-    var objs = [];
+function responseCollectionName(json) {
+    var key = null;
     var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes'];
     for (var k in json) {
         if ($.isArray(json[k]) &&
             $.inArray(k, notCollectionKeys) == -1) {
-            objs = json[k];
             key = k;
         }
     }
     // disruptions may be an object list only if there is no other object list
-    if (objs.length == 0 && 'disruptions' in json) {
-        objs = json['disruptions'];
+    if (key === null && 'disruptions' in json) {
         key = 'disruptions';
     }
-    // remove plural of collection type
-    if (key.slice(-1) == 's') {
-        key = key.slice(0, -1);
-    }
-    var result = $('<ul/>');
-    objs.forEach(function(obj) {
-        $('<li/>').html(render(key, obj)).appendTo(result);
-    });
-    return result;
+    return key;
 }
 
-function summary(name, json) {
-    if (name == 'response') {
-        return responseSummary(json);
-    }
-    // add here custom summary
-    return defaultSummary(json);
+function makeObjectButton(name, handle) {
+    // TODO call handle on toggle
+    return $('<label>')
+        .addClass('objectButton')
+        .append($('<input type="checkbox">').change(handle))
+        .append($('<span>').html(name));
+}
+
+function makeObjectButtonHandle(selector, renderHandle) {
+    return function() {
+        var div = $(this).closest('div.object').find(selector);
+        if ($(this).is(':checked')) {
+            div.removeClass('not_filled');
+            div.html(renderHandle());
+        } else {
+            div.addClass('not_filled');
+            div.empty();
+        }
+    };
 }
 
 function render(name, json) {
-    var head = $('<div class="head"></span>');
-    head.append($('<span class="name">{0}</span>'.format(name)));
-    head.append($('<button class="code">{}</button>').click(function() {
-        $(this).parent().parent().children(".data").html(renderjson(json));
-    }));
-    head.append($('<button class="summary">...</button>').click(function() {
-        $(this).parent().parent().children(".data").html(summary(name, json));
-    }));
+    var head = $('<div class="head">');
+    head.append($('<div class="type">').html(name));
+    head.append($('<div class="summary">').html(summary(name, json)));
+    head.append($('<div class="button">')
+                .append(makeObjectButton('Ext', makeObjectButtonHandle('div.extended', function() {
+                    return extended(name, json);
+                })))
+                .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
+                    return 'Map not implemented yet';
+                })))
+                .append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
+                    return renderjson(json);
+                }))));
 
-    var result = $('<div class="render"></div>');
+    var data = $('<div class="data">')
+        .append($('<div class="extended not_filled">'))
+        .append($('<div class="map not_filled">'))
+        .append($('<div class="code not_filled">'));
+
+    var result = $('<div class="object">');
     result.append(head);
-    result.append($('<span class="data"></span>').html(summary(name, json)));
+    result.append(data);
     return result
 }
 
@@ -81,7 +73,7 @@ $(document).ready(function() {
         $("#data").html("No request");
         return;
     }
-    renderjson.set_show_to_level(1);
+    renderjson.set_show_to_level(3);
     $.ajax({
         headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
         url: request,
@@ -90,10 +82,12 @@ $(document).ready(function() {
         function(data, status, xhr) {
             setStatus(xhr);
             $("#data").html(render("response", data));
+            $('#data input').first().click();
         },
         function(xhr, status, error) {
             setStatus(xhr);
-            $("#data").html(renderjson(xhr.responseJSON));
+            $("#data").html(render("response", xhr.responseJSON));
+            $('#data input').last().click();
         }
     );
 });

@@ -2,6 +2,22 @@ function isUndefined(val) {
     return typeof val == "undefined";
 }
 
+function isPlaceType(key) {
+    return $.inArray(key, ['from', 'to']) != -1;
+}
+
+function isDatetimeType(str) {
+    return str.match(/datetime$/);
+}
+
+function isAutoCompleteInput(elt) {
+    return elt.attr('class').contains('ui-autocomplete-input');
+}
+
+function isDatePicker(elt) {
+    return elt.attr('class').contains('hasDatepicker');
+}
+
 String.prototype.format = String.prototype.f = function() {
     var s = this,
         i = arguments.length;

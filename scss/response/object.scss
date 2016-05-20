@@ -1,0 +1,46 @@
+div.object {
+    margin: 1ex;
+    padding: 0;
+    border-style: solid;
+    border-width: 0.1ex;
+    border-color: #DEDEDE;
+
+    div.head {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0;
+        border-style: none;
+    }
+    div.type, div.button, div.summary {
+        border-style: none;
+        margin: 1ex;
+    }
+    div.type {
+        font-weight: bold;
+    }
+    div.button {
+        white-space: nowrap;
+    }
+    div.summary {
+        flex: 1;
+        padding-left: 2ex;
+    }
+    div.data {
+        border-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    div.data > div {
+        border-style: solid;
+        border-width: 0.1ex 0 0 0;
+        border-color: #DEDEDE;    
+        margin: 0;
+        padding: 1ex;
+    }
+    div.not_filled {
+        display: none;
+    }
+    @import 'button';
+}
