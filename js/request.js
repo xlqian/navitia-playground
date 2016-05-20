@@ -224,7 +224,7 @@ $(document).ready(function() {
         } else {
             api = api + '/' + r.decodeURI();
             vxxFound = /^v\d+$/.test(r);
-        	$("#api input.api").attr('value', api);
+            $("#api input.api").attr('value', api);
         }
     })
 
