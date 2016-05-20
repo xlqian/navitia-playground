@@ -11,6 +11,11 @@ function insertRoute(val) {
 }
 
 function makeRoute(val, currentRouteValue) {
+    var input = $('<input/>')
+                        .attr({type: 'text',
+                               onfocus: 'routeValOnFocus(this)',
+                               onkeyup: 'updateUrl(this)'})
+                        .addClass('route')
     if (currentRouteValue == 'coverage') {
         var res = $('<span/>')
         .addClass('toDelete')
@@ -18,16 +23,10 @@ function makeRoute(val, currentRouteValue) {
         .append(' ')
         .append($('<span/>')
                 .addClass('pathElt')
-                .append($('<input/>')
-                        .attr({id: 'inputCov',
-                               type: 'text',
-                               onfocus: 'updateUrl(this)',
-                               onfocus: 'routeValOnFocus(this)',
-                               onkeyup: 'updateUrl(this)'})
-                        .addClass('route'))
+                .append(input)
                 .append(makeDeleteButton()))
-        .append('<button class="add" onclick="insertRoute(this)">+</button>')       
-        makeCoverageList(val);
+        .append('<button class="add" onclick="insertRoute(this)">+</button>')
+        makeCoverageList(val, input);
         return res;
     } else {
         return $('<span/>')
@@ -51,20 +50,7 @@ function routeValOnFocus(valInput) {
     var cov = $('.route', $(valInput).parent().parent().prev()).val();
 
     if (cov == 'coverage' && ! $(valInput).attr('class').contains('route ui-autocomplete-input')) {
-        var delete_button = $('.delete', $(valInput).parent());
-        var v = $(valInput).val();
-        
-        $(valInput).remove();
-        
-        var valueElt = $('<input/>', {type: 'text',
-                                      onfocus: 'updateUrl(this)',
-                                      onfocus: 'routeValOnFocus(this)',
-                                      onkeyup: 'updateUrl(this)',
-                                      class: 'route ui-autocomplete-input',
-                                      id: 'inputCov'});
-        valueElt.insertBefore(delete_button);
-        makeCoverageList(v);
-        valInput = valueElt;
+        makeCoverageList($(valInput).val(), valInput);
     } else if (cov != 'coverage' && $(valInput).attr('class').contains('route ui-autocomplete-input')) {
         var delete_button = $('.delete', $(valInput).parent());
         var v = $(valInput).val();
@@ -72,7 +58,6 @@ function routeValOnFocus(valInput) {
         $(valInput).remove();
         
         var valueElt = $('<input/>', {type: 'text',
-                                      onfocus: 'updateUrl(this)',
                                       onfocus: 'routeValOnFocus(this)',
                                       onkeyup: 'updateUrl(this)',
                                       class: 'route',
@@ -116,13 +101,13 @@ function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
     return noEncoding ? elemToTest.value : elemToTest.value.encodeURI();
 }
 
-function makeCoverageList(val) {
+function makeCoverageList(val, obj) {
     var search = new URI(window.location).search(true);
     var api = $("#api input.api").attr('value');
     var request =  api + "/coverage";
     var token = search["token"];
     var res = [];
-    
+
     $.ajax({
         headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token + ":" ) },
         dataType: "json",
@@ -132,8 +117,8 @@ function makeCoverageList(val) {
                     for (var cov = 0; cov < data[dict].length; cov++) {
                         res.push(data[dict][cov].id);
                     }
-                    if (val) { $("#inputCov").val(val); }
-                    var auto = $("#inputCov").autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
+                    if (val) { $(obj).val(val); }
+                    var auto = $(obj).autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
                     auto.focus(function() {
                         auto.autocomplete("search", '');
                     });
