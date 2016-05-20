@@ -38,9 +38,53 @@ function responseSummary(json) {
     return result;
 }
 
+function formatDatetime(datetime) {
+    return datetime.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/,
+                           '$1-$2-$3 $4:$5:$5');
+}
+
+function getDate(datetime) {
+    return datetime.replace(/(\d{8}).*/, '$1');
+}
+
+function journeySummary(json) {
+    var res = $('<span>').append(formatDatetime(json.departure_date_time));
+    function add(s) {
+        res.append(' > ');
+        res.append(s);
+    }
+
+    json.sections.forEach(function(s) {
+        console.log(s);
+        switch (s.type) {
+        case "transfer":
+        case "waiting":
+            break;
+        case "street_network": add(s.mode); break;
+        case "public_transport":
+            add($('<span>')
+                .addClass('line_code')
+                .css('background-color', s.display_informations.color)
+                .append(s.display_informations.code));
+            break;
+        default: add(s.type); break;
+        }
+    });
+
+    if (getDate(json.departure_date_time) == getDate(json.arrival_date_time)) {
+        add(formatDatetime(json.arrival_date_time).split(' ')[1]);
+    } else {
+        add(formatDatetime(json.arrival_date_time));
+    }
+    return res;
+}
+
 function summary(name, json) {
     if (name == 'response') {
         return responseSummary(json);
+    }
+    if (name == 'journey') {
+        return journeySummary(json);
     }
     // add here custom summary
     return defaultSummary(json);
