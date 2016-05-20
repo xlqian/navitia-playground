@@ -14,7 +14,7 @@ function makeRoute(val, currentRouteValue) {
     var input = $('<input/>').focus(function(){ routeValOnFocus(this); })
                              .keyup(function(){ updateUrl(this); })
                              .attr('type', 'text')
-                             .addClass('route')
+                             .addClass('route');
     if (currentRouteValue == 'coverage') {
         var res = $('<span/>')
         .addClass('toDelete')
@@ -51,17 +51,12 @@ function routeValOnFocus(valInput) {
     if (cov == 'coverage' && ! $(valInput).attr('class').contains('route ui-autocomplete-input')) {
         makeCoverageList($(valInput).val(), valInput);
     } else if (cov != 'coverage' && $(valInput).attr('class').contains('route ui-autocomplete-input')) {
-        var delete_button = $('.delete', $(valInput).parent());
-        var v = $(valInput).val();
-        
-        $(valInput).remove();
-        
-        var valueElt = $('<input/>', {type: 'text',
-                                      onfocus: 'routeValOnFocus(this)',
-                                      onkeyup: 'updateUrl(this)',
-                                      class: 'route',
-                                      value: v});
-        valueElt.insertBefore(delete_button);
+        var valueElt = $('<input/>').addClass('route')
+                                    .attr('type', 'text')
+                                    .val($(valInput).val())
+                                    .focus(function(){ routeValOnFocus(this); })
+                                    .keyup(function(){ updateUrl(this); });
+        $(valInput).replaceWith(valueElt);
         valueElt.focus();
         valInput = valueElt;
     }
@@ -101,13 +96,12 @@ function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
 }
 
 function makeCoverageList(val, obj) {
-    var search = new URI(window.location).search(true);
     var api = $("#api input.api").attr('value');
+    var token = $('#token input.token').val();
     var request =  api + "/coverage";
-    var token = search["token"];
-
+    
     $.ajax({
-        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token + ":" ) },
+        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
         dataType: "json",
         url: request,
         success: function(data) {
@@ -223,15 +217,15 @@ $(document).ready(function() {
 
     var vxxFound = false;
     paths.slice(1).forEach(function(r) {
-      if (!r) { return; }
-      if (vxxFound) {
-        var currentRouteValue = $('#route span .route').last().val();
-        $("#route").append(makeRoute(r.decodeURI(), currentRouteValue));
-      } else {
-        api = api + '/' + r.decodeURI();
-        vxxFound = /^v\d+$/.test(r);
-    	$("#api input.api").attr('value', api);
-      }
+        if (!r) { return; }
+        if (vxxFound) {
+            var currentRouteValue = $('#route span .route').last().val();
+            $("#route").append(makeRoute(r.decodeURI(), currentRouteValue));
+        } else {
+            api = api + '/' + r.decodeURI();
+            vxxFound = /^v\d+$/.test(r);
+        	$("#api input.api").attr('value', api);
+        }
     })
 
     var params = req_uri.search(true);
@@ -239,15 +233,15 @@ $(document).ready(function() {
     if (! isUndefined(params)) {
         var param_elt = $("#parameterList");
         for (var key in params) {
-          var value = params[key];
-          // a list of params, ex.: forbidded_uris[]
-          if (Array.isArray(value)) {
-              value.forEach(function(v){
+            var value = params[key];
+            // a list of params, ex.: forbidded_uris[]
+            if (Array.isArray(value)) {
+                value.forEach(function(v){
                 param_elt.append(makeParam(key.decodeURI(), v.decodeURI()));
-              });
-          } else {
-            param_elt.append(makeParam(key.decodeURI(), params[key]));
-          }
+                });
+            } else {
+                param_elt.append(makeParam(key.decodeURI(), params[key]));
+            }
         }
     }
     $('#urlDynamic span').html(request);
