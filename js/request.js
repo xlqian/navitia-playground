@@ -50,20 +50,20 @@ function makeParam(key, val) {
 }
 
 function paramsValOnFocus(valInput){
-    var key = $('.key', $(valInput).parent()).val();
+    var key = $(valInput).prev().val();
+
     if ($.inArray(key, ['from', 'to']) != -1 &&
-        ! $(valInput).attr('class').contains('value ui-autocomplete-input')) {
+        ! $(valInput).attr('class').contains('ui-autocomplete-input')) {
         makeAutocomplete(valInput);
-    }else if (key.match(/datetime$/) &&
-              ! $(valInput).attr('class').contains('hasDatepicker')) {
-        makeDatetime(valInput)
+    }else if (key.match(/datetime$/)) {
+        makeDatetime(valInput);
     } else if ($(valInput).attr('class').contains('ui-autocomplete-input') ||
                $(valInput).attr('class').contains('hasDatepicker')) {
 
         // Get the delete_button position and the value of valInput before it's removed
         var delete_button = $('.delete', $(valInput).parent());
         var v = $(valInput).val();
-	// Remove the current input
+        // Remove the current input
         $(valInput).remove();
         // Create a new input
         var valueElt = $('<input/>', {type: 'text',
@@ -75,7 +75,6 @@ function paramsValOnFocus(valInput){
         valueElt.insertBefore(delete_button);
         valInput = valueElt;
     }
-
     updateUrl(valInput);
 }
 function insertParam() {
@@ -171,7 +170,7 @@ function makeDatetime(elt) {
         separator: 'T',
         controlType: 'select',
         oneLine: true,
-    }).focus();
+    });
 }
 
 $(document).ready(function() {
