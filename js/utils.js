@@ -2,11 +2,11 @@ function isUndefined(val) {
     return typeof val == "undefined";
 }
 
-function isFromOrTo(key) {
+function isPlaceType(key) {
     return $.inArray(key, ['from', 'to']) != -1;
 }
 
-function endsWithDatetime(str) {
+function isDatetimeType(str) {
     return str.match(/datetime$/);
 }
 

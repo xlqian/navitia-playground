@@ -48,9 +48,9 @@ function makeParam(key, val) {
         .focus(function(){ paramsValOnFocus(this); })
         .keyup(function(){ updateUrl(this); });
 
-    if (isFromOrTo(key)) {
+    if (isPlaceType(key)) {
         makeAutocomplete(valueElt);
-    }else if (endsWithDatetime(key)) {
+    }else if (isDatetimeType(key)) {
         makeDatetime(valueElt);
     }
     res.append(valueElt);
@@ -61,9 +61,9 @@ function makeParam(key, val) {
 function paramsValOnFocus(valInput){
     var key = $(valInput).prev().val();
 
-    if (isFromOrTo(key)) {
+    if (isPlaceType(key)) {
         makeAutocomplete(valInput);
-    }else if (endsWithDatetime(key)) {
+    }else if (isDatetimeType(key)) {
         makeDatetime(valInput);
     } else if (isAutoCompleteInput($(valInput)) ||
                isDatePicker($(valInput))) {
