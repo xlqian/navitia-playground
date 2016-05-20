@@ -2,7 +2,7 @@ function makeDeleteButton() {
     return $('<button/>')
         .addClass('delete')
         .click(function() { $(this).closest('.toDelete').remove(); updateUrl(this); })
-        .text('-');
+        .text('x');
 }
 
 function insertRoute(val) {
@@ -75,8 +75,6 @@ function makeParam(key, val) {
         .val(key)
         .focus(function(){ updateUrl(this); })
         .keyup(function(){ updateUrl(this); }));
-
-    res.append('=');
 
     var valueElt = $('<input/>')
          .attr('type', 'text')

@@ -9,41 +9,71 @@
   <link rel="icon" href="img/favicon.ico">
 </head>
 <body>
-  <header>
-    <img src="img/logo_apiihm.png">
-  </header>
-  <H2>Create your request</H2>
+<header>
+  <img src='img/logo_apiihm.png'>
+</header>
 
-  <div id="request">
-    <div id="api"><span class="inputgrp">API <input type="text" class="api" value="" onfocus="updateUrl(this)" onkeyup="updateUrl(this)"></span></div>
-    <div id="token"><span class="inputgrp">Token <input type="text" class="token" value=""></span></div>
-    <div id="route">
-      Route
-      <span><button class="add" onclick="insertRoute(this)">+</button></span>
-    </div>
+  <div id="colun"><!-- colun -->
+    <div id="construction"><!-- construction -->
+      <div id="request"><!-- request-->
+        <H2>Create a request</H2>
+            <span id="api">         
+              <input placeholder="API" type="text" class="api" value="" onkeyup="updateUrl()">
+            </span>
 
-    <div id="parameters">
-      Parameters<span id="parameterList"></span>
-      <button class="add" onclick="insertParam()">+</button>
-    </div>
-    <div id="submit">
-      <button class="Submit" onclick="submit()">Submit</button>
-    </div>
+            <span id="token">
+              <input placeholder="Token" type="text" class="token" value="">
+            </span>
+            <div id="Meppath"><!--Meappath-->
+              <p>Path</p>
+              <span id="route">
+                <button class="add" onclick="insertRoute(this)">+</button>
+              </span>
+            </div><!--Meappath-->
+
+      </div><!-- request-->
+
+
+        <p>Parameters</p>
+        <div id="parameters"><!-- parameters -->
+          <span id="parameterList"></span>
+          <button class="add" onclick="insertParam()">+</button>
+          <div id="submit"><!-- submit -->
+            <button class="Submit" onclick="submit()">Submit</button>
+          </div><!-- submit -->
+        </div><!-- parameters -->
+    </div><!-- construction -->
+  </div><!-- colun -->
+
+
+<div id="coldeux">
+
+  <div id="seeurl">
+      <div id='urlDynamic'>
+        <H2>And the URL is...</H2>
+        <span type="text" name='request' id='requestUrl' />
+      </div>
   </div>
-  <div id="urlDynamic">
-    url dynamic: <span type="text" name="request" id="requestUrl" />
-  </div>
-  <div id="response">
-    <div id="status"></div>
-    <div id="data">Loading...</div>
-  </div>
-  <div id="urlForm">
-    <form action="" method="get">
-      url: <input type="text" name="request">
-      token: <input type="text" name="token" id="urlFormToken">
+
+
+
+    <!-- url + token à mettre sur la home plutot -->
+  <div id='urlForm'><!-- url -->
+    <form action='' method='get'>
+      <input placeholder="url" type="text" name='request'>
+      <input placeholder="Token" type="text" name='token' id='urlFormToken'>
       <button>Submit</button>
     </form>
-  </div>
+  </div><!-- url -->
+
+      <div id="response"><!-- response -->
+        <div id="status"></div>
+        <div id="data">Loading...</div>
+      </div><!-- response -->
+
+</div>
+ 
+
   <script src="lib/lib.min.js"></script>
   <script src="js/app.min.js"></script>
 </body>
