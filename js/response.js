@@ -70,9 +70,11 @@ function responseSummary(json) {
     }
     if ('pagination' in json) {
         var p = json.pagination;
-        result = result + '({0}-{1}/{2})'.format(p.start_page,
-                                               p.start_page + p.items_on_page - 1,
-                                               p.total_result);
+        var first_number = p.start_page * p.items_per_page + 1;
+        result = result + '({0}-{1} of {2}&nbsp;results)'.format(
+            first_number,
+            first_number + p.items_on_page - 1,
+            p.total_result);
     }
     return result;
 }
@@ -115,9 +117,9 @@ function render(name, json) {
                     return extended(name, json);
                 })))
                 .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
-                    return 'Not implemented yet';
+                    return 'Map not implemented yet';
                 })))
-                .append(makeObjectButton('{}', makeObjectButtonHandle('div.code', function() {
+                .append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
                     return renderjson(json);
                 }))));
 
