@@ -32,20 +32,54 @@ function makeParam(key, val) {
         .addClass('toDelete')
         .append(' ');
 
-    var attr = {type: 'text', onfocus: 'updateUrl(this)', onkeyup: '"updateUrl(this)"'};
+    res.append($('<input/>')
+        .attr('type', 'text')
+        .addClass('key')
+        .val(key)
+        .focus(function(){ updateUrl(this); })
+        .keyup(function(){ updateUrl(this); }));
 
-    var intputKeyAttr = Object.assign(attr, {class: 'key', value: key});
-    res.append($('<input/>', intputKeyAttr));
     res.append('=');
-    var inputValAttr = Object.assign(attr, {class: 'value', value: val});
-    var valueElt = $('<input/>', inputValAttr);
 
-    autocomplete(valueElt);
+    var valueElt = $('<input/>')
+         .attr('type', 'text')
+        .addClass('value')
+        .val(val)
+        .focus(function(){ paramsValOnFocus(this); })
+        .keyup(function(){ updateUrl(this); });
+
+    if (isPlaceType(key)) {
+        makeAutocomplete(valueElt);
+    }else if (isDatetimeType(key)) {
+        makeDatetime(valueElt);
+    }
     res.append(valueElt);
     res.append(makeDeleteButton());
     return res;
 }
 
+function paramsValOnFocus(valInput){
+    var key = $(valInput).prev().val();
+
+    if (isPlaceType(key)) {
+        makeAutocomplete(valInput);
+    }else if (isDatetimeType(key)) {
+        makeDatetime(valInput);
+    } else if (isAutoCompleteInput($(valInput)) ||
+               isDatePicker($(valInput))) {
+
+        var newElt = $('<input/>')
+            .addClass('value')
+            .attr('type', 'text')
+            .val($(valInput).val())
+            .keyup(function(){ updateUrl(this); })
+            .focus(function(){ paramsValOnFocus(this); });
+        $(valInput).replaceWith(newElt);
+        newElt.focus();
+        valInput = newElt;
+    }
+    updateUrl(valInput);
+}
 function insertParam() {
     $("#parameterList").append(makeParam('', ''));
 }
@@ -101,14 +135,10 @@ function getCoverage() {
     return coverage;
 }
 
-function autocomplete(elt) {
+function makeAutocomplete(elt) {
     $(elt).autocomplete({
         source: function(request, response) {
-            var keyValue = elt.parent().children(".key").val();
-            if ($.inArray(keyValue, ['from', 'to']) == -1) {
-                response([]);
-                return;
-            }
+
             var token = $('#token input.token').val();
             var url = $('#api input.api').val();
             var cov = getCoverage();
@@ -132,6 +162,17 @@ function autocomplete(elt) {
                 }
             });
         },
+    });
+}
+
+function makeDatetime(elt) {
+    $(elt).datetimepicker({
+        dateFormat: 'yymmdd',
+        timeFormat: 'HHmmss',
+        timeInput: true,
+        separator: 'T',
+        controlType: 'select',
+        oneLine: true,
     });
 }
 
