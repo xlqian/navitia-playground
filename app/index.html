@@ -13,8 +13,9 @@
   <img src='img/logo_apiihm.png'>
 </header>
 
-  <div id="colun">
-      <div id="request">
+  <div id="colun"><!-- colun -->
+    <div id="construction"><!-- construction -->
+      <div id="request"><!-- request-->
         <H2>Create a request</H2>
             <span id="api">         
               <input placeholder="API" type="text" class="api" value="" onkeyup="updateUrl()">
@@ -23,26 +24,31 @@
             <span id="token">
               <input placeholder="Token" type="text" class="token" value="">
             </span>
-     
-            <p>Route</p>
-            <span id="route">
-              <button class="add" onclick="insertRoute(this)">+</button>
-            </span>
+            <div id="Meppath"><!--Meappath-->
+              <p>Path</p>
+              <span id="route">
+                <button class="add" onclick="insertRoute(this)">+</button>
+              </span>
+            </div><!--Meappath-->
 
-      </div>
+      </div><!-- request-->
 
-      <div id="parameters">
-        <p>Parameters</p><span id="parameterList"></span>
-        <button class="add" onclick="insertParam()">+</button>
-      </div>
-      <div id="submit">
-        <button class="Submit" onclick="submit()">Submit</button>
-      </div>
-  </div>
 
-  <div id="coldeux">
+        <p>Parameters</p>
+        <div id="parameters"><!-- parameters -->
+          <span id="parameterList"></span>
+          <button class="add" onclick="insertParam()">+</button>
+          <div id="submit"><!-- submit -->
+            <button class="Submit" onclick="submit()">Submit</button>
+          </div><!-- submit -->
+        </div><!-- parameters -->
+    </div><!-- construction -->
+  </div><!-- colun -->
+
+
+<div id="coldeux">
+
   <div id="seeurl">
-
       <div id='urlDynamic'>
         <H2>And the URL is...</H2>
         <span type="text" name='request' id='requestUrl' />
@@ -52,23 +58,20 @@
 
 
     <!-- url + token à mettre sur la home plutot -->
-  <div id='urlForm'>
+  <div id='urlForm'><!-- url -->
     <form action='' method='get'>
       <input placeholder="url" type="text" name='request'>
       <input placeholder="Token" type="text" name='token' id='urlFormToken'>
       <button>Submit</button>
     </form>
-  </div>
+  </div><!-- url -->
 
-      <div id="response">
+      <div id="response"><!-- response -->
         <div id="status"></div>
         <div id="data">Loading...</div>
-      </div>
+      </div><!-- response -->
 
-
-
-
-  </div>
+</div>
  
 
   <script src="lib/lib.min.js"></script>

@@ -29,15 +29,16 @@ p{
 
 .col{
 	display: inline-block;
-	width: 28%;
-	margin: 2.5%;
-	padding: 0%;
+	width: 24%;
+	margin: 5% 4.5% 1% 4.5%;
+	padding: 2em 0em 0em 0em;
+	background: #EFEFEF;
 }
 
 img{
     display: block;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
 }
 
 h1, h2, p{
@@ -47,29 +48,29 @@ h1, h2, p{
 h2{
 	font-size: 1.5rem;
     font-weight: normal;
-    margin: 1em 0em 1.5em 0em;
+    margin: 0.5em 0em 0.8em 0em;
 }
 
-.liens{
-	border: solid 1px green;
-	height: 6ex;
+.rubriques{
+	float: left;
+	width: 100%;
+	background: #FFF;
+	padding-top: 1em;
 }
 
 a{
-	float: left;
-	width: 80%;
-	border-radius: 0.2em;
-	margin: 0% 5% 2.5% 8%;
-	padding: 0.7em 0em 0.7em 1em;
-	background: #FFF;
+	display: list-item;
+	list-style-type: none;
 	font-family: 'OpenSans', sans-serif;
-	font-size: 100%;
+	font-size: 90%;
 	text-decoration: none;
+	text-align: center;
+	padding: 0em 0em 1em 0em;
 	color: #4e4e4e;
 }
 
 a:hover{
-	background: #bfebfa;
+	color: #bfebfa;
 }
 
 

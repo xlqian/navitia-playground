@@ -1,6 +1,6 @@
 body {
-    background-color: #F5F5F5;
-    margin: 0em;
+    background-color: #ededed;
+    margin: 0%;
     font-family: 'OpenSans', sans-serif;
     font-size: 100%;
     color: #4e4e4e;
@@ -18,105 +18,140 @@ img {
 
 h2{
 	line-height: 1em;
-	padding: 1.5em 0em 1em 0.5em;
+	text-align: center;
+	font-weight: normal;
+	padding: 0em 0em 1em 0em;
 	margin: 0em; 
 }
 
 #colun{
-	background: #EFEFEF;
 	float: left;
-	width: 17.5em;
-	margin: 1em 0.5 1em 1em;
-	padding: 1em;
+	width: 25%;
+	background: #ededed;
+	padding: 0%;
+}
+
+#construction{
+	padding: 2em;
+}
+
+#seeUrl, #urlForm{
+	text-align: center;
+	background: #F5F5F5 ;
+	padding: 2em 4em 1.4em 4em;
 }
 
 #coldeux{
-	float: left; 
+	float: left;
+	margin: 0%;
+	width: 75%;
+	background: #fff;
+	padding: 0%;
 }
 
-#api, #token, #route, #parameterList, #requestUrl, input.key, input.value {
-	display: list-item;
-	list-style-type: none;
+p{
+	margin: 1.5em 0em 0.5em 0em;
+	padding: 1em 0em 0em 0em;
+	border-top: 1px solid #9F9F9F;
+	text-align: center;
 }
 
+/* LES INPUT */
 input{
-	height: 5ex;
+	height: 5.2ex;
 	width: 100%;
+	margin-top: 0.3em;
 	padding: 0em 0em 0em 0.5em;
-	margin-bottom: 0.5em;
+	margin: 1em 0em 0.5em 0em;
 }
 
-button{
-	height: 4.5ex;
+/* API & TOKEN */
+input.api, input.token{
 	width: 100%;
+	height: 3%;
+}
+
+/* LES BTNS */
+button{
+	height: 3%;
+	width: 50%;
 	border: none;
 	border-radius: 0.25em;
 	color: #fff;
 	background: #56b5db;
 }
 
-button.code, button.summary, button.delete, button.add{
-	width: 4.5ex;
-	margin: 0em 0em 0.5em 0em;
+#Meppath{
+	display: inline-block; 	
+	width: 100%;
 }
 
-button.submit, input{
-	margin: 0em 0em 0.5em 0em;
+/* PATH */
+.routeElt,{
+	/*display: flex;
+	    flex-flow: row nowrap;
+	    justify-content: space-between;
+	    align-items: center;
+	    //margin: auto;
+		padding: 0em;*/
+	display: table;
+	width: 100%;
+	padding: 0em;
+	height: 5ex;
 }
 
-#seeurl, #urlForm{
-	background: #EFEFEF;
-	margin: 1em;
-	padding: 1em;
+.code, .summary{
+	width: 5ex;
 }
 
-#requestUrl, #urlDynamic{
-	display: inline-block;
+/* BTN DELETE DANS INPUT */
+input.key, input.value{
+	width: 45.5%;
 }
 
-#requestUrl{
-	color: #353535;  
+input.key{
+	margin: 0% 2% 0% 0%;
 }
 
-#response{
-	margin: 0em 1em 0em 1em;
+input.route{
+	height: 5ex;
+	width: 84%;
+	border: solid 1px #DEDEDE;
 	background: #FFF;
 }
 
-#status{
-	text-align: center; 
-	margin: 1em 0em 1em 0em;
-	padding: 2em 0em 1em;
-	font-weight: bold;
+button.add{
+	width: 7%;
+	height: 4.9ex;
+	padding: 0em;
+	border: none;
+	margin-left: 2%;
 }
 
-li{
-	list-style-type: none;
-	margin-left: -2.5em;
+button.delete{
+	width: 7%;
+	height: 4.9ex;
+	padding: 0em;
+	border: none;
+	border-radius: 0em 0.25em 0.25em 0em;
+	background: #777;
+}
+ 
+ /* BTN SUBMIT*/
+button.submit{
+	width: 100%;
+	margin: 2em 0em 1em 0em;
 }
 
-div.head, span.summary_text{
-	margin: 0em 1em 0em 1em;
+#requestUrl{
+	padding-bottom: 0.5em;
+	border-bottom: solid 1px #56b5db;
 }
 
-span.name{
-	margin: 0em 0.5em 0em 0em;
+#urlFormToken{
+	margin-bottom: 3em;
 }
 
-span.name, button.code, button.summary, span.summary_text{
-display: inline-table;
-}
 
-button.summary, span.summary_text{
-	margin: 0em 0.5em 0em 0.5em;
-}
 
-div.render{
-	border: 1px solid #dedede;
-	margin: 0.5em;
-	padding: 0.5em 0em 0.5em 0em;
-}
 
-#response{
-	text-transform: lowercase;
-}

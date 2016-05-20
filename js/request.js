@@ -2,7 +2,7 @@ function makeDeleteButton() {
     return $('<button/>')
         .addClass('delete')
         .click(function() { $(this).closest('.toDelete').remove(); updateUrl(this); })
-        .text('-');
+        .text('x');
 }
 
 function insertRoute(val) {
@@ -36,7 +36,6 @@ function makeParam(key, val) {
 
     var intputKeyAttr = Object.assign(attr, {class: 'key', value: key});
     res.append($('<input/>', intputKeyAttr));
-    res.append('=');
     var inputValAttr = Object.assign(attr, {class: 'value', value: val});
     var valueElt = $('<input/>', inputValAttr);
 
