@@ -20,13 +20,14 @@ function makeRoute(val, currentRouteValue) {
                 .addClass('pathElt')
                 .append($('<input/>')
                         .attr({id: 'inputCov',
-			       type: 'text',
+                               type: 'text',
                                onfocus: 'updateUrl(this)',
+                               onfocus: 'routeValOnFocus(this)',
                                onkeyup: 'updateUrl(this)'})
                         .addClass('route'))
                 .append(makeDeleteButton()))
         .append('<button class="add" onclick="insertRoute(this)">+</button>')       
-        listCoverage(val);
+        makeCoverageList(val);
         return res;
     } else {
         return $('<span/>')
@@ -44,6 +45,43 @@ function makeRoute(val, currentRouteValue) {
                 .append(makeDeleteButton()))
         .append('<button class="add" onclick="insertRoute(this)">+</button>')
     }
+}
+
+function routeValOnFocus(valInput) {
+    var cov = $('.route', $(valInput).parent().parent().prev()).val();
+
+    if (cov == 'coverage' && ! $(valInput).attr('class').contains('route ui-autocomplete-input')) {
+        var delete_button = $('.delete', $(valInput).parent());
+        var v = $(valInput).val();
+        
+        $(valInput).remove();
+        
+        var valueElt = $('<input/>', {type: 'text',
+                                      onfocus: 'updateUrl(this)',
+                                      onfocus: 'routeValOnFocus(this)',
+                                      onkeyup: 'updateUrl(this)',
+                                      class: 'route ui-autocomplete-input',
+                                      id: 'inputCov'});
+        valueElt.insertBefore(delete_button);
+        makeCoverageList(v);
+        valInput = valueElt;
+    } else if (cov != 'coverage' && $(valInput).attr('class').contains('route ui-autocomplete-input')) {
+        var delete_button = $('.delete', $(valInput).parent());
+        var v = $(valInput).val();
+        
+        $(valInput).remove();
+        
+        var valueElt = $('<input/>', {type: 'text',
+                                      onfocus: 'updateUrl(this)',
+                                      onfocus: 'routeValOnFocus(this)',
+                                      onkeyup: 'updateUrl(this)',
+                                      class: 'route',
+                                      value: v});
+        valueElt.insertBefore(delete_button);
+        valueElt.focus();
+        valInput = valueElt;
+    }
+    updateUrl(valInput);
 }
 
 function makeParam(key, val) {
@@ -78,13 +116,13 @@ function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
     return noEncoding ? elemToTest.value : elemToTest.value.encodeURI();
 }
 
-function listCoverage(val) {
+function makeCoverageList(val) {
     var search = new URI(window.location).search(true);
     var api = $("#api input.api").attr('value');
     var request =  api + "/coverage";
     var token = search["token"];
     var res = [];
-
+    
     $.ajax({
         headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token + ":" ) },
         dataType: "json",
@@ -95,7 +133,7 @@ function listCoverage(val) {
                         res.push(data[dict][cov].id);
                     }
                     if (val) { $("#inputCov").val(val); }
-                    var auto = $("#inputCov").autocomplete({source: res, minLength: 0, scroll: true});
+                    var auto = $("#inputCov").autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
                     auto.focus(function() {
                         auto.autocomplete("search", '');
                     });
