@@ -1,0 +1,72 @@
+/* --------------------
+URL TOKEN
+--------------------- */
+
+/* API & TOKEN */
+input.api, input.token{
+	width: 100%;
+}
+
+/* -----------------------
+PATH  et PARAMETERS 
+----------------------- */
+
+#Meppath{
+	width: 100%;
+}
+
+.routeElt{
+	margin-top: 0.5em;
+}
+
+.pathElt, .routeElt, .param{
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: right;
+	width: 100%;
+	padding: 0em;
+	height: 5ex;
+}
+
+.param{
+	margin: 0.5em 0em 0.5em 0em;
+}
+
+input.route{
+	height: 5ex;
+	width: 100%;
+	margin: 0em; 
+}
+
+input.key, input.value{
+	width: 46%;
+	height: 5ex;
+	margin: 0em; 
+}
+
+input.key{
+	margin-right: 0.5em ;
+}
+
+button.add{
+	width: 5ex;
+	height: 4.9ex;
+	padding: 0em;
+	border: none;
+	margin: 0em 0em 0em 0.5em;
+}
+
+button.delete{
+	width: 5ex;
+	height: 4.9ex;
+	padding: 0em;
+	border: none;
+	border-radius: 0em 0.25em 0.25em 0em;
+	background: #777;
+}
+ 
+@media screen and (max-width: 56em) {
+	input.key, input.value{
+		width: 50%;
+	}
+}
