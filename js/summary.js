@@ -66,6 +66,14 @@ function formatDatetime(datetime) {
                            '$1-$2-$3 $4:$5:$5');
 }
 
+function makeLineCode(display_informations) {
+    var elt = $('<span>')
+        .addClass('line_code')
+        .append(display_informations.code);
+    setColors(elt, display_informations);
+    return elt;
+}
+
 function journeySummary(json) {
     var res = $('<span>').append(formatDatetime(json.departure_date_time).split(' ')[1]);
     function add(s) {
@@ -82,11 +90,7 @@ function journeySummary(json) {
                 break;
             case "street_network": add(s.mode); break;
             case "public_transport":
-                var elt = $('<span>')
-                    .addClass('line_code')
-                    .append(s.display_informations.code);
-                setColors(elt, s.display_informations);
-                add(elt);
+                add(makeLineCode(s.display_informations));
                 break;
             default: add(s.type); break;
             }
@@ -99,6 +103,7 @@ function journeySummary(json) {
     }
 
     add(formatDatetime(json.arrival_date_time).split(' ')[1]);
+    res.append(', duration: ' + durationToString(json.duration));
     return res;
 }
 
@@ -137,6 +142,26 @@ function embeddedSummary(json) {
         .append(summary(json.embedded_type, json[json.embedded_type]));
 }
 
+function sectionSummary(section) {
+    var res = $('<span>');
+    switch (section.type) {
+    case 'street_network': res.append(section.mode); break;
+    case 'transfer': res.append(section.transfer_type); break;
+    case 'public_transport': res.append(makeLineCode(section.display_informations)); break;
+    default: res.append(section.type); break;
+    }
+    if ('from' in section) {
+        res.append(' from {0}'.format(htmlEncode(section.from.name)));
+    }
+    if ('to' in section) {
+        res.append(' to {0}'.format(htmlEncode(section.to.name)));
+    }
+    if ('duration' in section) {
+        res.append(' during {0}'.format(durationToString(section.duration)));
+    }
+    return res;
+}
+
 function summary(type, json) {
     switch (type) {
     case 'response': return responseSummary(json);
@@ -145,6 +170,7 @@ function summary(type, json) {
     case 'pt_object':
     case 'place':
         return embeddedSummary(json);
+    case 'section': return sectionSummary(json);
         // insert here your custom summary
     default: return defaultSummary(json);
     }
