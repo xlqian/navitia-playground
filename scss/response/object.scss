@@ -44,9 +44,13 @@ div.object {
     }
 
     .line_code {
+        display: inline-block;
         border: none;
-        border-radius: 300ex;// a lot to have great circles
-        padding: 1ex;
+        border-radius: 2em;// more than line-heght + 2 * padding to have circle borders
+        line-height: 1.2em;
+        min-width: 1.2em;// min-width == line-height to have a circle if small enough
+        text-align: center;// to have the code centered if smaller than min-width
+        padding: 0.4em;
     }
 
     @import 'button';
