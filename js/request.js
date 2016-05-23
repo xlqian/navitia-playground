@@ -11,7 +11,7 @@ function insertRoute(val) {
 }
 
 function makeTemplatePath(val, currentRouteValue, input) {
-    input.blur(function() {(this.value=='')? this.value=val:this.value;})
+    input.blur(function() { this.value = (this.value=='')? val:this.value;})
          .keyup(function(){ updateUrl(this); })
          .focusout(function() { if (($(this).val().slice(0, 1) == '{' && $(this).val().slice(-1) == '}') || (!$(this).val())) { $(this).addClass('defaultText'); } else { $(this).removeClass('defaultText'); } })
     if (currentRouteValue == 'coverage') {
