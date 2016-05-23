@@ -41,12 +41,6 @@ h2{
 	padding: 2em 4em 1.4em 4em;
 }
 
-#response {
-    background: #FFFFFF;
-    margin: 0;
-    padding: 3em;
-}
-
 #coldeux{
 	float: left;
 	margin: 0%;
@@ -98,7 +92,7 @@ button{
 	margin-top: 0.5em;
 }
 
-.pathElt, .routeElt, #parameterList, .param{
+.pathElt, .routeElt, .param{
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: right;
@@ -125,7 +119,7 @@ input.route{
 
 
 input.key, input.value{
-	width: 48%;
+	width: 46%;
 	height: 5ex;
 	margin: 0em; 
 }
@@ -180,5 +174,9 @@ button.delete{
 
 	#coldeux{
 		width: 100%;
+	}
+
+	input.key, input.value{
+		width: 50%;
 	}
 }
