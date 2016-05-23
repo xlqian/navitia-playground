@@ -75,6 +75,7 @@ function journeySummary(json) {
         switch (s.type) {
         case "transfer":
         case "waiting":
+        case "crow_fly":
             break;
         case "street_network": add(s.mode); break;
         case "public_transport":
