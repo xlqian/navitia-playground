@@ -92,13 +92,40 @@ function journeySummary(json) {
     return res;
 }
 
-function summary(name, json) {
-    if (name == 'response') {
-        return responseSummary(json);
+function linksSummary(json) {
+    var token = URI(window.location).search(true)["token"];
+    var res = $('<span>');
+    function makeHref(href) {
+        var res = '?request={0}'.format(href.encodeURI());
+        if (token) {
+            res += '&token={0}'.format(token.encodeURI());
+        }
+        return res;
     }
-    if (name == 'journey') {
-        return journeySummary(json);
+    function makeData(link) {
+        var res = link.type;
+        if (link.templated) {
+            res = '{{0}}'.format(res);
+        }
+        return res;
     }
-    // add here custom summary
-    return defaultSummary(json);
+    if ($.isArray(json)) {
+        json.forEach(function(link, i) {
+            res.append(' ')
+                .append($('<a>').attr('href', makeHref(link.href)).html(makeData(link)));
+        });
+    } else {
+        res.append('Links is not an array!');
+    }
+    return res;
+}
+
+function summary(type, json) {
+    switch (type) {
+    case 'response': return responseSummary(json);
+    case 'journey': return journeySummary(json);
+    case 'links': return linksSummary(json);
+        // insert here your custom summary
+    default: return defaultSummary(json);
+    }
 }

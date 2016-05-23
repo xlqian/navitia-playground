@@ -6,6 +6,9 @@ function responseExtended(json) {
         type = type.slice(0, -1);
     }
     var result = $('<div class="list"/>');
+    if ('links' in json) {
+        result.append(render('links', 'links', json.links));
+    }
     objs.forEach(function(obj, i) {
         result.append(render('{0}[{1}]'.format(key, i), type, obj));
     });

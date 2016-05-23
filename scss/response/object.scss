@@ -30,13 +30,14 @@ div.object {
         border-style: none;
         margin: 0;
         padding: 0;
+        overflow-x: auto;
     }
     div.data > div {
         border-style: solid;
         border-width: 0.1ex 0 0 0;
         border-color: #DEDEDE;    
         margin: 0;
-        padding: 1ex;
+        padding: 0;
     }
     div.not_filled {
         display: none;
