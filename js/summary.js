@@ -120,7 +120,7 @@ function linksSummary(json) {
         return res;
     }
     if ($.isArray(json)) {
-        json.forEach(function(link, i) {
+        json.forEach(function(link) {
             res.append(' ')
                 .append($('<a>').attr('href', makeHref(link.href)).html(makeData(link)));
         });
