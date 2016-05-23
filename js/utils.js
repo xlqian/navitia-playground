@@ -18,6 +18,10 @@ function isDatePicker(elt) {
     return elt.attr('class').contains('hasDatepicker');
 }
 
+function htmlEncode(value) {
+    return $('<div/>').text(value).html();
+}
+
 String.prototype.format = String.prototype.f = function() {
     var s = this,
         i = arguments.length;

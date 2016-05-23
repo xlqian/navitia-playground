@@ -7,7 +7,7 @@ function makeDeleteButton() {
 
 function insertRoute(val) {
     var currentRouteValue = $('.route', $(val).parent()).val();
-    $(val).parent().after(makeRoute('', currentRouteValue));
+    $(val).after(makeRoute('', currentRouteValue));
 }
 
 function makeRoute(val, currentRouteValue) {
