@@ -51,7 +51,7 @@ h2{
 p{
 	margin: 1.5em 0em 0.5em 0em;
 	padding: 1em 0em 0em 0em;
-	border-top: 1px solid #9F9F9F;
+	border-top: 0.1em solid #9F9F9F;
 	text-align: center;
 }
 
@@ -60,7 +60,7 @@ input{
 	width: 100%;
 	padding: 0em 0em 0em 0.5em;
 	margin: 1em 0em 0.5em 0em;
-	border: solid 1px #DEDEDE;
+	border: solid 0.1em #DEDEDE;
 	background: #FFF;
 }
 
@@ -85,7 +85,7 @@ button.submit{
 	margin: 2em 0em 1em 0em;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 56em) {
 	#colun{
 		width: 100%; 
 	}
