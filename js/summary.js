@@ -36,6 +36,9 @@ function defaultSummary(json) {
 }
 
 function responseSummary(json) {
+    if ('message' in json) {
+        return 'Message: {0}'.format(json.message);
+    }
     if ('error' in json) {
         return 'Error: {0}'.format(json.error.message);
     }
@@ -60,12 +63,8 @@ function formatDatetime(datetime) {
                            '$1-$2-$3 $4:$5:$5');
 }
 
-function getDate(datetime) {
-    return datetime.replace(/(\d{8}).*/, '$1');
-}
-
 function journeySummary(json) {
-    var res = $('<span>').append(formatDatetime(json.departure_date_time));
+    var res = $('<span>').append(formatDatetime(json.departure_date_time).split(' ')[1]);
     function add(s) {
         res.append(' > ');
         res.append(s);
@@ -89,11 +88,7 @@ function journeySummary(json) {
         }
     });
 
-    if (getDate(json.departure_date_time) == getDate(json.arrival_date_time)) {
-        add(formatDatetime(json.arrival_date_time).split(' ')[1]);
-    } else {
-        add(formatDatetime(json.arrival_date_time));
-    }
+    add(formatDatetime(json.arrival_date_time).split(' ')[1]);
     return res;
 }
 
