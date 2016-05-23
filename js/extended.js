@@ -1,12 +1,13 @@
 function responseExtended(json) {
     var key = responseCollectionName(json);
     var objs = key ? json[key] : [];
-    if (key.slice(-1) == 's') {
-        key = key.slice(0, -1);
+    var type = key;
+    if (type.slice(-1) == 's') {
+        type = type.slice(0, -1);
     }
     var result = $('<div class="list"/>');
-    objs.forEach(function(obj) {
-        result.append(render(key, obj));
+    objs.forEach(function(obj, i) {
+        result.append(render('{0}[{1}]'.format(key, i), type, obj));
     });
     return result;
 }

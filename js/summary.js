@@ -1,3 +1,25 @@
+function getTextColor(json) {
+    if ('text_color' in json) {
+        return '#' + json['text_color'];
+    }
+    if ('color' in json) {
+        var c = json.color;
+        function toNum(i) { return +('0x' + c.slice(i, i + 2)); }
+        var grey = 0.21 * toNum(0) + 0.72 * toNum(2) + 0.07 * toNum(4)
+        if (grey < 128) {
+            return 'white';
+        }
+    }
+    return 'black';
+}
+
+function setColors(elt, json) {
+    if ('color' in json) {
+        elt.css('background-color', '#' + json.color);
+        elt.css('color', getTextColor(json));
+    }
+}
+
 function defaultSummary(json) {
     var result = $('<span/>');
     if ('label' in json) {
@@ -9,16 +31,14 @@ function defaultSummary(json) {
     } else if ('id' in json) {
         result.html(json['id']);
     }
-    if ('color' in json) {
-        result.css('background-color', '#' + json.color);
-    }
-    if ('text_color' in json) {
-        result.css('color', '#' + json['text_color']);
-    }
+    setColors(result, json);
     return result;
 }
 
 function responseSummary(json) {
+    if ('message' in json) {
+        return 'Message: {0}'.format(json.message);
+    }
     if ('error' in json) {
         return 'Error: {0}'.format(json.error.message);
     }
@@ -38,9 +58,46 @@ function responseSummary(json) {
     return result;
 }
 
+function formatDatetime(datetime) {
+    return datetime.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/,
+                           '$1-$2-$3 $4:$5:$5');
+}
+
+function journeySummary(json) {
+    var res = $('<span>').append(formatDatetime(json.departure_date_time).split(' ')[1]);
+    function add(s) {
+        res.append(' > ');
+        res.append(s);
+    }
+
+    json.sections.forEach(function(s) {
+        switch (s.type) {
+        case "transfer":
+        case "waiting":
+        case "crow_fly":
+            break;
+        case "street_network": add(s.mode); break;
+        case "public_transport":
+            var elt = $('<span>')
+                .addClass('line_code')
+                .append(s.display_informations.code);
+            setColors(elt, s.display_informations);
+            add(elt);
+            break;
+        default: add(s.type); break;
+        }
+    });
+
+    add(formatDatetime(json.arrival_date_time).split(' ')[1]);
+    return res;
+}
+
 function summary(name, json) {
     if (name == 'response') {
         return responseSummary(json);
+    }
+    if (name == 'journey') {
+        return journeySummary(json);
     }
     // add here custom summary
     return defaultSummary(json);

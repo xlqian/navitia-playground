@@ -13,11 +13,11 @@ div.object {
         margin: 0;
         border-style: none;
     }
-    div.type, div.button, div.summary {
+    div.name, div.button, div.summary {
         border-style: none;
         margin: 1ex;
     }
-    div.type {
+    div.name {
         font-weight: bold;
     }
     div.button {
@@ -25,7 +25,6 @@ div.object {
     }
     div.summary {
         flex: 1;
-        padding-left: 2ex;
     }
     div.data {
         border-style: none;
@@ -42,5 +41,14 @@ div.object {
     div.not_filled {
         display: none;
     }
-    @import 'button';
+
+    .line_code {
+        display: inline-block;
+        border: none;
+        border-radius: 2em;// more than line-heght + 2 * padding to have circle borders
+        line-height: 1.2em;
+        min-width: 1.2em;// min-width == line-height to have a circle if small enough
+        text-align: center;// to have the code centered if smaller than min-width
+        padding: 0.4em;
+    }
 }

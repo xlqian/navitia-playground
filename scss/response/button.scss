@@ -1,26 +1,28 @@
-label.objectButton {
-    display: inline-block;
-}
+div.object {
+    label.objectButton {
+        display: inline-block;
+    }
 
-label.objectButton span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 5ex;
-    width: 5ex;
-    background: #efefef;
-    margin: 0.2ex;
-    border: none;
-    border-radius: 0.25em;
-    color: #353535;
-    text-align:center;
-}
+    label.objectButton span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 5ex;
+        width: 5ex;
+        background: #efefef;
+        margin: 0.2ex;
+        border: none;
+        border-radius: 0.25em;
+        color: #353535;
+        text-align:center;
+    }
 
-label.objectButton input {
-    display: none;
-}
+    label.objectButton input {
+        display: none;
+    }
 
-label.objectButton input:checked + span {
-    background-color:#56B5DB;
-    color:#fff;
+    label.objectButton input:checked + span {
+        background-color:#56B5DB;
+        color:#fff;
+    }
 }
