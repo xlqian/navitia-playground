@@ -39,13 +39,13 @@ function makeObjectButtonHandle(selector, renderHandle) {
     };
 }
 
-function render(name, json) {
+function render(name, type, json) {
     var head = $('<div class="head">');
-    head.append($('<div class="type">').html(name));
-    head.append($('<div class="summary">').html(summary(name, json)));
+    head.append($('<div class="name">').html(name));
+    head.append($('<div class="summary">').html(summary(type, json)));
     head.append($('<div class="button">')
                 .append(makeObjectButton('Ext', makeObjectButtonHandle('div.extended', function() {
-                    return extended(name, json);
+                    return extended(type, json);
                 })))
                 .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
                     return 'Map not implemented yet';
@@ -81,12 +81,12 @@ $(document).ready(function() {
     }).then(
         function(data, status, xhr) {
             setStatus(xhr);
-            $("#data").html(render("response", data));
+            $("#data").html(render("response", "response", data));
             $('#data input').first().click();
         },
         function(xhr, status, error) {
             setStatus(xhr);
-            $("#data").html(render("response", xhr.responseJSON));
+            $("#data").html(render("error", "response", xhr.responseJSON));
             $('#data input').last().click();
         }
     );
