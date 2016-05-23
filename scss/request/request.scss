@@ -1,0 +1,184 @@
+body {
+    background-color: #ededed;
+    margin: 0%;
+    font-family: 'OpenSans', sans-serif;
+    font-size: 100%;
+    color: #4e4e4e;
+}
+
+header{
+	width: 100%;
+	background-color: #ffffff;
+	margin: 0em;
+}
+
+img {
+    display: block;
+}
+
+h2{
+	line-height: 1em;
+	text-align: center;
+	font-weight: normal;
+	padding: 0em 0em 1em 0em;
+	margin: 0em; 
+}
+
+#colun{
+	float: left;
+	width: 25%;
+	background: #ededed;
+	padding: 0%;
+}
+
+#construction{
+	padding: 2em;
+}
+
+#seeUrl, #urlForm{
+	text-align: center;
+	background: #F5F5F5 ;
+	padding: 2em 4em 1.4em 4em;
+}
+
+#response {
+    background: #FFFFFF;
+    margin: 0;
+    padding: 3em;
+}
+
+#coldeux{
+	float: left;
+	margin: 0%;
+	width: 75%;
+	background: #fff;
+	padding: 0%;
+}
+
+p{
+	margin: 1.5em 0em 0.5em 0em;
+	padding: 1em 0em 0em 0em;
+	border-top: 1px solid #9F9F9F;
+	text-align: center;
+}
+
+/* LES INPUT */
+input{
+	height: 5.2ex;
+	width: 100%;
+	padding: 0em 0em 0em 0.5em;
+	margin: 1em 0em 0.5em 0em;
+	border: solid 1px #DEDEDE;
+	background: #FFF;
+}
+
+/* API & TOKEN */
+input.api, input.token{
+	width: 100%;
+	height: 3%;
+}
+
+/* LES BTNS */
+button{
+	height: 5ex;
+	width: 50%;
+	border: none;
+	border-radius: 0.25em;
+	color: #fff;
+	background: #56b5db;
+}
+
+#Meppath{
+	width: 100%;
+}
+
+/* PATH */
+
+.routeElt{
+	margin-top: 0.5em;
+}
+
+.pathElt, .routeElt, #parameterList, .param{
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: right;
+	width: 100%;
+	padding: 0em;
+	height: 5ex;
+}
+
+.param{
+	margin: 0.5em 0em 0.5em 0em;
+}
+
+.code, .summary{
+	width: 5ex;
+}
+
+/* BTN DELETE DANS INPUT */
+
+input.route{
+	height: 5ex;
+	width: 100%;
+	margin: 0em; 
+}
+
+
+input.key, input.value{
+	width: 48%;
+	height: 5ex;
+	margin: 0em; 
+}
+input.key{
+	margin-right: 0.5em ;
+}
+
+button.add{
+	width: 5ex;
+	height: 4.9ex;
+	padding: 0em;
+	border: none;
+	margin: 0em 0em 0em 0.5em;
+}
+
+button.delete{
+	width: 5ex;
+	height: 4.9ex;
+	padding: 0em;
+	border: none;
+	border-radius: 0em 0.25em 0.25em 0em;
+	background: #777;
+}
+ 
+ /* BTN SUBMIT*/
+	button.submit{
+	width: 100%;
+	margin: 2em 0em 1em 0em;
+}
+
+#requestUrl{
+	padding-bottom: 0.3em;
+	border-bottom: solid 1px #56b5db;
+	line-height: 2.5em;
+}
+
+#urlFormToken{
+	margin-bottom: 3em;
+}
+
+.ui-autocomplete {
+    height:auto;
+    max-height: 30ex;
+    overflow-y:scroll;
+}
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 900px) {
+	#colun{
+		width: 100%; 
+	}
+
+	#coldeux{
+		width: 100%;
+	}
+}
