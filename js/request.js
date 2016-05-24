@@ -237,51 +237,65 @@ function makeDatetime(elt) {
     });
 }
 
-$(document).ready(function() {
+function parseUrl() {
     var search = new URI(window.location).search(true);
     var token = search['token'];
-    if (isUndefined(token)) { token = ''; }
-    $("#token input.token").attr('value', token);
-    $("#urlFormToken").attr('value', token);
-
     var request = search['request'];
-    if (isUndefined(request)) { return; }
+    if (isUndefined(request)) { return null; }
 
     var req_uri = new URI(request);
-    var origin = req_uri.origin();
+    var api = req_uri.origin();
     var paths = req_uri.path().split('/');
-    // The first element after a split is an empty string("")
-    if (paths.length == 1) { return; }
-    var api = origin;
+    paths = paths.length == 1 ? [] : paths.slice(1);
+    var api_path = [];
 
     var vxxFound = false;
-    paths.slice(1).forEach(function(r) {
+    paths.forEach(function(r) {
+        console.log(r);
         if (!r) { return; }
         if (vxxFound) {
-            var currentRouteValue = $('#route span .route').last().val();
-            $("#route").append(makeRoute(r.decodeURI(), currentRouteValue));
+            api_path.push(r.decodeURI());
         } else {
-            api = api + '/' + r.decodeURI();
+            api += '/' + r.decodeURI();
             vxxFound = /^v\d+$/.test(r);
-            $("#api input.api").attr('value', api);
         }
-    })
+    });
 
     var params = req_uri.search(true);
 
-    if (! isUndefined(params)) {
-        var param_elt = $("#parameterList");
-        for (var key in params) {
-            var value = params[key];
-            // a list of params, ex.: forbidded_uris[]
-            if (Array.isArray(value)) {
-                value.forEach(function(v){
+    return {
+        token: token,
+        request: request,
+        api: api,
+        path: api_path,
+        query: isUndefined(params) ? {} : params
+    };
+}
+
+$(document).ready(function() {
+    var request = parseUrl();
+    if (request === null) { return; }
+    if (isUndefined(request.token)) { request.token = ''; }
+    $("#token input.token").attr('value', request.token);
+    $("#urlFormToken").attr('value', request.token);
+    $("#api input.api").attr('value', request.api);
+
+    request.path.forEach(function(r) {
+        var currentRouteValue = $('#route span .route').last().val();
+        $("#route").append(makeRoute(r, currentRouteValue));
+    });
+
+    var param_elt = $("#parameterList");
+    for (var key in request.query) {
+        var value = request.query[key];
+        // a list of params, ex.: forbidded_uris[]
+        if (Array.isArray(value)) {
+            value.forEach(function(v){
                 param_elt.append(makeParam(key.decodeURI(), v.decodeURI()));
-                });
-            } else {
-                param_elt.append(makeParam(key.decodeURI(), params[key]));
-            }
+            });
+        } else {
+            param_elt.append(makeParam(key.decodeURI(), value));
         }
     }
-    $('#urlDynamic span').html(request);
+    $('#urlDynamic span').html(request.request);
 });
