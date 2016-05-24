@@ -11,11 +11,11 @@ function isDatetimeType(str) {
 }
 
 function isAutoCompleteInput(elt) {
-    return elt.attr('class').contains('ui-autocomplete-input');
+    return elt.attr('class').indexOf('ui-autocomplete-input') > -1;
 }
 
 function isDatePicker(elt) {
-    return elt.attr('class').contains('hasDatepicker');
+    return elt.attr('class').indexOf('ui-autocomplete-input') > -1;
 }
 
 function htmlEncode(value) {
