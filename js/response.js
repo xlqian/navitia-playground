@@ -66,23 +66,22 @@ function render(name, type, json) {
 }
 
 $(document).ready(function() {
-    var search = new URI(window.location).search(true);
-    var request = search["request"];
-    var token = search["token"];
-    if (isUndefined(request)) {
+    var request = parseUrl();
+    if (request === null) {
         $("#data").html("No request");
         return;
     }
     renderjson.set_show_to_level(3);
     $.ajax({
-        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
-        url: request,
+        headers: isUndefined(request.token) ? {} : { Authorization: "Basic " + btoa(request.token) },
+        url: request.request,
         dataType: "json",
     }).then(
         function(data, status, xhr) {
             setStatus(xhr);
             $("#data").html(render("response", "response", data));
             $('#data input').first().click();
+            saveToken(request.api, request.token);
         },
         function(xhr, status, error) {
             setStatus(xhr);

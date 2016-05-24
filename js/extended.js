@@ -2,6 +2,7 @@ function responseExtended(json) {
     var key = responseCollectionName(json);
     var objs = key ? json[key] : [];
     var type = key;
+    if (! type) { return 'Unknown request type'; }
     if (type.slice(-1) == 's') {
         type = type.slice(0, -1);
     }
