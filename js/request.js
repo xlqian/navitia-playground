@@ -239,7 +239,6 @@ function makeDatetime(elt) {
 
 function parseUrl() {
     var search = new URI(window.location).search(true);
-    var token = search['token'];
     var request = search['request'];
     if (isUndefined(request)) { return null; }
 
@@ -251,7 +250,6 @@ function parseUrl() {
 
     var vxxFound = false;
     paths.forEach(function(r) {
-        console.log(r);
         if (!r) { return; }
         if (vxxFound) {
             api_path.push(r.decodeURI());
@@ -262,6 +260,9 @@ function parseUrl() {
     });
 
     var params = req_uri.search(true);
+
+    var token = search['token'];
+    if (isUndefined(token)) { token = getTokenFromStorage(api); }
 
     return {
         token: token,

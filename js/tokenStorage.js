@@ -16,3 +16,8 @@ function saveToken(api, token) {
     if (! token) { return; }
     window.localStorage.setItem(api, token);
 }
+
+function getTokenFromStorage(api) {
+    if (! localStorageAvailable()) { return; }
+    return window.localStorage.getItem(api);
+}
