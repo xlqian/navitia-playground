@@ -66,6 +66,10 @@ function formatDatetime(datetime) {
                            '$1-$2-$3 $4:$5:$5');
 }
 
+function formatTime(datetime) {
+    return formatDatetime(datetime).split(' ')[1];
+}
+
 function makeLineCode(display_informations) {
     var elt = $('<span>')
         .addClass('line_code')
@@ -75,7 +79,7 @@ function makeLineCode(display_informations) {
 }
 
 function journeySummary(json) {
-    var res = $('<span>').append(formatDatetime(json.departure_date_time).split(' ')[1]);
+    var res = $('<span>').append(formatTime(json.departure_date_time));
     function add(s) {
         res.append(' > ');
         res.append(s);
@@ -102,7 +106,7 @@ function journeySummary(json) {
         add(summary('place', json.to));
     }
 
-    add(formatDatetime(json.arrival_date_time).split(' ')[1]);
+    add(formatTime(json.arrival_date_time));
     res.append(', duration: ' + durationToString(json.duration));
     return res;
 }
@@ -144,17 +148,29 @@ function embeddedSummary(json) {
 
 function sectionSummary(section) {
     var res = $('<span>');
+    var pt = false;
+
     switch (section.type) {
     case 'street_network': res.append(section.mode); break;
     case 'transfer': res.append(section.transfer_type); break;
-    case 'public_transport': res.append(makeLineCode(section.display_informations)); break;
+    case 'public_transport':
+        pt = true;
+        res.append(makeLineCode(section.display_informations));
+        break;
     default: res.append(section.type); break;
     }
+
     if ('from' in section) {
         res.append(' from {0}'.format(htmlEncode(section.from.name)));
     }
+    if (pt) {
+        res.append(' at {0}'.format(formatTime(section.departure_date_time)));
+    }
     if ('to' in section) {
         res.append(' to {0}'.format(htmlEncode(section.to.name)));
+    }
+    if (pt) {
+        res.append(' at {0}'.format(formatTime(section.arrival_date_time)));
     }
     if ('duration' in section) {
         res.append(' during {0}'.format(durationToString(section.duration)));
