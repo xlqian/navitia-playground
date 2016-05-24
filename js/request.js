@@ -157,6 +157,7 @@ function makeCoverageList(val, obj) {
                     for (var cov = 0; cov < data[dict].length; cov++) {
                         res.push(data[dict][cov].id);
                     }
+                    if (val) { $(obj).val(val); }
                     var auto = $(obj).autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
                     auto.focus(function() {
                         auto.autocomplete("search", '');
