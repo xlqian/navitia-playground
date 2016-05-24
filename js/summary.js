@@ -62,8 +62,13 @@ function responseSummary(json) {
 }
 
 function formatDatetime(datetime) {
-    return datetime.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/,
-                           '$1-$2-$3 $4:$5:$5');
+    var formated = datetime.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/,
+                                    '$1-$2-$3 $4:$5:$6');
+    if (formated.slice(-2) == '00') {
+        return formated.slice(0, -3);
+    } else {
+        return formated;
+    }
 }
 
 function formatTime(datetime) {
