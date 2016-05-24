@@ -34,7 +34,7 @@ function compile_sass(env) {
     return function() {
         return gulp.src('scss/**/*.scss')
         .pipe(sass())
-        .pipe(gulpFilter('**/style.css'))
+        .pipe(gulpFilter(['**/style.css', '**/index.css']))
         .pipe(gulpif(isProd(env), cleanCSS()))
         .pipe(gulp.dest(config[env] + '/css'));
     }
