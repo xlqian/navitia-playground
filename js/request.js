@@ -48,9 +48,9 @@ function makeRoute(val, currentRouteValue) {
 function routeValOnFocus(valInput) {
     var cov = $('.route', $(valInput).parent().parent().prev()).val();
 
-    if (cov == 'coverage' && ! $(valInput).attr('class').contains('route ui-autocomplete-input')) {
+    if (cov == 'coverage' && ! isAutoCompleteInput($(valInput))) {
         makeCoverageList($(valInput).val(), valInput);
-    } else if (cov != 'coverage' && $(valInput).attr('class').contains('route ui-autocomplete-input')) {
+    } else if (cov != 'coverage' && isAutoCompleteInput($(valInput))) {
         var valueElt = $('<input/>').addClass('route')
                                     .attr('type', 'text')
                                     .val($(valInput).val())
@@ -194,7 +194,7 @@ function getCoverage() {
         prevIsCoverage = $(this).val() == 'coverage';
     });
     return coverage;
-}
+} 
 
 function makeAutocomplete(elt) {
     $(elt).autocomplete({
