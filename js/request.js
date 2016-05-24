@@ -10,13 +10,27 @@ function insertRoute(val) {
     $(val).parent().after(makeRoute('', currentRouteValue));
 }
 
-function makeRoute(val, currentRouteValue) {
-    var input = $('<input/>').focus(function(){ routeValOnFocus(this); })
-                             .keyup(function(){ updateUrl(this); })
-                             .attr('type', 'text')
-                             .addClass('route');
+function makeTemplatePath(val, currentRouteValue, input) {
+    input.addClass('templateInput')
+         .blur(function() { this.value = (this.value=='')? val:this.value;})
+         .keyup(function(){ updateUrl(this); })
+         .focusout(function() { if (isTemplate($(this).val()) || (!$(this).val())) { $(this).addClass('templateInput'); } else { $(this).removeClass('templateInput'); } })
     if (currentRouteValue == 'coverage') {
-        var res = $('<span/>')
+        input.focus(function(){ routeValOnFocus(this); this.value=''; })
+             .val(val);
+    } else { input.focus(function(){ updateUrl(this); this.value=''; } )}
+}
+
+function makeRoute(val, currentRouteValue) {
+    var input = '', res = '';
+    
+    if (currentRouteValue == 'coverage') {
+        input = $('<input/>').focus(function(){ routeValOnFocus(this); })
+                             .keyup(function(){ updateUrl(this); })
+                             .attr('type','text')
+                             .addClass('route');
+        if (isTemplate(val)) { makeTemplatePath(val, currentRouteValue, input); }
+        res = $('<span/>')
         .addClass('toDelete')
         .addClass('routeElt')
         .append(' ')
@@ -24,25 +38,26 @@ function makeRoute(val, currentRouteValue) {
                 .addClass('pathElt')
                 .append(input)
                 .append(makeDeleteButton()))
-        .append('<button class="add" onclick="insertRoute(this)">+</button>')
+        .append('<button class="add" onclick="insertRoute(this)">+</button>');
         makeCoverageList(val, input);
-        return res;
     } else {
-        return $('<span/>')
+        input = $('<input/>').focus(function(){ updateUrl(this); })
+                             .keyup(function(){ updateUrl(this); })
+                             .attr('type','text')
+                             .addClass('route')
+                             .val(val);
+        if (isTemplate(val)) { makeTemplatePath(val, currentRouteValue, input); }
+        res = $('<span/>')
         .addClass('toDelete')
         .addClass('routeElt')
         .append(' ')
         .append($('<span/>')
                 .addClass('pathElt')
-                .append($('<input/>')
-                        .attr({type: 'text',
-                               onfocus: 'updateUrl(this)',
-                               onkeyup: 'updateUrl(this)'})
-                        .addClass('route')
-                        .val(val))
+                .append(input)
                 .append(makeDeleteButton()))
-        .append('<button class="add" onclick="insertRoute(this)">+</button>')
+        .append('<button class="add" onclick="insertRoute(this)">+</button>');
     }
+    return res;
 }
 
 function routeValOnFocus(valInput) {
@@ -142,7 +157,6 @@ function makeCoverageList(val, obj) {
                     for (var cov = 0; cov < data[dict].length; cov++) {
                         res.push(data[dict][cov].id);
                     }
-                    if (val) { $(obj).val(val); }
                     var auto = $(obj).autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
                     auto.focus(function() {
                         auto.autocomplete("search", '');
