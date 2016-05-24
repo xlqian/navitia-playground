@@ -18,6 +18,11 @@ function isDatePicker(elt) {
     return elt.attr('class').contains('hasDatepicker');
 }
 
+function isTemplate(str) {
+    return str.slice(0, 1) == '{' && str.slice(-1) == '}';
+}
+
+
 String.prototype.format = String.prototype.f = function() {
     var s = this,
         i = arguments.length;
