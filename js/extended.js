@@ -15,10 +15,20 @@ function responseExtended(json) {
     return result;
 }
 
-function extended(name, json) {
-    if (name == 'response') {
-        return responseExtended(json);
-    }
+function journeyExtended(json) {
+    if (! ('sections' in json)) { return $('No extended view for isochron'); }
+    var result = $('<div class="list"/>');
+    json.sections.forEach(function(section, i) {
+        result.append(render('sections[{0}]'.format(i), 'section', section));
+    });
+    return result;
+}
+
+function extended(type, json) {
+    switch (type) {
+    case 'response': return responseExtended(json);
+    case 'journey': return journeyExtended(json);
     // add here custom extended
-    return 'No extended view yet!';
+    default: return 'No extended view yet!';
+    }
 }
