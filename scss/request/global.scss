@@ -11,13 +11,14 @@ body {
 }
 
 header{
+	display: inline-block;
 	width: 100%;
 	background-color: #ffffff;
 	margin: 0em;
 }
 
 img {
-    display: block;
+    float: left;
     width: 8em;
   	padding: 1.5em 0em 1.5em 2em;
 }
@@ -28,6 +29,14 @@ h2{
 	font-weight: normal;
 	padding: 0em 0em 1em 0em;
 	margin: 0em; 
+}
+
+#back{	
+	float: right;
+	color: #56b5db;
+	text-decoration: none; 
+	margin: 1.8em 3em 0em 0em;
+	text-transform: uppercase;
 }
 
 #colun{
