@@ -72,6 +72,8 @@ $(document).ready(function() {
         return;
     }
     renderjson.set_show_to_level(3);
+    renderjson.set_max_string_length(60);
+    renderjson.set_sort_objects(true);
     $.ajax({
         headers: isUndefined(request.token) ? {} : { Authorization: "Basic " + btoa(request.token) },
         url: request.request,
