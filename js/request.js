@@ -143,6 +143,8 @@ function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
 }
 
 function makeCoverageList(val, obj) {
+    if (val) { $(obj).val(val); }
+    
     var api = $("#api input.api").attr('value');
     var token = $('#token input.token').val();
     var request =  api + "/coverage";
@@ -157,7 +159,6 @@ function makeCoverageList(val, obj) {
                     for (var cov = 0; cov < data[dict].length; cov++) {
                         res.push(data[dict][cov].id);
                     }
-                    if (val) { $(obj).val(val); }
                     var auto = $(obj).autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
                     auto.focus(function() {
                         auto.autocomplete("search", '');
@@ -293,7 +294,6 @@ $(document).ready(function() {
     if (request === null) { return; }
     if (isUndefined(request.token)) { request.token = ''; }
     $("#token input.token").attr('value', request.token);
-    $("#urlFormToken").attr('value', request.token);
     $("#api input.api").attr('value', request.api);
 
     request.path.forEach(function(r) {

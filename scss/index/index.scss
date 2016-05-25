@@ -18,6 +18,37 @@ h1{
     font-weight: normal;
 }
 
+/* ---------------------------------
+AND THE URL IS
+--------------------------------- */
+form{
+	text-align: center;
+	background: #F5F5F5;
+	padding: 2em 0em 0em 0em;
+	margin: 0em;
+}
+
+input{
+	height: 5ex;
+	padding: 0em 0em 0em 0.5em;
+	border: solid 1px #DEDEDE;
+	background: #FFF;
+}
+
+button{
+	height: 5ex;
+	padding: 0em 2em 0em 2em;
+	border: none;
+	border-radius: 0.25em;
+	color: #fff;
+	background: #56b5db;
+	text-transform: uppercase;
+}
+
+#urlFormToken{
+	margin-bottom: 3em;
+}
+
 p{
 	float: right;
 	height: auto; 
@@ -30,6 +61,10 @@ p{
 	float: left;
 	width: 70%;
 	margin: 0% 15% 0% 15%
+}
+
+#urlForm{
+	
 }
 
 .col{
