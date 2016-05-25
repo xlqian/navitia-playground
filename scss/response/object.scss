@@ -4,6 +4,7 @@ div.object {
     border-style: solid;
     border-width: 0.1ex;
     border-color: #DEDEDE;
+    background-color: #F5F5F5;
 
     div.head {
         display: flex;
@@ -25,7 +26,6 @@ div.object {
         flex: 1;
     }
     div.data {
-        background-color: #F5F5F5;
         border-style: none;
         margin: 0;
         padding: 0;
