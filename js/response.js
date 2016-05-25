@@ -28,7 +28,7 @@ function makeObjectButton(name, handle) {
 
 function makeObjectButtonHandle(selector, renderHandle) {
     return function() {
-        var div = $(this).closest('div.object').find(selector);
+        var div = $(this).closest('div.object').children('div.data').children(selector);
         if ($(this).is(':checked')) {
             div.removeClass('not_filled');
             div.html(renderHandle());
