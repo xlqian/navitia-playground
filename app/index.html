@@ -4,6 +4,8 @@
 	  <meta charset="UTF-8">
 	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	  <link href="css/index/index.css" rel="stylesheet">
+	  <link href="css/request/url.css" rel="stylesheet">
+	  <link href="css/request/global.css" rel="stylesheet">
 	  <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 	  <link rel="icon" href="img/favicon.ico" />
 	</head>
@@ -15,41 +17,51 @@
 		<h3>Discover what you can do with the API!</h3>
 	</div>
 	<div class="raw">
+
+		<!-- url + token à mettre sur la home plutot -->
+		<div id='urlForm'><!-- url -->
+			<form action='' method='get'>
+		    	<input placeholder="url" type="text" name='request'>
+		    	<input placeholder="Token" type="text" name='token' id='urlFormToken'>
+		    	<button>Submit</button>
+		    </form>
+		</div><!-- url -->
+
 		<div class="col">
 			<div class="rubriques">	
 				<h2><img src='img/journey.png'>Journey planning</h2>		
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26to%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26" rel="nofollow">Journey without coverage<p>></p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26to%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26" rel="nofollow">Journey with coverage<p>></p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fjourneys%3Fto%3D%257Bplace.id%257D%26from%3D%257Bplace.id%257D%26datetime_represents%3Darrival%26datetime%3D%257Bdatetime%257D%26" rel="nofollow">Journey with arrival datetime<p>></p></a>	
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26to%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26">Journey without coverage<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26to%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26">Journey with coverage<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fjourneys%3Fto%3D%257Bplace.id%257D%26from%3D%257Bplace.id%257D%26datetime_represents%3Darrival%26datetime%3D%257Bdatetime%257D%26">Journey with arrival datetime<p>></p></a>	
 			</div>
 		</div>
 
 		<div class="col">
 			<div class="rubriques">	
 				<h2><img src='img/departures.png'>Next departures</h2>		
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fstop_areas%2F%257Bstop_area.id%257D%2Fdepartures%3Ffrom_datetime%3D%257Bdatetime%257D%26" rel="nofollow">Departures at stop area<p>></p></a>			
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fstop_areas%2F%257Bstop_area.id%257D%2Farrivals%3Ffrom_datetime%3D%257Bdatetime%257D%26" rel="nofollow">Arrivals at stop area<p>></p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fstop_areas%2F%257Bstop_area.id%257D%2Fstop_schedules%3Ffrom_datetime%3D%257Bdatetime%257D%26items_per_schedule%3D5%26" rel="nofollow">Stop schedules at stop area<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fstop_areas%2F%257Bstop_area.id%257D%2Fdepartures%3Ffrom_datetime%3D%257Bdatetime%257D%26">Departures at stop area<p>></p></a>			
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fstop_areas%2F%257Bstop_area.id%257D%2Farrivals%3Ffrom_datetime%3D%257Bdatetime%257D%26">Arrivals at stop area<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fstop_areas%2F%257Bstop_area.id%257D%2Fstop_schedules%3Ffrom_datetime%3D%257Bdatetime%257D%26items_per_schedule%3D5%26">Stop schedules at stop area<p>></p></a>
 			</div>		
 		</div>
 
 		<div class="col">
 			<div class="rubriques">	
 				<h2><img src='img/line.png'>Line schedules</h2>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Froutes%2F%257Broute.id%257D%2Froute_schedules%3Ffrom_datetime%3D%257Bdatetime%257D%26items_per_schedule%3D25%26" rel="nofollow">Route schedules for route<p>></p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Flines%2F%257Bline.id%257D%2Froute_schedules%3Ffrom_datetime%3D%257Bdatetime%257D%26items_per_schedule%3D25%26" rel="nofollow">Route schedules for line<p>></p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fstop_areas%2F%257Bstop_area.id%257D%2Froute_schedules%3Ffrom_datetime%3D%257Bdatetime%257D%26items_per_schedule%3D25%26" rel="nofollow">Route schedules at stop area<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Froutes%2F%257Broute.id%257D%2Froute_schedules%3Ffrom_datetime%3D%257Bdatetime%257D%26items_per_schedule%3D25%26">Route schedules for route<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Flines%2F%257Bline.id%257D%2Froute_schedules%3Ffrom_datetime%3D%257Bdatetime%257D%26items_per_schedule%3D25%26">Route schedules for line<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fstop_areas%2F%257Bstop_area.id%257D%2Froute_schedules%3Ffrom_datetime%3D%257Bdatetime%257D%26items_per_schedule%3D25%26">Route schedules at stop area<p>></p></a>
 			</div>
 		</div>
 
 		<div class="col">
 			<div class="rubriques">	
 				<h2><img src='img/search.png'>Search place</h2>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fpt_objects%3Fq%3D%257Btext%257D%26" rel="nofollow">Auto complete transportation object<p>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fpt_objects%3Fq%3D%257Btext%257D%26">Auto complete transportation object<p>
 					>
 				</p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fplaces%3Fq%3D%257Btext%257D%26" rel="nofollow">Auto complete places<p>></p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fpt_objects%3Fq%3D%257Btext%257D%26type%255B%255D%3Dnetwork%26type%255B%255D%3Dline%26" rel="nofollow">Auto complete only on stop area<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fplaces%3Fq%3D%257Btext%257D%26">Auto complete places<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fpt_objects%3Fq%3D%257Btext%257D%26type%255B%255D%3Dnetwork%26type%255B%255D%3Dline%26">Auto complete only on stop area<p>></p></a>
 			</div>
 		</div>
 
@@ -57,8 +69,8 @@
 			<div class="rubriques">	
 
 				<h2><img src='img/nearby.png'>Place nearby</h2>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoord%2F%257Blon%253Blat%257D%2Fplaces_nearby%3F" rel="nofollow">Find places nearby somewhere<p>></p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fcoord%2F%257Blon%253Blat%257D%2Fstop_areas%3Fdistance%3D500%26" rel="nofollow">Find stop areas nearby somewhere<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoord%2F%257Blon%253Blat%257D%2Fplaces_nearby%3F">Find places nearby somewhere<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fcoord%2F%257Blon%253Blat%257D%2Fstop_areas%3Fdistance%3D500%26">Find stop areas nearby somewhere<p>></p></a>
 				
 			</div>
 		</div>
@@ -66,8 +78,8 @@
 		<div class="col">
 			<div class="rubriques">	
 				<h2><img src='img/isochrons.png'>Isochrons</h2>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26max_duration%3D1200%26" rel="nofollow">Isochrons without coverage<p>></p></a>
-				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26datetime%3D20160523T163632%26max_duration%3D1200%26" rel="nofollow">Isochrons with coverage<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26max_duration%3D1200%26">Isochrons without coverage<p>></p></a>
+				<a href="apihm.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26datetime%3D20160523T163632%26max_duration%3D1200%26">Isochrons with coverage<p>></p></a>
 			</div>
 		</div>
 	</div>

@@ -1,8 +1,6 @@
 /* --------------------
 URL TOKEN
 --------------------- */
-
-/* API & TOKEN */
 input.api, input.token{
 	width: 100%;
 }
@@ -10,7 +8,6 @@ input.api, input.token{
 /* -----------------------
 PATH  et PARAMETERS 
 ----------------------- */
-
 #Meppath{
 	width: 100%;
 }
@@ -63,6 +60,18 @@ button.delete{
 	border: none;
 	border-radius: 0em 0.25em 0.25em 0em;
 	background: #777;
+}
+
+/* url is */
+#seeurl{
+	background: #ededed;
+	padding: 2em;
+}
+
+#requestUrl{
+	padding-bottom: 0.3em;
+	border-bottom: solid 0.1em #56b5db;
+	line-height: 2.5em;
 }
  
 @media screen and (max-width: 56em) {

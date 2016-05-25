@@ -10,8 +10,9 @@
 </head>
 <body>
 <header>
-  <img src='img/logo_apiihm.png'>
-  <a id="back" href="index.html" rel="nofollow">Go home</a>
+<a id="back" href="index.html" rel="nofollow" title="Go to Homepage">
+  <img src="img/logo_apiihm.png" alt="Logo Apihm">
+</a>
 </header>
 
   <div id="colun"><!-- colun -->
@@ -28,10 +29,9 @@
             <div id="Meppath"><!--Meappath-->
               <p>Path</p>
               <span id="route">
-                <span class="routeElt"><button class="add" onclick="insertRoute(this)">+</button><span>
+                <span class="routeElt"><button class="add"onclick="insertRoute(this)">+</button><span>
               </span>
             </div><!--Meappath-->
-
       </div><!-- request-->
 
 
@@ -58,14 +58,7 @@
 
 
 
-    <!-- url + token à mettre sur la home plutot -->
-  <div id='urlForm'><!-- url -->
-    <form action='' method='get'>
-      <input placeholder="url" type="text" name='request'>
-      <input placeholder="Token" type="text" name='token' id='urlFormToken'>
-      <button>Submit</button>
-    </form>
-  </div><!-- url -->
+
 
       <div id="response"><!-- response -->
         <div id="status"></div>
