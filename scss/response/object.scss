@@ -12,6 +12,7 @@ div.object {
         align-items: center;
         margin: 0;
         border-style: none;
+        background-color: white;
     }
     div.name, div.button, div.summary {
         border-style: none;
@@ -24,6 +25,7 @@ div.object {
         flex: 1;
     }
     div.data {
+        background-color: #F5F5F5;
         border-style: none;
         margin: 0;
         padding: 0;

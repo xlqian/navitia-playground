@@ -1,0 +1,26 @@
+div.object pre.renderjson {
+    margin: 0;
+    padding: 1ex;
+    background-color: #353535;
+    color: #F5F5F5;
+
+    a {
+        text-decoration: none;
+        color: #89C6E5;
+    }
+    .key {
+        color: #CED480;
+    }
+    .string {
+        color: #EFBF8F;
+    }
+    .number {
+        color: #F18897;
+    }
+    .boolean {
+        color: #F18897;
+    }
+    .keyword {
+        color: #F18897;
+    }
+}
