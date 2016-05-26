@@ -1,11 +1,20 @@
+function getType(key) {
+    if (!key) {
+        return null;
+    }
+    if (key.slice(-1) === 's') {
+        return key.slice(0, -1);
+    }
+    return key;
+}
+
 function responseExtended(json) {
     var key = responseCollectionName(json);
     var objs = key ? json[key] : [];
-    var type = key;
+
+    var type = getType(key);
     if (! type) { return 'Unknown request type'; }
-    if (type.slice(-1) === 's') {
-        type = type.slice(0, -1);
-    }
+
     var result = $('<div class="list"/>');
     if ('links' in json) {
         result.append(render('links', 'links', json.links));
