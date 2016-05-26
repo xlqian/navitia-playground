@@ -11,7 +11,7 @@
 <body>
 <header>
 <a id="back" href="index.html" rel="nofollow" title="Go to Homepage">
-  <img src="img/logo_apiihm.png" alt="Logo Apihm">
+  <img class="logo" src="img/logo_apiihm.png" alt="Logo Apihm">
 </a>
 </header>
 
@@ -37,8 +37,11 @@
 
         <p>Parameters</p>
         <div id="parameters"><!-- parameters -->
-          <span id="parameterList"></span>
-          <button class="add" onclick="insertParam()">+</button>
+          <div id="parameterList"></div>
+          <div id="addParam">
+            <input id="addParamInput" type="text" placeholder="type a key to add a parameter">
+            <button class="add" onclick="insertParam()">+</button>
+          </div>
           <div id="submit"><!-- submit -->
             <button class="Submit" onclick="submit()">Submit</button>
           </div><!-- submit -->
