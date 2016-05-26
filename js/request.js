@@ -2,7 +2,7 @@ function makeDeleteButton() {
     return $('<button/>')
         .addClass('delete')
         .click(function() { $(this).closest('.toDelete').remove(); updateUrl(this); })
-        .text('x');
+        .html('<img src="img/delete.svg" class="deleteButton" alt="delete">');
 }
 
 function insertRoute(val) {
@@ -84,62 +84,42 @@ function makeParam(key, val) {
         .addClass('toDelete')
         .append(' ');
 
-    res.append($('<input/>')
-        .attr('type', 'text')
-        .addClass('key')
-        .val(key)
-        .focus(function(){ updateUrl(this); })
-        .keyup(function(){ updateUrl(this); }));
+    res.append($('<span/>').addClass('key').text(key));
 
     var valueElt = $('<input/>')
          .attr('type', 'text')
+         .attr('placeholder', 'type your value here')
         .addClass('value')
-        .val(val)
-        .focus(function(){ paramsValOnFocus(this); })
-        .keyup(function(){ updateUrl(this); });
+        .val(val);
 
     if (isPlaceType(key)) {
         makeAutocomplete(valueElt);
     }else if (isDatetimeType(key)) {
         makeDatetime(valueElt);
     }
+    var update = function(){ updateUrl(this); }
+    valueElt.keyup(update).change(update).focus(update);
     res.append(valueElt);
     res.append(makeDeleteButton());
     return res;
 }
 
-function paramsValOnFocus(valInput){
-    var key = $(valInput).prev().val();
-
-    if (isPlaceType(key)) {
-        makeAutocomplete(valInput);
-    }else if (isDatetimeType(key)) {
-        makeDatetime(valInput);
-    } else if (isAutoCompleteInput($(valInput)) ||
-               isDatePicker($(valInput))) {
-
-        var newElt = $('<input/>')
-            .addClass('value')
-            .attr('type', 'text')
-            .val($(valInput).val())
-            .keyup(function(){ updateUrl(this); })
-            .focus(function(){ paramsValOnFocus(this); });
-        $(valInput).replaceWith(newElt);
-        newElt.focus();
-        valInput = newElt;
-    }
-    updateUrl(valInput);
-}
 function insertParam() {
-    $("#parameterList").append(makeParam('', ''));
+    var key = $('#addParamInput').val();
+    $("#parameterList").append(makeParam(key, ''));
+    $('#addParamInput').val('');
+    $("#parameterList input").last().focus();
 }
 
 function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
+    var value = $(elemToTest).is('input') ?
+        (noEncoding ? elemToTest.value : elemToTest.value.encodeURI()) :
+        $(elemToTest).text();
     if (focusedElem == elemToTest) {
         return '<span class="focus_params" style="color:red">{0}</span>'
-            .format(noEncoding ? elemToTest.value : elemToTest.value.encodeURI());
+            .format(value);
     }
-    return noEncoding ? elemToTest.value : elemToTest.value.encodeURI();
+    return value;
 }
 
 function makeCoverageList(val, obj) {
@@ -177,7 +157,7 @@ function finalUrl(focusedElem) {
 
     finalUrl += '?';
 
-    $('#parameters input.key, #parameters input.value').each(function(){
+    $('#parameters .key, #parameters input.value').each(function(){
         finalUrl += getFocusedElemValue(this, focusedElem);
         if ($(this).hasClass('key')) {
             finalUrl += '=';
@@ -290,6 +270,12 @@ function parseUrl() {
 }
 
 $(document).ready(function() {
+    $("#addParamInput").keyup(function(event) {
+        if (event.keyCode == 13) {
+            $("#addParam button.add").click();
+        }
+    });
+
     var request = parseUrl();
     if (request === null) { return; }
     if (isUndefined(request.token)) { request.token = ''; }
@@ -313,5 +299,5 @@ $(document).ready(function() {
             param_elt.append(makeParam(key.decodeURI(), value));
         }
     }
-    $('#urlDynamic span').html(request.request);
+    $('#urlDynamic span').text(request.request);
 });

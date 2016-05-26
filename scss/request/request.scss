@@ -16,50 +16,60 @@ PATH  et PARAMETERS
 	margin-top: 0.5em;
 }
 
-.pathElt, .routeElt, .param{
+.pathElt, .routeElt, .param, #addParam {
 	display: flex;
 	flex-flow: row nowrap;
-	align-items: right;
+	align-items: center;
 	width: 100%;
 	padding: 0em;
 	height: 5ex;
 }
 
-.param{
-	margin: 0.5em 0em 0.5em 0em;
+.param, #addParam {
+    margin: 0.5em 0em 0.5em 0em;
+    height: auto;
+    border: solid 0.1em #DEDEDE;
+    background-color: white;
 }
 
-input.route{
+input.route, #addParamInput {
 	height: 5ex;
 	width: 100%;
 	margin: 0em; 
 }
 
-input.key, input.value{
-	width: 46%;
-	height: 5ex;
-	margin: 0em; 
+input.value, #addParamInput {
+    width: 100%;
+    min-width: 5em;
+    height: auto;
+    border: none;
+    padding: 1ex;
+    margin: 0;
+    background-color: inherit;
 }
 
-input.key{
-	margin-right: 0.5em ;
+.key{
+    margin: 0 0 0 1ex;
+    font-weight: bold;
 }
 
-button.add{
-	width: 5ex;
-	height: 4.9ex;
-	padding: 0em;
-	border: none;
-	margin: 0em 0em 0em 0.5em;
+img.deleteButton {
+    height: 1.2em;
+    margin: 0;
+    padding: 0;
 }
 
-button.delete{
-	width: 5ex;
-	height: 4.9ex;
-	padding: 0em;
-	border: none;
-	border-radius: 0em 0.25em 0.25em 0em;
-	background: #777;
+button.delete, button.add {
+    background-color: inherit;
+    color: inherit;
+    margin: 0;
+    width: auto;
+    height: auto;
+    padding: 1ex;
+    font-weight: bold;
+    color: #008ACA;
+    text-transform: uppercase;
+    font-size: 100%;
 }
 
 /* url is */
@@ -72,12 +82,6 @@ button.delete{
 	padding-bottom: 0.3em;
 	border-bottom: solid 0.1em #56b5db;
 	line-height: 2.5em;
-}
- 
-@media screen and (max-width: 56em) {
-	input.key, input.value{
-		width: 50%;
-	}
 }
 
 .templateInput {
