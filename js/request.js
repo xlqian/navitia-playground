@@ -90,14 +90,15 @@ function makeParam(key, val) {
          .attr('type', 'text')
          .attr('placeholder', 'type your value here')
         .addClass('value')
-        .val(val)
-        .keyup(function(){ updateUrl(this); });
+        .val(val);
 
     if (isPlaceType(key)) {
         makeAutocomplete(valueElt);
     }else if (isDatetimeType(key)) {
         makeDatetime(valueElt);
     }
+    var update = function(){ updateUrl(this); }
+    valueElt.keyup(update).change(update).focus(update);
     res.append(valueElt);
     res.append(makeDeleteButton());
     return res;
@@ -106,6 +107,8 @@ function makeParam(key, val) {
 function insertParam() {
     var key = $('#addParamInput').val();
     $("#parameterList").append(makeParam(key, ''));
+    $('#addParamInput').val('');
+    $("#parameterList input").last().focus();
 }
 
 function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
@@ -267,6 +270,12 @@ function parseUrl() {
 }
 
 $(document).ready(function() {
+    $("#addParamInput").keyup(function(event) {
+        if (event.keyCode == 13) {
+            $("#addParam button.add").click();
+        }
+    });
+
     var request = parseUrl();
     if (request === null) { return; }
     if (isUndefined(request.token)) { request.token = ''; }
