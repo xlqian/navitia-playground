@@ -15,37 +15,51 @@
 </a>
 </header>
 
-  <div id="colun"><!-- colun -->
-    <div id="construction"><!-- construction -->
-      <div id="request"><!-- request-->
+  <div id="colun">
+    <div id="construction">
+      <div id="request">
         <H2>Create a request</H2>
-            <span id="api">         
-              <input placeholder="API" type="text" class="api" value="" onkeyup="updateUrl()">
-            </span>
-
-            <span id="token">
-              <input placeholder="Token" type="text" class="token" value="">
-            </span>
-            <div id="Meppath"><!--Meappath-->
-              <p>Path</p>
-              <span id="route">
-                <span class="routeElt"><button class="add" onclick="insertRoute(this)">+</button><span>
-              </span>
-            </div><!--Meappath-->
-      </div><!-- request-->
-
-
-        <p>Parameters</p>
-        <div id="parameters"><!-- parameters -->
-          <div id="parameterList"></div>
-          <div id="addParam">
-            <input id="addParamInput" type="text" placeholder="type a key to add a parameter">
+        <div id="credentialsFrame">
+          <h3>Credencials</h3>
+          <div id="api" class="inputDiv">
+            <input placeholder="API" type="text" class="api" onkeyup="updateUrl()">
+          </div>
+          <div id="token" class="inputDiv">
+            <input placeholder="Token" type="text" class="token">
+          </div>
+        </div>
+        <div id="pathFrame">
+          <h3>Path</h3>
+          <div id="path"></div>
+          <div id="feature" class="inputDiv">
+            <input id="featureInput"
+                   type="text"
+                   onfocus="updateUrl(this)"
+                   placeholder="empty feature">
+          </div>
+          <div id="addPathElt" class="inputDiv">
+            <input id="addPathInput"
+                   class="addInput"
+                   type="text"
+                   placeholder="type a key to add a path element">
+            <button class="add" onclick="insertPathElt()">Add</button>
+          </div>
+        </div><!-- pathFrame -->
+        <div id="parameterFrame">
+          <h3>Parameters</h3>
+          <div id="parameters"></div>
+          <div id="addParam" class="inputDiv">
+            <input id="addParamInput"
+                   class="addInput"
+                   type="text"
+                   placeholder="type a key to add a parameter">
             <button class="add" onclick="insertParam()">Add</button>
           </div>
-          <div id="submit"><!-- submit -->
-            <button class="Submit" onclick="submit()">Submit</button>
-          </div><!-- submit -->
-        </div><!-- parameters -->
+        </div><!-- parameterFrame -->
+        <div id="submit"><!-- submit -->
+          <button class="Submit" onclick="submit()">Submit</button>
+        </div><!-- submit -->
+      </div><!-- request-->
     </div><!-- construction -->
   </div><!-- colun -->
 
