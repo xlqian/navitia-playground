@@ -1,9 +1,9 @@
 function isUndefined(val) {
-    return typeof val == "undefined";
+    return typeof val === 'undefined';
 }
 
 function isPlaceType(key) {
-    return $.inArray(key, ['from', 'to']) != -1;
+    return $.inArray(key, ['from', 'to']) !== -1;
 }
 
 function isDatetimeType(str) {
@@ -29,10 +29,10 @@ function durationToString(duration) {
     var hours = Math.floor(duration / (60 * 60)) % 24;
     var days = Math.floor(duration / (24 * 60 * 60));
 
-    if (days != 0) { res += '{0}d'.format(days); }
-    if (hours != 0) { res += '{0}h'.format(hours); }
-    if (minutes != 0) { res += '{0}min'.format(minutes); }
-    if (seconds != 0) { res += '{0}s'.format(seconds); }
+    if (days !== 0) { res += '{0}d'.format(days); }
+    if (hours !== 0) { res += '{0}h'.format(hours); }
+    if (minutes !== 0) { res += '{0}min'.format(minutes); }
+    if (seconds !== 0) { res += '{0}s'.format(seconds); }
 
     if (! res) {
         return '0s';
@@ -42,7 +42,7 @@ function durationToString(duration) {
 }
 
 function isTemplate(str) {
-    return str.slice(0, 1) == '{' && str.slice(-1) == '}';
+    return str.slice(0, 1) === '{' && str.slice(-1) === '}';
 }
 
 

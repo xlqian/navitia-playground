@@ -1,5 +1,4 @@
 function responseExtended(json) {
-    "use strict";
     var key = responseCollectionName(json);
     var objs = key ? json[key] : [];
     var type = key;

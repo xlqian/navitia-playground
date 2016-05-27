@@ -1,11 +1,12 @@
+function _toNum(i) { return +('0x' + c.slice(i, i + 2)); }
+
 function getTextColor(json) {
     if ('text_color' in json) {
-        return '#' + json['text_color'];
+        return '#' + json.text_color;
     }
     if ('color' in json) {
-        var c = json['color'];
-        function toNum(i) { return +('0x' + c.slice(i, i + 2)); }
-        var grey = 0.21 * toNum(0) + 0.72 * toNum(2) + 0.07 * toNum(4)
+        var c = json.color;
+        var grey = 0.21 * _toNum(0) + 0.72 * _toNum(2) + 0.07 * _toNum(4);
         if (grey < 128) {
             return 'white';
         }
@@ -23,13 +24,13 @@ function setColors(elt, json) {
 function defaultSummary(json) {
     var result = $('<span/>');
     if ('label' in json) {
-        result.text(json['label']);
+        result.text(json.label);
     } else if ('code' in json) {
-        result.text(json['code']);
+        result.text(json.code);
     }else if ('name' in json) {
-        result.text(json['name']);
+        result.text(json.name);
     } else if ('id' in json) {
-        result.text(json['id']);
+        result.text(json.id);
     }
     setColors(result, json);
     return result;
@@ -64,7 +65,7 @@ function responseSummary(json) {
 function formatDatetime(datetime) {
     var formated = datetime.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/,
                                     '$1-$2-$3 $4:$5:$6');
-    if (formated.slice(-2) == '00') {
+    if (formated.slice(-2) === '00') {
         return formated.slice(0, -3);
     } else {
         return formated;
@@ -93,12 +94,12 @@ function journeySummary(json) {
     if ('sections' in json) {
         json.sections.forEach(function(s) {
             switch (s.type) {
-            case "transfer":
-            case "waiting":
-            case "crow_fly":
+            case 'transfer':
+            case 'waiting':
+            case 'crow_fly':
                 break;
-            case "street_network": add(s.mode); break;
-            case "public_transport":
+            case 'street_network': add(s.mode); break;
+            case 'public_transport':
                 add(makeLineCode(s.display_informations));
                 break;
             default: add(s.type); break;
@@ -117,7 +118,7 @@ function journeySummary(json) {
 }
 
 function linksSummary(json) {
-    var token = URI(window.location).search(true)["token"];
+    var token = URI(window.location).search(true).token;
     var res = $('<span>');
     function makeHref(href) {
         var res = '?request={0}'.format(href.encodeURI());
