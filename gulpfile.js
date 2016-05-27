@@ -28,7 +28,7 @@ function lint(env) {
     return function() {
         return gulp.src('js/**/*.js')
         .pipe(jshint())
-        // TODO: Active this when all errors are fixed    
+        // TODO: Active this when all errors are fixed
         // .pipe(jshint.reporter('fail'))
         .pipe(jshint.reporter('jshint-stylish'));
     }
@@ -71,6 +71,7 @@ function compile_vendor_js(env){
             '**/renderjson.js',
             '**/urijs/src/URI.js',
             '**/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.js',
+            '**/sprintf/src/sprintf.js',
             '!**/*.min.js']))
             .pipe(concat('lib.min.js'))
             .pipe(gulpif(isProd(env),uglify()))

@@ -29,10 +29,10 @@ function durationToString(duration) {
     var hours = Math.floor(duration / (60 * 60)) % 24;
     var days = Math.floor(duration / (24 * 60 * 60));
 
-    if (days !== 0) { res += '{0}d'.format(days); }
-    if (hours !== 0) { res += '{0}h'.format(hours); }
-    if (minutes !== 0) { res += '{0}min'.format(minutes); }
-    if (seconds !== 0) { res += '{0}s'.format(seconds); }
+    if (days !== 0) { res += sprintf('%sd', days); }
+    if (hours !== 0) { res += sprintf('%sh', hours); }
+    if (minutes !== 0) { res += sprintf('%smin', minutes); }
+    if (seconds !== 0) { res += sprintf('%ss', seconds); }
 
     if (! res) {
         return '0s';
@@ -44,26 +44,3 @@ function durationToString(duration) {
 function isTemplate(str) {
     return str.slice(0, 1) === '{' && str.slice(-1) === '}';
 }
-
-
-String.prototype.format = String.prototype.f = function() {
-    var s = this,
-        i = arguments.length;
-
-    while (i--) {
-        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
-    }
-    return s;
-};
-
-String.prototype.encodeURI = function() {
-    var s = this;
-
-    return encodeURIComponent(s);
-};
-
-String.prototype.decodeURI = function() {
-    var s = this;
-
-    return decodeURIComponent(s);
-};

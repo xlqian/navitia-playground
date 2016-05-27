@@ -1,5 +1,5 @@
 function setStatus(xhr) {
-    $('#status').html('Status: {0} ({1})'.format(xhr.statusText, xhr.status));
+    $('#status').html(sprintf('Status: %s (%s)', xhr.statusText, xhr.status));
 }
 
 function responseCollectionName(json) {

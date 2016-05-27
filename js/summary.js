@@ -1,4 +1,4 @@
-function _toNum(i) { return +('0x' + c.slice(i, i + 2)); }
+function _toNum(c, i) { return +('0x' + c.slice(i, i + 2)); }
 
 function getTextColor(json) {
     if ('text_color' in json) {
@@ -6,7 +6,7 @@ function getTextColor(json) {
     }
     if ('color' in json) {
         var c = json.color;
-        var grey = 0.21 * _toNum(0) + 0.72 * _toNum(2) + 0.07 * _toNum(4);
+        var grey = 0.21 * _toNum(c, 0) + 0.72 * _toNum(c, 2) + 0.07 * _toNum(c, 4);
         if (grey < 128) {
             return 'white';
         }
@@ -41,20 +41,20 @@ function responseSummary(json) {
         return 'Error: response is not JSon';
     }
     if ('message' in json) {
-        return 'Message: {0}'.format(htmlEncode(json.message));
+        return sprintf('Message: %s', htmlEncode(json.message));
     }
     if ('error' in json && json.error && 'message' in json.error) {
-        return 'Error: {0}'.format(htmlEncode(json.error.message));
+        return sprintf('Error: %s', htmlEncode(json.error.message));
     }
     var result = '';
     var key = responseCollectionName(json);
     if (key) {
-        result = result + ' {0}&nbsp;{1} '.format(json[key].length, key);
+        result = result + sprintf(' %s&nbsp;%s ', json[key].length, key);
     }
     if ('pagination' in json) {
         var p = json.pagination;
         var first_number = p.start_page * p.items_per_page + 1;
-        result = result + '({0}-{1} of {2}&nbsp;results)'.format(
+        result = result + sprintf('(%s-%s of %s&nbsp;results)',
             first_number,
             first_number + p.items_on_page - 1,
             p.total_result);
@@ -108,7 +108,7 @@ function journeySummary(json) {
     } else {
         // isochron
         add(summary('place', json.from));
-        add('{0} transfer(s)'.format(json.nb_transfers));
+        add(sprintf('%s transfer(s)', json.nb_transfers));
         add(summary('place', json.to));
     }
 
@@ -121,16 +121,16 @@ function linksSummary(json) {
     var token = URI(window.location).search(true).token;
     var res = $('<span>');
     function makeHref(href) {
-        var res = '?request={0}'.format(href.encodeURI());
+        var res = sprintf('?request=%s', encodeURIComponent(href));
         if (token) {
-            res += '&token={0}'.format(token.encodeURI());
+            res += sprintf('&token=%s', encodeURIComponent(token));
         }
         return res;
     }
     function makeData(link) {
         var res = link.type;
         if (link.templated) {
-            res = '{{0}}'.format(res);
+            res = sprintf('%s', res);
         }
         return res;
     }
@@ -167,19 +167,19 @@ function sectionSummary(section) {
     }
 
     if ('from' in section) {
-        res.append(' from {0}'.format(htmlEncode(section.from.name)));
+        res.append(sprintf(' from %s', htmlEncode(section.from.name)));
     }
     if (pt) {
-        res.append(' at {0}'.format(formatTime(section.departure_date_time)));
+        res.append(sprintf(' at %s', formatTime(section.departure_date_time)));
     }
     if ('to' in section) {
-        res.append(' to {0}'.format(htmlEncode(section.to.name)));
+        res.append(sprintf(' to %s', htmlEncode(section.to.name)));
     }
     if (pt) {
-        res.append(' at {0}'.format(formatTime(section.arrival_date_time)));
+        res.append(sprintf(' at %s', formatTime(section.arrival_date_time)));
     }
     if ('duration' in section) {
-        res.append(' during {0}'.format(durationToString(section.duration)));
+        res.append(sprintf(' during %s', durationToString(section.duration)));
     }
     return res;
 }

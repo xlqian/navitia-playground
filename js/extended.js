@@ -11,7 +11,7 @@ function responseExtended(json) {
         result.append(render('links', 'links', json.links));
     }
     objs.forEach(function(obj, i) {
-        result.append(render('{0}[{1}]'.format(key, i), type, obj));
+        result.append(render(sprintf('%s[%s]', key, i), type, obj));
     });
     return result;
 }
@@ -20,7 +20,7 @@ function journeyExtended(json) {
     if (! ('sections' in json)) { return $('No extended view for isochron'); }
     var result = $('<div class="list"/>');
     json.sections.forEach(function(section, i) {
-        result.append(render('sections[{0}]'.format(i), 'section', section));
+        result.append(render(sprintf('sections[%s]', i), 'section', section));
     });
     return result;
 }
