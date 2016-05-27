@@ -1,3 +1,6 @@
+/* global isUndefined */
+/* TODO: Complete the jshint*/Z
+
 function makeDeleteButton() {
     return $('<button/>')
         .addClass('delete')
@@ -9,7 +12,7 @@ function insertPathElt() {
     var key = $('#addPathInput').val();
     $("#path").append(makeKeyValue(key, ''));
     $('#addPathInput').val('');
-    $("#path input").last().focus();
+    $("#path input").last().focusZ();
 }
 
 function insertParam() {

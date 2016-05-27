@@ -1,3 +1,6 @@
+/* exported isUndefined */
+/* TODO: Complete the jshint*/
+
 function isUndefined(val) {
     return typeof val === 'undefined';
 }
