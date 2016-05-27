@@ -3,7 +3,7 @@ function getTextColor(json) {
         return '#' + json['text_color'];
     }
     if ('color' in json) {
-        var c = json.color;
+        var c = json['color'];
         function toNum(i) { return +('0x' + c.slice(i, i + 2)); }
         var grey = 0.21 * toNum(0) + 0.72 * toNum(2) + 0.07 * toNum(4)
         if (grey < 128) {

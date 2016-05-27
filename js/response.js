@@ -1,5 +1,5 @@
 function setStatus(xhr) {
-    $("#status").html('Status: {0} ({1})'.format(xhr.statusText, xhr.status));
+    $('#status').html('Status: {0} ({1})'.format(xhr.statusText, xhr.status));
 }
 
 function responseCollectionName(json) {
@@ -7,7 +7,7 @@ function responseCollectionName(json) {
     var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes'];
     for (var k in json) {
         if ($.isArray(json[k]) &&
-            $.inArray(k, notCollectionKeys) == -1) {
+            $.inArray(k, notCollectionKeys) === -1) {
             key = k;
         }
     }
@@ -62,32 +62,32 @@ function render(name, type, json) {
     var result = $('<div class="object">');
     result.append(head);
     result.append(data);
-    return result
+    return result;
 }
 
 $(document).ready(function() {
     var request = parseUrl();
     if (request === null) {
-        $("#data").html("No request");
+        $('#data').html('No request');
         return;
     }
     renderjson.set_show_to_level(3);
     renderjson.set_max_string_length(60);
     renderjson.set_sort_objects(true);
     $.ajax({
-        headers: isUndefined(request.token) ? {} : { Authorization: "Basic " + btoa(request.token) },
+        headers: isUndefined(request.token) ? {} : { Authorization: 'Basic ' + btoa(request.token) },
         url: request.request,
-        dataType: "json",
+        dataType: 'json',
     }).then(
         function(data, status, xhr) {
             setStatus(xhr);
-            $("#data").html(render("response", "response", data));
+            $('#data').html(render('response', 'response', data));
             $('#data input').first().click();
             saveToken(request.api, request.token);
         },
         function(xhr, status, error) {
             setStatus(xhr);
-            $("#data").html(render("error", "response", xhr.responseJSON));
+            $('#data').html(render('error', 'response', xhr.responseJSON));
             $('#data input').last().click();
         }
     );
