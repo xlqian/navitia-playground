@@ -55,8 +55,10 @@ function makeKeyValue(key, val) {
         makeAutocomplete(valueElt);
     } else if (isDatetimeType(key)) {
         makeDatetime(valueElt);
-    } else if (key == 'coverage') {
-        makeCoverageList(val, valueElt);
+    } else if (autocomplete.staticAutocompleteTypes.indexOf(key) > -1) {
+        autocomplete.staticAutocomplete(valueElt, key);
+    }else if (autocomplete.dynamicAutocompleteTypes.indexOf(key) > -1) {
+        autocomplete.dynamicAutocomplete(valueElt, key);
     }
     var update = function(){ updateUrl(this); }
     valueElt.keyup(update).change(update).focus(update);
@@ -151,32 +153,7 @@ function getCoverage() {
 }
 
 function makeAutocomplete(elt) {
-    $(elt).autocomplete({
-        source: function(request, response) {
-            var token = $('#token input.token').val();
-            var url = $('#api input.api').val();
-            var cov = getCoverage();
-            if (cov !== null) {
-                url = sprintf('%s/coverage/%s', url, cov);
-            }
-            $.ajax({
-                url: sprintf('%s/places?q=%s', url, encodeURIComponent(request.term)),
-                headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
-                success: function(data) {
-                    var res = [];
-                    if ('places' in data) {
-                        data['places'].forEach(function(place) {
-                            res.push({ value: place.id, label: place.name });
-                        });
-                    }
-                    response(res);
-                },
-                error: function() {
-                    response([]);
-                }
-            });
-        },
-    });
+    autocomplete.dynamicAutocomplete(elt, 'places');
 }
 
 function makeDatetime(elt) {
