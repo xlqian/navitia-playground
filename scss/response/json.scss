@@ -4,7 +4,11 @@ div.object pre.renderjson {
     background-color: #353535;
     color: #F5F5F5;
     overflow-x: auto;
+    font-size: 1em;
 
+    .disclosure {
+        font-size: 1.5em;
+    }
     a {
         text-decoration: none;
         color: #89C6E5;

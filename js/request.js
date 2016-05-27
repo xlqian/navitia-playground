@@ -10,16 +10,16 @@ function makeDeleteButton() {
 
 function insertPathElt() {
     var key = $('#addPathInput').val();
-    $("#path").append(makeKeyValue(key, ''));
+    $("#feature").before(makeKeyValue(key, ''));
     $('#addPathInput').val('');
-    $("#path input").last().focus();
+    $("#feature").prev().find('input').first().focus();
 }
 
 function insertParam() {
     var key = $('#addParamInput').val();
-    $("#parameters").append(makeKeyValue(key, ''));
+    $('#addParam').before(makeKeyValue(key, ''));
     $('#addParamInput').val('');
-    $("#parameters input").last().focus();
+    $('#addParam').prev().find('input').first().focus();
 }
 
 function makeTemplatePath(val, input) {
@@ -135,7 +135,7 @@ function submit() {
 
 function updateUrl(focusedElem) {
     var f = finalUrl(focusedElem);
-    $('#urlDynamic span').html(f);
+    $('#requestUrl').html(f);
 }
 
 function getCoverage() {
@@ -244,7 +244,7 @@ $(document).ready(function() {
         if (prevPathElt === null) {
             prevPathElt = r;
         } else {
-            $("#path").append(makeKeyValue(prevPathElt, r));
+            $("#feature").before(makeKeyValue(prevPathElt, r));
             prevPathElt = null;
         }
     });
@@ -252,17 +252,17 @@ $(document).ready(function() {
         $('#featureInput').val(prevPathElt);
     }
 
-    var param_elt = $("#parameters");
+    var addParam = $("#addParam");
     for (var key in request.query) {
         var value = request.query[key];
         // a list of params, ex.: forbidded_uris[]
         if (Array.isArray(value)) {
             value.forEach(function(v){
-                param_elt.append(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v)));
+                addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v)));
             });
         } else {
-            param_elt.append(makeKeyValue(decodeURIComponent(key), value));
+            addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(value)));
         }
     }
-    $('#urlDynamic span').text(request.request);
+    updateUrl();
 });

@@ -1,91 +1,82 @@
 <html>
-<head>
-  <title>APIHM</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/vendor.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-  <link rel="icon" href="img/favicon.ico">
-</head>
-<body>
-<header>
-<a id="back" href="index.html" rel="nofollow" title="Go to Homepage">
-  <img class="logo" src="img/logo_apiihm.png" alt="Logo Apihm">
-</a>
-</header>
+  <head>
+    <title>APIHM</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/vendor.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+    <link rel="icon" href="img/favicon.ico">
+  </head>
+  <body>
+    <header>
+      <a id="back" href="index.html" rel="nofollow" title="Go to Homepage">
+        <img class="logo" src="img/logo_apiihm.png" alt="Logo Apihm">
+      </a>
+    </header>
 
-  <div id="colun">
-    <div id="construction">
+    <div id="content">
       <div id="request">
-        <H2>Create a request</H2>
+        <h2>Create a request</h2>
         <div id="credentialsFrame">
-          <h3>Credencials</h3>
-          <div id="api" class="inputDiv">
-            <input placeholder="API" type="text" class="api" onkeyup="updateUrl()">
-          </div>
-          <div id="token" class="inputDiv">
-            <input placeholder="Token" type="text" class="token">
+          <h3>Credentials</h3>
+          <div id="credentials">
+            <div id="api" class="inputDiv">
+              <input placeholder="API" type="text" class="api" onkeyup="updateUrl()">
+            </div>
+            <div id="token" class="inputDiv">
+              <input placeholder="Token" type="text" class="token">
+            </div>
           </div>
         </div>
         <div id="pathFrame">
           <h3>Path</h3>
-          <div id="path"></div>
-          <div id="feature" class="inputDiv">
-            <input id="featureInput"
-                   type="text"
-                   onfocus="updateUrl(this)"
-                   placeholder="empty feature">
-          </div>
-          <div id="addPathElt" class="inputDiv">
-            <input id="addPathInput"
-                   class="addInput"
-                   type="text"
-                   placeholder="type a key to add a path element">
-            <button class="add" onclick="insertPathElt()">Add</button>
+          <div id="path">
+            <div id="feature" class="inputDiv">
+              <input id="featureInput"
+                     type="text"
+                     onfocus="updateUrl(this)"
+                     placeholder="empty feature">
+            </div>
+            <div id="addPathElt" class="inputDiv">
+              <input id="addPathInput"
+                     class="addInput"
+                     type="text"
+                     placeholder="type a key to add a path element">
+              <button class="add" onclick="insertPathElt()">Add</button>
+            </div>
           </div>
         </div><!-- pathFrame -->
         <div id="parameterFrame">
           <h3>Parameters</h3>
-          <div id="parameters"></div>
-          <div id="addParam" class="inputDiv">
-            <input id="addParamInput"
-                   class="addInput"
-                   type="text"
-                   placeholder="type a key to add a parameter">
-            <button class="add" onclick="insertParam()">Add</button>
+          <div id="parameters">
+            <div id="addParam" class="inputDiv">
+              <input id="addParamInput"
+                     class="addInput"
+                     type="text"
+                     placeholder="type a key to add a parameter">
+              <button class="add" onclick="insertParam()">Add</button>
+            </div>
           </div>
         </div><!-- parameterFrame -->
-        <div id="submit"><!-- submit -->
+        <div id="createdRequestFrame">
+          <h3>Created request</h3>
+          <div id="urlDiv" class="inputDiv">
+            <div class="key">URL</div>
+            <div id="requestUrl"></div>
+          </div>
           <button class="Submit" onclick="submit()">Submit</button>
-        </div><!-- submit -->
+        </div><!-- createdRequestFrame -->
       </div><!-- request-->
-    </div><!-- construction -->
-  </div><!-- colun -->
-
-
-<div id="coldeux">
-
-  <div id="seeurl">
-      <div id='urlDynamic'>
-        <H2>And the URL is...</H2>
-        <span type="text" name='request' id='requestUrl' />
-      </div>
-  </div>
-
-
-
-
 
       <div id="response"><!-- response -->
-        <div id="status"></div>
-        <div id="data">Loading...</div>
+        <h2>Explore the response</h2>
+        <div id="status">Loading...</div>
+        <div id="data"></div>
       </div><!-- response -->
+    </div><!-- content -->
 
-</div>
- 
-
-  <script src="lib/lib.min.js"></script>
-  <script src="js/app.min.js"></script>
-</body>
+    <script src="lib/lib.min.js"></script>
+    <script src="js/app.min.js"></script>
+  </body>
 </html>
