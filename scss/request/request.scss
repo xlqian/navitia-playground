@@ -1,75 +1,55 @@
-/* --------------------
-URL TOKEN
---------------------- */
-input.api, input.token{
-	width: 100%;
-}
+#request {
 
-/* -----------------------
-PATH  et PARAMETERS 
------------------------ */
-#Meppath{
-	width: 100%;
-}
+    .inputDiv {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        width: 100%;
+        padding: 0em;
+        margin: 0.5em 0em 0.5em 0em;
+        height: auto;
+        border: solid 0.1em #DEDEDE;
+        background-color: white;
+    }
 
-.routeElt{
-	margin-top: 0.5em;
-}
+    input {
+        width: 100%;
+        min-width: 5em;
+        height: auto;
+        border: none;
+        padding: 0;
+        margin: 1ex;
+        background-color: inherit;
+        font-size: 100%;
+    }
 
-.pathElt, .routeElt, .param, #addParam {
-	display: flex;
-	flex-flow: row nowrap;
-	align-items: center;
-	width: 100%;
-	padding: 0em;
-	height: 5ex;
-}
+    .key{
+        margin: 1ex 0 1ex 1ex;
+        font-weight: bold;
+    }
 
-.param, #addParam {
-    margin: 0.5em 0em 0.5em 0em;
-    height: auto;
-    border: solid 0.1em #DEDEDE;
-    background-color: white;
-}
+    img.deleteButton {
+        height: 1.2em;
+        margin: 0;
+        padding: 0;
+    }
 
-input.route, #addParamInput {
-	height: 5ex;
-	width: 100%;
-	margin: 0em; 
-}
+    button.delete, button.add {
+        background-color: inherit;
+        color: inherit;
+        margin: 0;
+        width: auto;
+        height: auto;
+        padding: 1ex;
+        font-weight: bold;
+        color: #008ACA;
+        text-transform: uppercase;
+        font-size: 100%;
+    }
 
-input.value, #addParamInput {
-    width: 100%;
-    min-width: 5em;
-    height: auto;
-    border: none;
-    padding: 1ex;
-    margin: 0;
-    background-color: inherit;
-}
-
-.key{
-    margin: 0 0 0 1ex;
-    font-weight: bold;
-}
-
-img.deleteButton {
-    height: 1.2em;
-    margin: 0;
-    padding: 0;
-}
-
-button.delete, button.add {
-    background-color: inherit;
-    color: inherit;
-    margin: 0;
-    width: auto;
-    height: auto;
-    padding: 1ex;
-    font-weight: bold;
-    color: #008ACA;
-    text-transform: uppercase;
-    font-size: 100%;
+    .templateInput {
+        box-shadow: 0 0 0.5ex #008ACA;
+    }
 }
 
 /* url is */
@@ -84,6 +64,3 @@ button.delete, button.add {
 	line-height: 2.5em;
 }
 
-.templateInput {
-	border-color: #FF6699;
-}

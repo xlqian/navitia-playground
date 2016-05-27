@@ -5,82 +5,38 @@ function makeDeleteButton() {
         .html('<img src="img/delete.svg" class="deleteButton" alt="delete">');
 }
 
-function insertRoute(val) {
-    var currentRouteValue = $('.route', $(val).parent()).val();
-    $(val).parent().after(makeRoute('', currentRouteValue));
+function insertPathElt() {
+    var key = $('#addPathInput').val();
+    $("#path").append(makeKeyValue(key, ''));
+    $('#addPathInput').val('');
+    $("#path input").last().focus();
 }
 
-function makeTemplatePath(val, currentRouteValue, input) {
-    input.addClass('templateInput')
-         .blur(function() { this.value = (this.value=='')? val:this.value;})
-         .keyup(function(){ updateUrl(this); })
-         .focusout(function() { if (isTemplate($(this).val()) || (!$(this).val())) { $(this).addClass('templateInput'); } else { $(this).removeClass('templateInput'); } })
-    if (currentRouteValue == 'coverage') {
-        input.focus(function(){ routeValOnFocus(this); this.value=''; })
-             .val(val);
-    } else { input.focus(function(){ updateUrl(this); this.value=''; } )}
+function insertParam() {
+    var key = $('#addParamInput').val();
+    $("#parameters").append(makeKeyValue(key, ''));
+    $('#addParamInput').val('');
+    $("#parameters input").last().focus();
 }
 
-function makeRoute(val, currentRouteValue) {
-    var input = '', res = '';
-    
-    if (currentRouteValue == 'coverage') {
-        input = $('<input/>').focus(function(){ routeValOnFocus(this); })
-                             .keyup(function(){ updateUrl(this); })
-                             .attr('type','text')
-                             .addClass('route');
-        if (isTemplate(val)) { makeTemplatePath(val, currentRouteValue, input); }
-        res = $('<span/>')
-        .addClass('toDelete')
-        .addClass('routeElt')
-        .append(' ')
-        .append($('<span/>')
-                .addClass('pathElt')
-                .append(input)
-                .append(makeDeleteButton()))
-        .append('<button class="add" onclick="insertRoute(this)">+</button>');
-        makeCoverageList(val, input);
-    } else {
-        input = $('<input/>').focus(function(){ updateUrl(this); })
-                             .keyup(function(){ updateUrl(this); })
-                             .attr('type','text')
-                             .addClass('route')
-                             .val(val);
-        if (isTemplate(val)) { makeTemplatePath(val, currentRouteValue, input); }
-        res = $('<span/>')
-        .addClass('toDelete')
-        .addClass('routeElt')
-        .append(' ')
-        .append($('<span/>')
-                .addClass('pathElt')
-                .append(input)
-                .append(makeDeleteButton()))
-        .append('<button class="add" onclick="insertRoute(this)">+</button>');
-    }
-    return res;
+function makeTemplatePath(val, input) {
+    var templateFilled = false;
+    input.closest('.inputDiv').addClass('templateInput');
+    input.focus(function() { if (!templateFilled) { this.value=''; } })
+        .blur(function() {
+            if (templateFilled) { return; }
+            if ($(this).val() == val || $(this).val() == '') {
+                this.value = val;
+            } else {
+                $(this).closest('.inputDiv').removeClass('templateInput');
+                templateFilled = true;
+            }
+        });
 }
 
-function routeValOnFocus(valInput) {
-    var cov = $('.route', $(valInput).parent().parent().prev()).val();
-
-    if (cov == 'coverage' && ! isAutoCompleteInput($(valInput))) {
-        makeCoverageList($(valInput).val(), valInput);
-    } else if (cov != 'coverage' && isAutoCompleteInput($(valInput))) {
-        var valueElt = $('<input/>').addClass('route')
-                                    .attr('type', 'text')
-                                    .val($(valInput).val())
-                                    .focus(function(){ routeValOnFocus(this); })
-                                    .keyup(function(){ updateUrl(this); });
-        $(valInput).replaceWith(valueElt);
-        valueElt.focus();
-        valInput = valueElt;
-    }
-    updateUrl(valInput);
-}
-
-function makeParam(key, val) {
-    var res = $('<span/>')
-        .addClass('param')
+function makeKeyValue(key, val) {
+    var res = $('<div/>')
+        .addClass('inputDiv')
         .addClass('toDelete')
         .append(' ');
 
@@ -94,21 +50,20 @@ function makeParam(key, val) {
 
     if (isPlaceType(key)) {
         makeAutocomplete(valueElt);
-    }else if (isDatetimeType(key)) {
+    } else if (isDatetimeType(key)) {
         makeDatetime(valueElt);
+    } else if (key == 'coverage') {
+        makeCoverageList(val, valueElt);
     }
     var update = function(){ updateUrl(this); }
     valueElt.keyup(update).change(update).focus(update);
     res.append(valueElt);
     res.append(makeDeleteButton());
-    return res;
-}
 
-function insertParam() {
-    var key = $('#addParamInput').val();
-    $("#parameterList").append(makeParam(key, ''));
-    $('#addParamInput').val('');
-    $("#parameterList input").last().focus();
+    // valueElt must be attached to res to call this
+    if (isTemplate(val)) { makeTemplatePath(val, valueElt); }
+
+    return res;
 }
 
 function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
@@ -151,7 +106,7 @@ function makeCoverageList(val, obj) {
 
 function finalUrl(focusedElem) {
     var finalUrl = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
-    $("#route input.route").each(function(){
+    $("#path .key, #path input.value, #featureInput").each(function(){
         finalUrl += '/' + getFocusedElemValue(this, focusedElem);
     });
 
@@ -183,11 +138,11 @@ function updateUrl(focusedElem) {
 function getCoverage() {
     var prevIsCoverage = false;
     var coverage = null;
-    var covElt = $("#route input.route").each(function() {
+    var covElt = $("#path .key, #path input.value").each(function() {
         if (prevIsCoverage) {
             coverage = $(this).val();
         }
-        prevIsCoverage = $(this).val() == 'coverage';
+        prevIsCoverage = $(this).text() == 'coverage';
     });
     return coverage;
 } 
@@ -195,7 +150,6 @@ function getCoverage() {
 function makeAutocomplete(elt) {
     $(elt).autocomplete({
         source: function(request, response) {
-
             var token = $('#token input.token').val();
             var url = $('#api input.api').val();
             var cov = getCoverage();
@@ -270,9 +224,9 @@ function parseUrl() {
 }
 
 $(document).ready(function() {
-    $("#addParamInput").keyup(function(event) {
+    $(".addInput").keyup(function(event) {
         if (event.keyCode == 13) {
-            $("#addParam button.add").click();
+            $(this).parent().find("button.add").click();
         }
     });
 
@@ -282,21 +236,29 @@ $(document).ready(function() {
     $("#token input.token").attr('value', request.token);
     $("#api input.api").attr('value', request.api);
 
+    var prevPathElt = null;
     request.path.forEach(function(r) {
-        var currentRouteValue = $('#route span .route').last().val();
-        $("#route").append(makeRoute(r, currentRouteValue));
+        if (prevPathElt === null) {
+            prevPathElt = r;
+        } else {
+            $("#path").append(makeKeyValue(prevPathElt, r));
+            prevPathElt = null;
+        }
     });
+    if (prevPathElt !== null) {
+        $('#featureInput').val(prevPathElt);
+    }
 
-    var param_elt = $("#parameterList");
+    var param_elt = $("#parameters");
     for (var key in request.query) {
         var value = request.query[key];
         // a list of params, ex.: forbidded_uris[]
         if (Array.isArray(value)) {
             value.forEach(function(v){
-                param_elt.append(makeParam(key.decodeURI(), v.decodeURI()));
+                param_elt.append(makeKeyValue(key.decodeURI(), v.decodeURI()));
             });
         } else {
-            param_elt.append(makeParam(key.decodeURI(), value));
+            param_elt.append(makeKeyValue(key.decodeURI(), value));
         }
     }
     $('#urlDynamic span').text(request.request);
