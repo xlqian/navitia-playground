@@ -68,22 +68,22 @@ function makeKeyValue(key, val) {
 
 function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
     var value = $(elemToTest).is('input') ?
-        (noEncoding ? elemToTest.value : elemToTest.value.encodeURI()) :
+        (noEncoding ? elemToTest.value : encodeURIComponent(elemToTest.value)) :
         $(elemToTest).text();
     if (focusedElem == elemToTest) {
-        return '<span class="focus_params" style="color:red">{0}</span>'
-            .format(value);
+        return sprintf('<span class="focus_params" style="color:red">%s</span>'
+            , value);
     }
     return value;
 }
 
 function makeCoverageList(val, obj) {
     if (val) { $(obj).val(val); }
-    
+
     var api = $("#api input.api").attr('value');
     var token = $('#token input.token').val();
     var request =  api + "/coverage";
-    
+
     $.ajax({
         headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
         dataType: "json",
@@ -127,7 +127,7 @@ function finalUrl(focusedElem) {
 function submit() {
     var token = $('#token input.token').val();
     var f = finalUrl(); // finalUrl can be called without any args
-    window.location = '?request={0}&token={1}'.format(f.encodeURI(), token.encodeURI());
+    window.location = sprintf('?request=%s&token=%s', encodeURIComponent(f), encodeURIComponent(token));
 }
 
 function updateUrl(focusedElem) {
@@ -145,7 +145,7 @@ function getCoverage() {
         prevIsCoverage = $(this).text() == 'coverage';
     });
     return coverage;
-} 
+}
 
 function makeAutocomplete(elt) {
     $(elt).autocomplete({
@@ -154,10 +154,10 @@ function makeAutocomplete(elt) {
             var url = $('#api input.api').val();
             var cov = getCoverage();
             if (cov !== null) {
-                url = '{0}/coverage/{1}'.format(url, cov);
+                url = sprintf('%s/coverage/%s', url, cov);
             }
             $.ajax({
-                url: '{0}/places?q={1}'.format(url, request.term.encodeURI()),
+                url: sprintf('%s/places?q=%s', url, encodeURIComponent(request.term)),
                 headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
                 success: function(data) {
                     var res = [];
@@ -202,9 +202,9 @@ function parseUrl() {
     paths.forEach(function(r) {
         if (!r) { return; }
         if (vxxFound) {
-            api_path.push(r.decodeURI());
+            api_path.push(decodeURIComponent(r));
         } else {
-            api += '/' + r.decodeURI();
+            api += '/' + decodeURIComponent(r);
             vxxFound = /^v\d+$/.test(r);
         }
     });
@@ -255,10 +255,10 @@ $(document).ready(function() {
         // a list of params, ex.: forbidded_uris[]
         if (Array.isArray(value)) {
             value.forEach(function(v){
-                param_elt.append(makeKeyValue(key.decodeURI(), v.decodeURI()));
+                param_elt.append(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v)));
             });
         } else {
-            param_elt.append(makeKeyValue(key.decodeURI(), value));
+            param_elt.append(makeKeyValue(decodeURIComponent(key), value));
         }
     }
     $('#urlDynamic span').text(request.request);
