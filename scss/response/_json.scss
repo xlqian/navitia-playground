@@ -1,8 +1,8 @@
 div.object pre.renderjson {
     margin: 0;
     padding: 1ex;
-    background-color: #353535;
-    color: #F5F5F5;
+    background-color: $dark-gray;
+    color: $gray;
     overflow-x: auto;
     font-size: 1em;
 
@@ -11,21 +11,21 @@ div.object pre.renderjson {
     }
     a {
         text-decoration: none;
-        color: #89C6E5;
+        color: $light-blue;
     }
     .key {
-        color: #CED480;
+        color: $light-green;
     }
     .string {
-        color: #EFBF8F;
+        color: $light-orange;
     }
     .number {
-        color: #F18897;
+        color: $light-pink;
     }
     .boolean {
-        color: #F18897;
+        color: $light-pink;
     }
     .keyword {
-        color: #F18897;
+        color: $light-pink;
     }
 }

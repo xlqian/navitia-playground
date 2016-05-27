@@ -9,12 +9,15 @@ div.object {
         justify-content: center;
         height: 5ex;
         width: 5ex;
-        background: #efefef;
         margin: 0.2ex;
         border: none;
         border-radius: 0.25em;
-        color: #353535;
         text-align:center;
+        background-color: $gray;
+        color: $dark-gray;
+        font: 1em;
+        text-transform: uppercase;
+        font-weight: bold;
     }
 
     label.objectButton input {
