@@ -3,6 +3,7 @@ var gulp = require('gulp');
 
 // Include Our Plugins
 var jshint = require('gulp-jshint');
+var jslint = require('gulp-jslint');
 var sass   = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var concat = require('gulp-concat');
@@ -23,11 +24,17 @@ function isProd(env) {
     return env == 'prod';
 }
 // Lint Task
-gulp.task('lint', function() {
-    return gulp.src('js/*.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
-});
+function lint(env) {
+    return function() {
+        return gulp.src('js/**/*.js')
+        .pipe(jshint())
+        // TODO: Active this when all errors are fixed
+        // .pipe(jshint.reporter('fail'))
+        .pipe(jshint.reporter('jshint-stylish'));
+    }
+}
+gulp.task('dev:lint', lint('dev'));
+gulp.task('prod:lint', lint('prod'));
 
 // Compile Sass
 function compile_sass(env) {
@@ -64,6 +71,7 @@ function compile_vendor_js(env){
             '**/renderjson.js',
             '**/urijs/src/URI.js',
             '**/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.js',
+            '**/sprintf/src/sprintf.js',
             '!**/*.min.js']))
             .pipe(concat('lib.min.js'))
             .pipe(gulpif(isProd(env),uglify()))
@@ -145,9 +153,10 @@ gulp.task('prod:watch', watch('prod'));
 // build sequence
 function build(env) {
     return function(cb){
-        runSequence([
+        runSequence(
         env + ':scripts',
-        env + ':sass',
+        env + ':lint',
+        [env + ':sass',
         env + ':bower',
         env + ':img',
         env + ':minify_html'], cb);

@@ -1,3 +1,6 @@
+/* exported localStorageAvailable */
+/* TODO: Complete the jshint*/
+
 function localStorageAvailable() {
     try {
 	var storage = window.localStorage,
