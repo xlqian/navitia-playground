@@ -58,8 +58,8 @@ function makeKeyValue(key, val) {
     } else if (key == 'coverage') {
         makeCoverageList(val, valueElt);
     }
-    var update = function(){ updateUrl(this); }
-    valueElt.keyup(update).change(update).focus(update);
+    valueElt.on('input', function() { updateUrl(this); });
+    valueElt.focus(function() { updateUrl(this); });
     res.append(valueElt);
     res.append(makeDeleteButton());
 
@@ -238,6 +238,11 @@ function parseUrl() {
 }
 
 $(document).ready(function() {
+    // Manage add input/button
+    $('button.add').prop('disabled', true);
+    $('.addInput').on('input', function() {
+        $(this).parent().find('button.add').prop('disabled', this.value.length === 0);
+    });
     $(".addInput").keyup(function(event) {
         if (event.keyCode == 13) {
             $(this).parent().find("button.add").click();

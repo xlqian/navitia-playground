@@ -21,34 +21,19 @@
     }
 
     .templateInput {
-        box-shadow: 0 0 0.25em $blue;
-    }
-
-    #credentials .inputDiv {
-        border-color: $orange;
-    }
-    #path .inputDiv {
-        border-color: $green;
-    }
-    #path .templateInput {
-        box-shadow: 0 0 0.25em $green;
-    }
-    #parameters .inputDiv {
-        border-color: $blue;
-    }
-    #parameters .templateInput {
-        box-shadow: 0 0 0.25em $blue;
+        box-shadow: 0 0 0.5em $blue;
     }
 
     input {
         width: 100%;
         min-width: 5em;
-        height: auto;
         border: none;
-        border-width: 0;
         padding: 0.5em;
         background-color: inherit;
-        font-size: 100%;
+        font: inherit;
+    }
+    input:focus {
+        outline: 0;
     }
 
     .key {
@@ -58,21 +43,46 @@
         background-color: $gray;
     }
 
+    button::-moz-focus-inner {
+        border-style: none;
+        padding: 0;
+    }
+
     button.delete, button.add {
         background-color: inherit;
         color: inherit;
         width: auto;
         height: auto;
         padding: 0.5em 0.5em 0.5em 0;
+        margin: 0;
+        font: inherit;
         font-weight: bold;
         color: $dark-blue;
         text-transform: uppercase;
-        font-size: 100%;
+    }
+    button.add:disabled {
+        visibility: hidden;
     }
 
     img.deleteButton {
+        vertical-align: text-top;
         height: 1.1em;
     }
+
+    @mixin request-parts($color) {
+        .inputDiv {
+            border-color: $color;
+        }
+        .templateInput {
+            box-shadow: 0 0 0.5em $color;
+        }
+        .key {
+            background-color: $color;
+        }
+    }
+    #credentials { @include request-parts($light-orange); }
+    #path { @include request-parts($light-green); }
+    #parameters { @include request-parts($light-blue); }
 
     #urlDiv {
         width: 100%;
