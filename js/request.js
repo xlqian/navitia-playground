@@ -69,17 +69,6 @@ function makeKeyValue(key, val) {
     return res;
 }
 
-function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
-    var value = $(elemToTest).is('input') ?
-        (noEncoding ? elemToTest.value : encodeURIComponent(elemToTest.value)) :
-        $(elemToTest).text();
-    if (focusedElem == elemToTest) {
-        return sprintf('<span class="focus_params" style="color:red">%s</span>'
-            , value);
-    }
-    return value;
-}
-
 function makeCoverageList(val, obj) {
     if (val) { $(obj).val(val); }
 
@@ -107,23 +96,45 @@ function makeCoverageList(val, obj) {
     });
 }
 
+function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
+    var value = $(elemToTest).is('input') ? elemToTest.value : $(elemToTest).text();
+    if (! noEncoding) { value = encodeURIComponent(value); }
+    if (focusedElem == elemToTest) {
+        return sprintf('<span class="focusedParam">%s</span>', value);
+    } else {
+        return value;
+    }
+}
+
 function finalUrl(focusedElem) {
-    var finalUrl = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
+    var api = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
+
+    var path = '';
     $("#path .key, #path input.value, #featureInput").each(function(){
-        finalUrl += '/' + getFocusedElemValue(this, focusedElem);
+        path += '/' + getFocusedElemValue(this, focusedElem);
     });
 
-    finalUrl += '?';
-
+    var parameters = '?';
     $('#parameters .key, #parameters input.value').each(function(){
-        finalUrl += getFocusedElemValue(this, focusedElem);
+        parameters += getFocusedElemValue(this, focusedElem);
         if ($(this).hasClass('key')) {
-            finalUrl += '=';
+            parameters += '=';
         }
         if ($(this).hasClass('value')) {
-            finalUrl += '&';
+            parameters += '&';
         }
     });
+
+    if (focusedElem === undefined) {
+        // called without arg, we want pure text
+        return api + path + parameters;
+    } else {
+        // with arg, we want a rendering thing
+        return sprintf('<span class="api">%s</span>' +
+                       '<span class="path">%s</span>' +
+                       '<span class="parameters">%s</span>',
+                       api, path, parameters);
+    }
     return finalUrl;
 }
 
@@ -264,5 +275,5 @@ $(document).ready(function() {
             addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(value)));
         }
     }
-    updateUrl();
+    updateUrl(null);
 });

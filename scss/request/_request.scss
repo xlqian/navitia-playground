@@ -79,7 +79,20 @@
     }
     #requestUrl{
         margin: 0.5em;
-        overflow-x: auto
+        overflow-x: auto;
+
+        .api {
+            background-color: $light-orange;
+        }
+        .path {
+            background-color: $light-green;
+        }
+        .parameters {
+            background-color: $light-blue;
+        }
+        .focusedParam {
+            font-weight: bold;
+        }
     }
     #submitDiv {
         text-align: center;

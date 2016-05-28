@@ -22,7 +22,12 @@
           <h3>Credentials</h3>
           <div id="credentials">
             <div id="api" class="inputDiv">
-              <input placeholder="API" type="text" class="api" onkeyup="updateUrl()">
+              <input placeholder="API"
+                     type="text"
+                     class="api"
+                     onfocus="updateUrl(this)"
+                     onkeyup="updateUrl(this)"
+                     onchange="updateUrl(this)">
             </div>
             <div id="token" class="inputDiv">
               <input placeholder="Token" type="text" class="token">
@@ -36,6 +41,8 @@
               <input id="featureInput"
                      type="text"
                      onfocus="updateUrl(this)"
+                     onkeyup="updateUrl(this)"
+                     onchange="updateUrl(this)"
                      placeholder="empty feature">
             </div>
             <div id="addPathElt" class="inputDiv">
