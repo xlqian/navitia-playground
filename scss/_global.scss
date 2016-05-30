@@ -1,0 +1,40 @@
+body {
+    color: black;
+    background-color: white;
+    margin: 0;
+    font-family: 'OpenSans', sans-serif;
+    font-size: 100%;
+}
+
+header {
+    display: inline-block;
+    width: 100%;
+    margin: 0em;
+}
+
+#content {
+    padding: 0.5em;
+    max-width: 105em;
+    margin: auto;
+}
+
+img.logo {
+    float: left;
+    width: 8em;
+    padding: 1.5em 0em 1.5em 2em;
+}
+
+.ui-autocomplete {
+    height: auto;
+    max-height: 15em;
+    overflow-y: auto;
+}
+
+button {
+    padding: 0.5em 2em;
+    border: none;
+    border-radius: 0.25em;
+    color: white;
+    background: $blue;
+    text-transform: uppercase;
+}

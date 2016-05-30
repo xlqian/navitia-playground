@@ -44,42 +44,35 @@ var autocomplete = {
             ]
         },
         paramKey: {
-            all : ['addresses',
-            'commercial_modes',
-            'companies',
-            'departures',
-            'disruptions',
-            'networks',
-            'lines',
-            'physical_modes',
-            'places_nearby',
-            'poi_types',
-            'pois',
-            'route_schedule',
-            'routes',
-            'stop_areas',
-            'stop_points',
-            'stop_schedules',
-            'vehicles_journeys',
-            'places',
-            'stop_schedules',
-            ],
+            journeys : ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'forbidden_uris[]', 'data_freshness', 'count'],
+            places: ['q', 'type[]', 'count'],
+            pt_objects: ['q', 'type[]', 'count'],
+            all: [''],
         }
     },
     addKeyAutocomplete: function(input, key) {
+        var  source;
         if (key === 'pathKey' && ! $('#pathFrame').find('.toDelete').length) {
             source = this.autocompleteTree[key].empty;
-        } else {
+        } else if (key === 'paramKey'){
+            var feature = $('#featureInput').val();
+            source = this.autocompleteTree[key][feature];
+            source = source ? source : [];
+        }else {
             source = this.autocompleteTree[key].all;
         }
 
-        $(input).autocomplete({source: source,
+        $(input).autocomplete({
+            source: source,
             minLength: 0,
             scroll: true,
-            delay: 500}).focus(function() {
+            delay: 500,
+            select: function (event, ui) {
+                $(input).parent().find('button.add').prop('disabled', false);
+            }
+        }).focus(function() {
                 $(this).autocomplete('search', '');
         });
-
     },
     staticAutocompleteTypes : ['coverage',
         'physical_modes',
@@ -109,9 +102,13 @@ var autocomplete = {
                     $(input).autocomplete({source: res,
                         minLength: 0,
                         scroll: true,
-                        delay: 500}).focus(function() {
-                            $(this).autocomplete('search', '');
+                        delay: 500
+                    }).focus(function() {
+                            $(input).autocomplete('search', '');
                     });
+                    if ($(input).is(':focus')) {
+                        $(input).autocomplete('search', '');
+                    }
                 }
         });
     },

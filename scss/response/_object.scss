@@ -3,8 +3,8 @@ div.object {
     padding: 0;
     border-style: solid;
     border-width: 0.1ex;
-    border-color: #DEDEDE;
-    background-color: #F5F5F5;
+    border-color: $gray;
+    background-color: $light-gray;
 
     div.head {
         display: flex;
@@ -33,7 +33,7 @@ div.object {
     div.data > div {
         border-style: solid;
         border-width: 0.1ex 0 0 0;
-        border-color: #DEDEDE;    
+        border-color: $gray;
         margin: 0;
         padding: 0;
     }
