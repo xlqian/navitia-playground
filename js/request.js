@@ -10,16 +10,16 @@ function makeDeleteButton() {
 
 function insertPathElt() {
     var key = $('#addPathInput').val();
-    $("#path").append(makeKeyValue(key, ''));
+    $("#feature").before(makeKeyValue(key, ''));
     $('#addPathInput').val('');
-    $("#path input").last().focus();
+    $("#feature").prev().find('input').first().focus();
 }
 
 function insertParam() {
     var key = $('#addParamInput').val();
-    $("#parameters").append(makeKeyValue(key, ''));
+    $('#addParam').before(makeKeyValue(key, ''));
     $('#addParamInput').val('');
-    $("#parameters input").last().focus();
+    $('#addParam').prev().find('input').first().focus();
 }
 
 function makeTemplatePath(val, input) {
@@ -58,8 +58,8 @@ function makeKeyValue(key, val) {
     } else if (key == 'coverage') {
         makeCoverageList(val, valueElt);
     }
-    var update = function(){ updateUrl(this); }
-    valueElt.keyup(update).change(update).focus(update);
+    valueElt.on('input', function() { updateUrl(this); });
+    valueElt.focus(function() { updateUrl(this); });
     res.append(valueElt);
     res.append(makeDeleteButton());
 
@@ -67,17 +67,6 @@ function makeKeyValue(key, val) {
     if (isTemplate(val)) { makeTemplatePath(val, valueElt); }
 
     return res;
-}
-
-function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
-    var value = $(elemToTest).is('input') ?
-        (noEncoding ? elemToTest.value : encodeURIComponent(elemToTest.value)) :
-        $(elemToTest).text();
-    if (focusedElem == elemToTest) {
-        return sprintf('<span class="focus_params" style="color:red">%s</span>'
-            , value);
-    }
-    return value;
 }
 
 function makeCoverageList(val, obj) {
@@ -107,23 +96,45 @@ function makeCoverageList(val, obj) {
     });
 }
 
+function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
+    var value = $(elemToTest).is('input') ? elemToTest.value : $(elemToTest).text();
+    if (! noEncoding) { value = encodeURIComponent(value); }
+    if (focusedElem == elemToTest) {
+        return sprintf('<span class="focusedParam">%s</span>', value);
+    } else {
+        return value;
+    }
+}
+
 function finalUrl(focusedElem) {
-    var finalUrl = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
+    var api = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
+
+    var path = '';
     $("#path .key, #path input.value, #featureInput").each(function(){
-        finalUrl += '/' + getFocusedElemValue(this, focusedElem);
+        path += '/' + getFocusedElemValue(this, focusedElem);
     });
 
-    finalUrl += '?';
-
+    var parameters = '?';
     $('#parameters .key, #parameters input.value').each(function(){
-        finalUrl += getFocusedElemValue(this, focusedElem);
+        parameters += getFocusedElemValue(this, focusedElem);
         if ($(this).hasClass('key')) {
-            finalUrl += '=';
+            parameters += '=';
         }
         if ($(this).hasClass('value')) {
-            finalUrl += '&';
+            parameters += '&';
         }
     });
+
+    if (focusedElem === undefined) {
+        // called without arg, we want pure text
+        return api + path + parameters;
+    } else {
+        // with arg, we want a rendering thing
+        return sprintf('<span class="api">%s</span>' +
+                       '<span class="path">%s</span>' +
+                       '<span class="parameters">%s</span>',
+                       api, path, parameters);
+    }
     return finalUrl;
 }
 
@@ -135,7 +146,7 @@ function submit() {
 
 function updateUrl(focusedElem) {
     var f = finalUrl(focusedElem);
-    $('#urlDynamic span').html(f);
+    $('#requestUrl').html(f);
 }
 
 function getCoverage() {
@@ -227,6 +238,11 @@ function parseUrl() {
 }
 
 $(document).ready(function() {
+    // Manage add input/button
+    $('button.add').prop('disabled', true);
+    $('.addInput').on('input', function() {
+        $(this).parent().find('button.add').prop('disabled', this.value.length === 0);
+    });
     $(".addInput").keyup(function(event) {
         if (event.keyCode == 13) {
             $(this).parent().find("button.add").click();
@@ -244,7 +260,7 @@ $(document).ready(function() {
         if (prevPathElt === null) {
             prevPathElt = r;
         } else {
-            $("#path").append(makeKeyValue(prevPathElt, r));
+            $("#feature").before(makeKeyValue(prevPathElt, r));
             prevPathElt = null;
         }
     });
@@ -252,17 +268,17 @@ $(document).ready(function() {
         $('#featureInput').val(prevPathElt);
     }
 
-    var param_elt = $("#parameters");
+    var addParam = $("#addParam");
     for (var key in request.query) {
         var value = request.query[key];
         // a list of params, ex.: forbidded_uris[]
         if (Array.isArray(value)) {
             value.forEach(function(v){
-                param_elt.append(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v)));
+                addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v)));
             });
         } else {
-            param_elt.append(makeKeyValue(decodeURIComponent(key), value));
+            addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(value)));
         }
     }
-    $('#urlDynamic span').text(request.request);
+    updateUrl(null);
 });

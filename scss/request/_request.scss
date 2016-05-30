@@ -1,0 +1,110 @@
+#request {
+
+    #credentials, #path, #parameters {
+        display: flex;
+        flex-flow: row wrap;
+        width: 100%;
+        height: auto;
+    }
+
+    .inputDiv {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: stretch;
+        width: 25em;
+        margin: 0 1em 1.25em 0;
+        padding: 0;
+        background-color: white;
+        border-style: solid;
+        border-width: 0 0 0.3em 0;
+        border-color: $gray;
+    }
+
+    .templateInput {
+        box-shadow: 0 0 0.5em $blue;
+    }
+
+    input {
+        width: 100%;
+        min-width: 5em;
+        border: none;
+        padding: 0.5em;
+        background-color: inherit;
+        font: inherit;
+    }
+    input:focus {
+        outline: 0;
+    }
+
+    .key {
+        margin: 0;
+        padding: 0.5em;
+        font-weight: bold;
+        background-color: $gray;
+    }
+
+    button::-moz-focus-inner {
+        border-style: none;
+        padding: 0;
+    }
+
+    button.delete, button.add {
+        background-color: inherit;
+        color: inherit;
+        width: auto;
+        height: auto;
+        padding: 0.5em 0.5em 0.5em 0;
+        margin: 0;
+        font: inherit;
+        font-weight: bold;
+        color: $dark-blue;
+        text-transform: uppercase;
+    }
+    button.add:disabled {
+        visibility: hidden;
+    }
+
+    img.deleteButton {
+        vertical-align: text-top;
+        height: 1.1em;
+    }
+
+    @mixin request-parts($color) {
+        .inputDiv {
+            border-color: $color;
+        }
+        .templateInput {
+            box-shadow: 0 0 0.5em $color;
+        }
+        .key {
+            background-color: $color;
+        }
+    }
+    #credentials { @include request-parts($light-orange); }
+    #path { @include request-parts($light-green); }
+    #parameters { @include request-parts($light-blue); }
+
+    #urlDiv {
+        width: 100%;
+    }
+    #requestUrl{
+        margin: 0.5em;
+        overflow-x: auto;
+
+        .api {
+            background-color: $light-orange;
+        }
+        .path {
+            background-color: $light-green;
+        }
+        .parameters {
+            background-color: $light-blue;
+        }
+        .focusedParam {
+            font-weight: bold;
+        }
+    }
+    #submitDiv {
+        text-align: center;
+    }
+}

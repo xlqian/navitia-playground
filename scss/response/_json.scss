@@ -1,0 +1,31 @@
+div.object pre.renderjson {
+    margin: 0;
+    padding: 1ex;
+    background-color: $dark-gray;
+    color: $gray;
+    overflow-x: auto;
+    font-size: 1em;
+
+    .disclosure {
+        font-size: 1.5em;
+    }
+    a {
+        text-decoration: none;
+        color: $light-blue;
+    }
+    .key {
+        color: $light-green;
+    }
+    .string {
+        color: $light-orange;
+    }
+    .number {
+        color: $light-red;
+    }
+    .boolean {
+        color: $light-red;
+    }
+    .keyword {
+        color: $light-red;
+    }
+}
