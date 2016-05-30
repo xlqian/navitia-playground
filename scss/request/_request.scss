@@ -41,6 +41,7 @@
         padding: 0.5em;
         font-weight: bold;
         background-color: $gray;
+        color: $dark-gray;
     }
 
     button::-moz-focus-inner {
@@ -74,10 +75,7 @@
             border-color: $color;
         }
         .templateInput {
-            box-shadow: 0 0 0.5em $color;
-        }
-        .key {
-            background-color: $color;
+            box-shadow: 0 0 0.5em darken($color, 30%);
         }
     }
     #credentials { @include request-parts($light-orange); }
