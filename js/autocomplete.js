@@ -63,6 +63,7 @@ var autocomplete = {
         if (isDatetimeType(key)) {
             makeDatetime(input);
         } else if (key in this.autocompleteTree.paramValue){
+            // TODO : factorize this code
             $(input).autocomplete({
                 source: this.autocompleteTree.paramValue[key],
                 minLength: 0,
