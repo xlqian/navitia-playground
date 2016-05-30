@@ -121,7 +121,7 @@ var autocomplete = {
             url: request,
             success: function(data) {
                     var res = [];
-                    summary(staticType, data);
+                    // TODO: use summary
                     staticType = (staticType==='coverage') ? 'regions' :  staticType;
                     data[staticType].forEach(function(elt){
                         res.push({ value: elt.id, label: elt.name });
@@ -193,6 +193,7 @@ var autocomplete = {
                     headers: isUndefined(token) ? {} : { Authorization: 'Basic ' + btoa(token) },
                     success: function (data) {
                         var res = [];
+                        // TODO: use summary
                         var search = null;
                         if ('places' in data) {
                             search = data.places;
