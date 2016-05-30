@@ -14,7 +14,7 @@ var autocomplete = {
             'places_nearby',
             'poi_types',
             'pois',
-            'route_schedule',
+            'route_schedules',
             'routes',
             'stop_areas',
             'stop_points',
@@ -34,7 +34,7 @@ var autocomplete = {
             'places_nearby',
             'poi_types',
             'pois',
-            'route_schedule',
+            'route_schedules',
             'routes',
             'stop_areas',
             'stop_points',
@@ -44,8 +44,13 @@ var autocomplete = {
             ]
         },
         paramKey: {
+            departures : ['from_datetime', 'duration', 'forbidden_uris[]', 'data_freshness'],
             journeys : ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'forbidden_uris[]', 'data_freshness', 'count'],
-            places: ['q', 'type[]', 'count'],
+            route_schedule : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'],
+            stop_schedules : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'],
+            places_nearby : ['distance', 'type[]', 'admin_uri[]', 'filter'],
+            places: ['q', 'type[]', 'count', 'admin_uri[]'],
+            pois : ['distance'],
             pt_objects: ['q', 'type[]', 'count'],
         }
     },
