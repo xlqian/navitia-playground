@@ -47,7 +47,6 @@ var autocomplete = {
             journeys : ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'forbidden_uris[]', 'data_freshness', 'count'],
             places: ['q', 'type[]', 'count'],
             pt_objects: ['q', 'type[]', 'count'],
-            all: [''],
         }
     },
     addKeyAutocomplete: function(input, key) {
