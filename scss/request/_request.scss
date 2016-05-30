@@ -41,6 +41,7 @@
         padding: 0.5em;
         font-weight: bold;
         background-color: $gray;
+        color: $dark-gray;
     }
 
     button::-moz-focus-inner {
@@ -61,7 +62,7 @@
         text-transform: uppercase;
     }
     button.add:disabled {
-        visibility: hidden;
+        color: $gray;
     }
 
     img.deleteButton {
@@ -74,10 +75,7 @@
             border-color: $color;
         }
         .templateInput {
-            box-shadow: 0 0 0.5em $color;
-        }
-        .key {
-            background-color: $color;
+            box-shadow: 0 0 0.5em darken($color, 30%);
         }
     }
     #credentials { @include request-parts($light-orange); }
@@ -91,18 +89,18 @@
         margin: 0.5em;
         overflow-x: auto;
 
-        .api {
-            background-color: $light-orange;
+        @mixin url-colors($color) {
+            background-color: $color;
+
+            .focusedParam {
+                background-color: darken($color, 35%);
+                color: white;
+            }
         }
-        .path {
-            background-color: $light-green;
-        }
-        .parameters {
-            background-color: $light-blue;
-        }
-        .focusedParam {
-            font-weight: bold;
-        }
+
+        .api { @include url-colors($light-orange); }
+        .path { @include url-colors($light-green); }
+        .parameters { @include url-colors($light-blue); }
     }
     #submitDiv {
         text-align: center;

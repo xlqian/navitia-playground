@@ -37,4 +37,6 @@ button {
     color: white;
     background: $blue;
     text-transform: uppercase;
+    font: inherit;
+    font-weight: bold;
 }
