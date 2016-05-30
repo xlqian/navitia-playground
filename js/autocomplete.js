@@ -1,25 +1,21 @@
 var autocomplete = {
     autocompleteTree: {
         pathKey: {
-            empty : ['coverage', 'places', 'journeys', 'coord'],
+            empty : ['coverage', 'places', 'coord'],
             all : ['addresses',
             'commercial_modes',
             'companies',
-            'departures',
             'disruptions',
             'lines',
             'networks',
             'physical_modes',
             'places',
-            'places_nearby',
             'poi_types',
             'pois',
             'physical_modes',
-            'route_schedules',
             'routes',
             'stop_areas',
             'stop_points',
-            'stop_schedules',
             'vehicles_journeys',
             ],
         },
@@ -59,11 +55,20 @@ var autocomplete = {
             traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'],
         }
     },
-    paramValueAutoComplete : function (input, key) {
+    valueAutoComplete : function (input, key) {
         if (isPlaceType(key)) {
             this.dynamicAutocomplete(input, 'places');
         } else if (isDatetimeType(key)) {
             makeDatetime(input);
+        } else if (key in this.autocompleteTree.paramValue){
+            $(input).autocomplete({
+                source: this.autocompleteTree.paramValue[key],
+                minLength: 0,
+                scroll: true,
+                delay: 500
+            }).focus(function() {
+                    $(this).autocomplete('search', '');
+            });
         } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
             this.staticAutocomplete(input, key);
         }else if (this.dynamicAutocompleteTypes.indexOf(key) > -1) {

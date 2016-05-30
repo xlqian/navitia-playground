@@ -21,6 +21,7 @@ function insertParam() {
     var key = $('#addParamInput').val();
     $('#addParam').before(makeKeyValue(key, '', 'parameters'));
     $('#addParamInput').val('');
+    $('#addParamInput').parent().find('button.add').prop('disabled', true);
     $('#addParam').prev().find('input').first().focus();
 }
 
@@ -51,7 +52,6 @@ function updateAddPathAC(val){
 };
 
 function updateAddParamAC() {
-    console.log("focusout");
     autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
 }
 function makeKeyValue(key, val, cls) {
@@ -69,7 +69,7 @@ function makeKeyValue(key, val, cls) {
         .addClass(cls)
         .val(val);
 
-    autocomplete.paramValueAutoComplete(valueElt, key);
+    autocomplete.valueAutoComplete(valueElt, key);
 
     valueElt.on('input', function() { updateUrl(this); });
     valueElt.focus(function() { updateUrl(this); });
@@ -80,33 +80,6 @@ function makeKeyValue(key, val, cls) {
     if (isTemplate(val)) { makeTemplatePath(val, valueElt); }
 
     return res;
-}
-
-function makeCoverageList(val, obj) {
-    if (val) { $(obj).val(val); }
-
-    var api = $("#api input.api").attr('value');
-    var token = $('#token input.token').val();
-    var request =  api + "/coverage";
-
-    $.ajax({
-        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
-        dataType: "json",
-        url: request,
-        success: function(data) {
-                var res = [];
-                for (var dict in data) {
-                    for (var cov = 0; cov < data[dict].length; cov++) {
-                        res.push(data[dict][cov].id);
-                    }
-                    var auto = $(obj).autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
-                    auto.focus(function() {
-                        auto.autocomplete("search", '');
-                    });
-                    return auto;
-                }
-            }
-    });
 }
 
 function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
