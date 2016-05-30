@@ -71,7 +71,7 @@ function makeKeyValue(key, val, cls) {
         .val(val);
 
     if (isPlaceType(key)) {
-        makeAutocomplete(valueElt);
+        autocomplete.dynamicAutocomplete(elt, 'places');
     } else if (isDatetimeType(key)) {
         makeDatetime(valueElt);
     } else if (autocomplete.staticAutocompleteTypes.indexOf(key) > -1) {
@@ -180,10 +180,6 @@ function getCoverage() {
         prevIsCoverage = $(this).text() == 'coverage';
     });
     return coverage;
-}
-
-function makeAutocomplete(elt) {
-    autocomplete.dynamicAutocomplete(elt, 'places');
 }
 
 function makeDatetime(elt) {
