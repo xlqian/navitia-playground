@@ -48,7 +48,7 @@ function render(name, type, json) {
                     return extended(type, json);
                 })))
                 .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
-                    return 'Map not implemented yet';
+                    return map.run(type, json);
                 })))
                 .append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
                     return renderjson(json);

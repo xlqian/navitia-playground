@@ -72,6 +72,7 @@ function compile_vendor_js(env){
             '**/urijs/src/URI.js',
             '**/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.js',
             '**/sprintf/src/sprintf.js',
+            '**/leaflet/dist/leaflet-src.js',
             '!**/*.min.js']))
             .pipe(concat('lib.min.js'))
             .pipe(gulpif(isProd(env),uglify()))
@@ -87,7 +88,8 @@ function compile_vendor_css(env){
         return bower()
         .pipe(gulpFilter([
             '**/jquery-ui/themes/smoothness/jquery-ui.css',
-            '**/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.css']))
+            '**/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.css',
+            '**/leaflet/dist/leaflet.css']))
             .pipe(concat('vendor.min.css'))
             .pipe(gulpif(isProd(env),cleanCSS()))
             .pipe(gulp.dest(config[env] + '/css'));

@@ -47,3 +47,12 @@ function durationToString(duration) {
 function isTemplate(str) {
     return str.slice(0, 1) === '{' && str.slice(-1) === '}';
 }
+
+function flatMap(array, f) {
+    var result = [];
+
+    array.forEach(function(obj) {
+        result = result.concat(f(obj));
+    });
+    return result;
+}
