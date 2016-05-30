@@ -62,7 +62,7 @@
         text-transform: uppercase;
     }
     button.add:disabled {
-        visibility: hidden;
+        color: $gray;
     }
 
     img.deleteButton {
