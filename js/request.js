@@ -10,16 +10,15 @@ function makeDeleteButton() {
 
 function insertPathElt() {
     var key = $('#addPathInput').val();
-    if (key.length === 0) { return; }
     $("#feature").before(makeKeyValue(key, '', 'path'));
     autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
     $('#addPathInput').val('');
+    $('#addPathInput').parent().find('button.add').prop('disabled', true);
     $("#feature").prev().find('input').first().focus();
 }
 
 function insertParam() {
     var key = $('#addParamInput').val();
-    if (key.length === 0) { return; }
     $('#addParam').before(makeKeyValue(key, '', 'parameters'));
     $('#addParamInput').val('');
     $('#addParam').prev().find('input').first().focus();
@@ -225,7 +224,7 @@ function parseUrl() {
 $(document).ready(function() {
     // Manage add input/button
     $('button.add').prop('disabled', true);
-    $('.addInput').on('input', function() {
+    $('.addInput').on('input change', function() {
         $(this).parent().find('button.add').prop('disabled', this.value.length === 0);
     });
     $(".addInput").keyup(function(event) {

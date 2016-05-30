@@ -70,18 +70,17 @@ var autocomplete = {
             this.dynamicAutocomplete(input, key);
         }
     },
-    addKeyAutocomplete: function(input, key) {
+    addKeyAutocomplete: function(input, type) {
         var  source;
-        if (key === 'pathKey' && ! $('#pathFrame').find('.toDelete').length) {
-            source = this.autocompleteTree[key].empty;
-        } else if (key === 'paramKey'){
+        if (type === 'pathKey' && ! $('#pathFrame').find('.toDelete').length) {
+            source = this.autocompleteTree[type].empty;
+        } else if (type === 'paramKey'){
             var feature = $('#featureInput').val();
-            source = this.autocompleteTree[key][feature];
-            source = source ? source : [];
+            source = this.autocompleteTree[type][feature];
         }else {
-            source = this.autocompleteTree[key].all;
+            source = this.autocompleteTree[type].all;
         }
-
+        source = source ? source : [];
         $(input).autocomplete({
             source: source,
             minLength: 0,
