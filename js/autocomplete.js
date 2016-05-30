@@ -59,10 +59,8 @@ var autocomplete = {
             datetime_represents : ['arrival', 'departure'].sort(),
         }
     },
-    valueAutoComplete : function (input, key) {
-        if (isPlaceType(key)) {
-            this.dynamicAutocomplete(input, 'places');
-        } else if (isDatetimeType(key)) {
+    valueAutoComplete: function (input, key) {
+        if (isDatetimeType(key)) {
             makeDatetime(input);
         } else if (key in this.autocompleteTree.paramValue){
             $(input).autocomplete({
@@ -75,7 +73,7 @@ var autocomplete = {
             });
         } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
             this.staticAutocomplete(input, key);
-        }else if (this.dynamicAutocompleteTypes.indexOf(key) > -1) {
+        } else if (this.dynamicAutocompleteTypes.indexOf(key) > -1) {
             this.dynamicAutocomplete(input, key);
         }
     },
@@ -102,7 +100,7 @@ var autocomplete = {
             $(this).autocomplete('search', '');
         });
     },
-    staticAutocompleteTypes : ['coverage',
+    staticAutocompleteTypes: ['coverage',
         'physical_modes',
         'poi_types',
     ],
@@ -140,7 +138,7 @@ var autocomplete = {
                 }
         });
     },
-    dynamicAutocompleteTypes : [
+    dynamicAutocompleteTypes: [
         'addresses',
         'administrative_regions',
         'commercial_modes',
@@ -152,6 +150,8 @@ var autocomplete = {
         'routes',
         'stop_areas',
         'stop_points',
+        'from',
+        'to',
     ],
     dynamicAutocomplete: function (elt, dynamicType) {
         var formatPtReq = function (v){
@@ -172,6 +172,8 @@ var autocomplete = {
             routes: formatPtReq('route'),
             stop_areas: formatPtReq('stop_area'),
             stop_points: formatPlacesReq('stop_point'),
+            from: 'places/?&q=',
+            to: 'places/?&q=',
         };
         var httpReq = dynamicTypeRequest[dynamicType];
         if (! httpReq) {
