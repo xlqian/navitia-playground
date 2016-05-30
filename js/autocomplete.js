@@ -84,7 +84,7 @@ var autocomplete = {
         } else if (type === 'paramKey'){
             var feature = $('#featureInput').val();
             source = this.autocompleteTree[type][feature];
-        }else {
+        } else {
             source = this.autocompleteTree[type].all;
         }
         source = source ? source : [];
@@ -161,7 +161,7 @@ var autocomplete = {
             return sprintf('places/?type[]=%s&q=', v);
         };
         var dynamicTypeRequest = {
-            addresses:formatPlacesReq('address'),
+            addresses: formatPlacesReq('address'),
             administrative_regions: formatPlacesReq('administrative_region'),
             commercial_modes: formatPtReq('commercial_mode'),
             coord: formatPlacesReq('address'),
