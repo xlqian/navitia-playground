@@ -31,11 +31,11 @@ var autocomplete = {
             'disruptions',
             'lines',
             'networks',
-            'physical_modes',
             'places_nearby',
             'places',
             'poi_types',
             'pois',
+            'physical_modes',
             'pt_objects',
             'route_schedules',
             'routes',
@@ -54,6 +54,20 @@ var autocomplete = {
             pt_objects: ['q', 'type[]', 'count'],
             route_schedule : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'],
             stop_schedules : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'],
+        },
+        paramValue : {
+            traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'],
+        }
+    },
+    paramValueAutoComplete : function (input, key) {
+        if (isPlaceType(key)) {
+            this.dynamicAutocomplete(input, 'places');
+        } else if (isDatetimeType(key)) {
+            makeDatetime(input);
+        } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
+            this.staticAutocomplete(input, key);
+        }else if (this.dynamicAutocompleteTypes.indexOf(key) > -1) {
+            this.dynamicAutocomplete(input, key);
         }
     },
     addKeyAutocomplete: function(input, key) {
@@ -82,7 +96,7 @@ var autocomplete = {
     },
     staticAutocompleteTypes : ['coverage',
         'physical_modes',
-        'poi_types'
+        'poi_types',
     ],
     staticAutocomplete : function (input, staticType){
         var api = $('#api input.api').attr('value');

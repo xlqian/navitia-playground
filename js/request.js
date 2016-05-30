@@ -70,15 +70,8 @@ function makeKeyValue(key, val, cls) {
         .addClass(cls)
         .val(val);
 
-    if (isPlaceType(key)) {
-        autocomplete.dynamicAutocomplete(elt, 'places');
-    } else if (isDatetimeType(key)) {
-        makeDatetime(valueElt);
-    } else if (autocomplete.staticAutocompleteTypes.indexOf(key) > -1) {
-        autocomplete.staticAutocomplete(valueElt, key);
-    }else if (autocomplete.dynamicAutocompleteTypes.indexOf(key) > -1) {
-        autocomplete.dynamicAutocomplete(valueElt, key);
-    }
+    autocomplete.paramValueAutoComplete(valueElt, key);
+
     valueElt.on('input', function() { updateUrl(this); });
     valueElt.focus(function() { updateUrl(this); });
     res.append(valueElt);
