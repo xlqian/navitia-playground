@@ -12,16 +12,14 @@ function insertPathElt() {
     var key = $('#addPathInput').val();
     $("#feature").before(makeKeyValue(key, '', 'path'));
     autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
-    $('#addPathInput').val('');
-    $('#addPathInput').parent().find('button.add').prop('disabled', true);
+    $('#addPathInput').val('').change();
     $("#feature").prev().find('input').first().focus();
 }
 
 function insertParam() {
     var key = $('#addParamInput').val();
     $('#addParam').before(makeKeyValue(key, '', 'parameters'));
-    $('#addParamInput').val('');
-    $('#addParamInput').parent().find('button.add').prop('disabled', true);
+    $('#addParamInput').val('').change();
     $('#addParam').prev().find('input').first().focus();
 }
 

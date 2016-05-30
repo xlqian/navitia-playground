@@ -1,3 +1,5 @@
+var _paramValueEverywhere = ['depth'];
+
 var autocomplete = {
     autocompleteTree: {
         pathKey: {
@@ -17,7 +19,7 @@ var autocomplete = {
             'stop_areas',
             'stop_points',
             'vehicles_journeys',
-            ],
+            ].sort(),
         },
         features: {
             all: ['addresses',
@@ -25,6 +27,7 @@ var autocomplete = {
             'companies',
             'departures',
             'disruptions',
+            'journeys',
             'lines',
             'networks',
             'places_nearby',
@@ -39,20 +42,21 @@ var autocomplete = {
             'stop_points',
             'stop_schedules',
             'vehicles_journeys',
-            ]
+            ].sort(),
         },
         paramKey: {
-            departures : ['from_datetime', 'duration', 'forbidden_uris[]', 'data_freshness'],
-            journeys : ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'forbidden_uris[]', 'data_freshness', 'count'],
-            places_nearby : ['distance', 'type[]', 'admin_uri[]', 'filter'],
-            places: ['q', 'type[]', 'count', 'admin_uri[]'],
-            pois : ['distance'],
-            pt_objects: ['q', 'type[]', 'count'],
-            route_schedule : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'],
-            stop_schedules : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'],
+            departures : ['from_datetime', 'duration', 'forbidden_uris[]', 'data_freshness'].concat(_paramValueEverywhere).sort(),
+            journeys : ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'forbidden_uris[]', 'data_freshness', 'count'].concat(_paramValueEverywhere).sort(),
+            places_nearby : ['distance', 'type[]', 'admin_uri[]', 'filter'].concat(_paramValueEverywhere).sort(),
+            places: ['q', 'type[]', 'count', 'admin_uri[]'].concat(_paramValueEverywhere).sort(),
+            pois : ['distance'].concat(_paramValueEverywhere),
+            pt_objects: ['q', 'type[]', 'count'].concat(_paramValueEverywhere),
+            route_schedule : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'].concat(_paramValueEverywhere).sort(),
+            stop_schedules : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'].concat(_paramValueEverywhere).sort(),
         },
         paramValue : {
-            traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'],
+            traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'].sort(),
+            datetime_represents : ['arrival', 'departure'].sort(),
         }
     },
     valueAutoComplete : function (input, key) {
@@ -77,7 +81,7 @@ var autocomplete = {
     },
     addKeyAutocomplete: function(input, type) {
         var  source;
-        if (type === 'pathKey' && ! $('#pathFrame').find('.toDelete').length) {
+        if (type === 'pathKey' && ! $('#pathFrame').find('.value').length) {
             source = this.autocompleteTree[type].empty;
         } else if (type === 'paramKey'){
             var feature = $('#featureInput').val();
@@ -92,10 +96,10 @@ var autocomplete = {
             scroll: true,
             delay: 500,
             select: function (event, ui) {
-                $(input).parent().find('button.add').prop('disabled', false);
+                $(input).val(ui.item.value).change();
             }
         }).focus(function() {
-                $(this).autocomplete('search', '');
+            $(this).autocomplete('search', '');
         });
     },
     staticAutocompleteTypes : ['coverage',
@@ -128,7 +132,7 @@ var autocomplete = {
                         scroll: true,
                         delay: 500
                     }).focus(function() {
-                            $(input).autocomplete('search', '');
+                        $(input).autocomplete('search', '');
                     });
                     if ($(input).is(':focus')) {
                         $(input).autocomplete('search', '');
