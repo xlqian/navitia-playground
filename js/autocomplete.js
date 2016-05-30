@@ -1,7 +1,49 @@
 var autocomplete = {
     autocompleteTree: {
-        routeTree: {
-            'undefined' : ['coverage', 'places', 'journeys', 'coord'],
+        pathKey: {
+            empty : ['coverage', 'places', 'journeys', 'coord'],
+            all : ['addresses',
+            'commercial_modes',
+            'companies',
+            'departures',
+            'disruptions',
+            'lines',
+            'networks',
+            'physical_modes',
+            'places',
+            'places_nearby',
+            'poi_types',
+            'pois',
+            'route_schedule',
+            'routes',
+            'stop_areas',
+            'stop_points',
+            'stop_schedules',
+            'vehicles_journeys',
+            ],
+        },
+        features: {
+            all: ['addresses',
+            'commercial_modes',
+            'companies',
+            'departures',
+            'disruptions',
+            'lines',
+            'networks',
+            'physical_modes',
+            'places_nearby',
+            'poi_types',
+            'pois',
+            'route_schedule',
+            'routes',
+            'stop_areas',
+            'stop_points',
+            'stop_schedules',
+            'vehicles_journeys',
+            'places',
+            ]
+        },
+        paramKey: {
             all : ['addresses',
             'commercial_modes',
             'companies',
@@ -22,29 +64,22 @@ var autocomplete = {
             'places',
             'stop_schedules',
             ],
-            addresses : ['places_nearby'],
-            coverage : ['addresses',
-            'commercial_modes',
-            'companies',
-            'disruptions',
-            'journeys',
-            'networks',
-            'lines',
-            'physical_modes',
-            'places_nearby',
-            'poi_types',
-            'pois',
-            'route_schedule',
-            'routes',
-            'stop_areas',
-            'stop_points',],
-            journeys : [],
-            places_nearby : [],
-            pois : ['places_nearby'],
-            stop_areas : ['departures', 'places_nearby', 'stop_schedules'],
-            stop_points : ['departures', 'places_nearby', 'stop_schedules'],
-            // TODO Complete the tree*/
         }
+    },
+    addKeyAutocomplete: function(input, key) {
+        if (key === 'pathKey' && ! $('#pathFrame').find('.toDelete').length) {
+            source = this.autocompleteTree[key].empty;
+        } else {
+            source = this.autocompleteTree[key].all;
+        }
+
+        $(input).autocomplete({source: source,
+            minLength: 0,
+            scroll: true,
+            delay: 500}).focus(function() {
+                $(this).autocomplete('search', '');
+        });
+
     },
     staticAutocompleteTypes : ['coverage',
         'physical_modes',

@@ -31,18 +31,19 @@
         <div id="pathFrame">
           <h3>Path</h3>
           <div id="path"></div>
-          <div id="feature" class="inputDiv">
+          <div id="feature" class="inputDiv path">
             <input id="featureInput"
+                   class="path"
                    type="text"
                    onfocus="updateUrl(this)"
                    placeholder="empty feature">
           </div>
           <div id="addPathElt" class="inputDiv">
             <input id="addPathInput"
-                   class="addInput"
+                   class="addInput path"
                    type="text"
                    placeholder="type a key to add a path element">
-            <button class="add" onclick="insertPathElt()">Add</button>
+            <button class="add path" onclick="insertPathElt()">Add</button>
           </div>
         </div><!-- pathFrame -->
         <div id="parameterFrame">
@@ -50,7 +51,7 @@
           <div id="parameters"></div>
           <div id="addParam" class="inputDiv">
             <input id="addParamInput"
-                   class="addInput"
+                   class="addInput param"
                    type="text"
                    placeholder="type a key to add a parameter">
             <button class="add" onclick="insertParam()">Add</button>
@@ -83,7 +84,7 @@
       </div><!-- response -->
 
 </div>
- 
+
 
   <script src="lib/lib.min.js"></script>
   <script src="js/app.min.js"></script>

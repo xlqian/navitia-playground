@@ -4,21 +4,23 @@
 function makeDeleteButton() {
     return $('<button/>')
         .addClass('delete')
-        .click(function() { $(this).closest('.toDelete').remove(); updateUrl(this); })
+        .click(function() { $(this).closest('.toDelete').remove(); updateAddAC(this); updateUrl(this); })
         .html('<img src="img/delete.svg" class="deleteButton" alt="delete">');
 }
 
 function insertPathElt() {
     var key = $('#addPathInput').val();
-    $("#path").append(makeKeyValue(key, ''));
+    $("#path").append(makeKeyValue(key, '', 'path'));
     $('#addPathInput').val('');
+    autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
     $("#path input").last().focus();
 }
 
 function insertParam() {
     var key = $('#addParamInput').val();
-    $("#parameters").append(makeKeyValue(key, ''));
+    $("#parameters").append(makeKeyValue(key, '', 'parameters'));
     $('#addParamInput').val('');
+    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
     $("#parameters input").last().focus();
 }
 
@@ -37,7 +39,18 @@ function makeTemplatePath(val, input) {
         });
 }
 
-function makeKeyValue(key, val) {
+function updateAddAC(val){
+    var input = $(val).prev();
+    if (! input.hasClass('path')) {
+        return;
+    }
+    if (! $('input path').length) {
+        // No more path inputs, we should update autocomplete of add
+        autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
+    }
+};
+
+function makeKeyValue(key, val, cls) {
     var res = $('<div/>')
         .addClass('inputDiv')
         .addClass('toDelete')
@@ -49,6 +62,7 @@ function makeKeyValue(key, val) {
          .attr('type', 'text')
          .attr('placeholder', 'type your value here')
         .addClass('value')
+        .addClass(cls)
         .val(val);
 
     if (isPlaceType(key)) {
@@ -221,7 +235,7 @@ $(document).ready(function() {
         if (prevPathElt === null) {
             prevPathElt = r;
         } else {
-            $("#path").append(makeKeyValue(prevPathElt, r));
+            $("#path").append(makeKeyValue(prevPathElt, r, 'path'));
             prevPathElt = null;
         }
     });
@@ -235,11 +249,15 @@ $(document).ready(function() {
         // a list of params, ex.: forbidded_uris[]
         if (Array.isArray(value)) {
             value.forEach(function(v){
-                param_elt.append(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v)));
+                param_elt.append(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v), 'parameters'));
             });
         } else {
-            param_elt.append(makeKeyValue(decodeURIComponent(key), value));
+            param_elt.append(makeKeyValue(decodeURIComponent(key), value, 'parameters'));
         }
     }
+    autocomplete.addKeyAutocomplete($('#featureInput'), 'features');
+    autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
+    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
+
     $('#urlDynamic span').text(request.request);
 });
