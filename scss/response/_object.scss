@@ -1,3 +1,13 @@
+.line_code {
+    display: inline-block;
+    border: none;
+    border-radius: 3em;// more than line-height + 2 * padding to have circle borders
+    line-height: 1.2em;
+    min-width: 1.2em;// min-width == line-height to have a circle if small enough
+    text-align: center;// to have the code centered if smaller than min-width
+    padding: 0.4em;
+}
+
 div.object {
     margin: 1ex;
     padding: 0;
@@ -43,15 +53,5 @@ div.object {
 
     div.leaflet {
         height: 80vh;
-    }
-
-    .line_code {
-        display: inline-block;
-        border: none;
-        border-radius: 2em;// more than line-heght + 2 * padding to have circle borders
-        line-height: 1.2em;
-        min-width: 1.2em;// min-width == line-height to have a circle if small enough
-        text-align: center;// to have the code centered if smaller than min-width
-        padding: 0.4em;
     }
 }
