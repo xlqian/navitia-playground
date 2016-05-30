@@ -4,21 +4,22 @@
 function makeDeleteButton() {
     return $('<button/>')
         .addClass('delete')
-        .click(function() { $(this).closest('.toDelete').remove(); updateUrl(this); })
+        .click(function() { $(this).closest('.toDelete').remove(); updateAddPathAC(this); updateUrl(this); })
         .html('<img src="img/delete.svg" class="deleteButton" alt="delete">');
 }
 
 function insertPathElt() {
     var key = $('#addPathInput').val();
-    $("#feature").before(makeKeyValue(key, ''));
-    $('#addPathInput').val('');
+    $("#feature").before(makeKeyValue(key, '', 'path'));
+    autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
+    $('#addPathInput').val('').change();
     $("#feature").prev().find('input').first().focus();
 }
 
 function insertParam() {
     var key = $('#addParamInput').val();
-    $('#addParam').before(makeKeyValue(key, ''));
-    $('#addParamInput').val('');
+    $('#addParam').before(makeKeyValue(key, '', 'parameters'));
+    $('#addParamInput').val('').change();
     $('#addParam').prev().find('input').first().focus();
 }
 
@@ -37,7 +38,21 @@ function makeTemplatePath(val, input) {
         });
 }
 
-function makeKeyValue(key, val) {
+function updateAddPathAC(val){
+    var input = $(val).prev();
+    if (! input.hasClass('path')) {
+        return;
+    }
+    if (! $('input path').length) {
+        // No more path inputs, we should update autocomplete of add
+        autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
+    }
+};
+
+function updateAddParamAC() {
+    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
+}
+function makeKeyValue(key, val, cls) {
     var res = $('<div/>')
         .addClass('inputDiv')
         .addClass('toDelete')
@@ -49,15 +64,11 @@ function makeKeyValue(key, val) {
          .attr('type', 'text')
          .attr('placeholder', 'type your value here')
         .addClass('value')
+        .addClass(cls)
         .val(val);
 
-    if (isPlaceType(key)) {
-        makeAutocomplete(valueElt);
-    } else if (isDatetimeType(key)) {
-        makeDatetime(valueElt);
-    } else if (key == 'coverage') {
-        makeCoverageList(val, valueElt);
-    }
+    autocomplete.valueAutoComplete(valueElt, key);
+
     valueElt.on('input', function() { updateUrl(this); });
     valueElt.focus(function() { updateUrl(this); });
     res.append(valueElt);
@@ -67,33 +78,6 @@ function makeKeyValue(key, val) {
     if (isTemplate(val)) { makeTemplatePath(val, valueElt); }
 
     return res;
-}
-
-function makeCoverageList(val, obj) {
-    if (val) { $(obj).val(val); }
-
-    var api = $("#api input.api").attr('value');
-    var token = $('#token input.token').val();
-    var request =  api + "/coverage";
-
-    $.ajax({
-        headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
-        dataType: "json",
-        url: request,
-        success: function(data) {
-                var res = [];
-                for (var dict in data) {
-                    for (var cov = 0; cov < data[dict].length; cov++) {
-                        res.push(data[dict][cov].id);
-                    }
-                    var auto = $(obj).autocomplete({source: res, minLength: 0, scroll: true, delay: 500});
-                    auto.focus(function() {
-                        auto.autocomplete("search", '');
-                    });
-                    return auto;
-                }
-            }
-    });
 }
 
 function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
@@ -161,35 +145,6 @@ function getCoverage() {
     return coverage;
 }
 
-function makeAutocomplete(elt) {
-    $(elt).autocomplete({
-        source: function(request, response) {
-            var token = $('#token input.token').val();
-            var url = $('#api input.api').val();
-            var cov = getCoverage();
-            if (cov !== null) {
-                url = sprintf('%s/coverage/%s', url, cov);
-            }
-            $.ajax({
-                url: sprintf('%s/places?q=%s', url, encodeURIComponent(request.term)),
-                headers: isUndefined(token) ? {} : { Authorization: "Basic " + btoa(token) },
-                success: function(data) {
-                    var res = [];
-                    if ('places' in data) {
-                        data['places'].forEach(function(place) {
-                            res.push({ value: place.id, label: place.name });
-                        });
-                    }
-                    response(res);
-                },
-                error: function() {
-                    response([]);
-                }
-            });
-        },
-    });
-}
-
 function makeDatetime(elt) {
     $(elt).datetimepicker({
         dateFormat: 'yymmdd',
@@ -240,7 +195,7 @@ function parseUrl() {
 $(document).ready(function() {
     // Manage add input/button
     $('button.add').prop('disabled', true);
-    $('.addInput').on('input', function() {
+    $('.addInput').on('input change', function() {
         $(this).parent().find('button.add').prop('disabled', this.value.length === 0);
     });
     $(".addInput").keyup(function(event) {
@@ -248,6 +203,7 @@ $(document).ready(function() {
             $(this).parent().find("button.add").click();
         }
     });
+    $("#featureInput").focusout(updateAddParamAC);
 
     var request = parseUrl();
     if (request === null) { return; }
@@ -260,7 +216,7 @@ $(document).ready(function() {
         if (prevPathElt === null) {
             prevPathElt = r;
         } else {
-            $("#feature").before(makeKeyValue(prevPathElt, r));
+            $("#feature").before(makeKeyValue(prevPathElt, r, 'path'));
             prevPathElt = null;
         }
     });
@@ -274,11 +230,15 @@ $(document).ready(function() {
         // a list of params, ex.: forbidded_uris[]
         if (Array.isArray(value)) {
             value.forEach(function(v){
-                addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v)));
+                addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v), 'parameters'));
             });
         } else {
-            addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(value)));
+            addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(value), 'parameters'));
         }
     }
+    autocomplete.addKeyAutocomplete($('#featureInput'), 'features');
+    autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
+    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
+
     updateUrl(null);
 });
