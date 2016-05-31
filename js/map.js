@@ -7,10 +7,28 @@ var map = {
             return [
                 L.geoJson(json.geojson, {
                     style: function() {
+                        var color = '#fff';
                         if ("display_informations" in json) {
-                            return { color: "#" + json.display_informations.color };
+                            color = getTextColor(json.display_informations);
                         }
-                        return {};
+                        return {
+                            color: color,
+                            weight: 7,
+                            opacity: 1
+                        };
+                    }
+                }),
+                L.geoJson(json.geojson, {
+                    style: function() {
+                        var color = '#008ACA';
+                        if ("display_informations" in json) {
+                            color = "#" + json.display_informations.color;
+                        }
+                        return {
+                            color: color,
+                            weight: 5,
+                            opacity: 1
+                        };
                     }
                 })
             ];
@@ -42,7 +60,7 @@ var map = {
             L.tileLayer(
                 'http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
                     attribution: '&copy; '+mapLink+'. Tiles courtesy of '+mapquestLink+mapquestPic,
-                    maxZoom: 18,
+                    maxZoom: 17,
                     subdomains: '1234',
             }).addTo(m);
             var overlay = L.featureGroup(map.makeFeatures[type](json)).addTo(m);
