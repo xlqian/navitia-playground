@@ -10,7 +10,6 @@ var autocomplete = {
             'disruptions',
             'lines',
             'networks',
-            'physical_modes',
             'places',
             'poi_types',
             'pois',
@@ -25,6 +24,7 @@ var autocomplete = {
             all: ['addresses',
             'commercial_modes',
             'companies',
+            'coverage',
             'departures',
             'disruptions',
             'journeys',
@@ -120,13 +120,20 @@ var autocomplete = {
             dataType: 'json',
             url: request,
             success: function(data) {
-                    var res = [];
-                    // TODO: use summary
-                    staticType = (staticType==='coverage') ? 'regions' :  staticType;
-                    data[staticType].forEach(function(elt){
-                        res.push({ value: elt.id, label: elt.name });
-                    });
-                    $(input).autocomplete({source: res,
+                var res = [];
+                staticType = (staticType==='coverage') ? 'regions' :  staticType;
+                data[staticType].forEach(function(elt) {
+                    res.push({ value: elt.id, label: summary(getType(staticType), elt) });
+                });
+                res = res.sort(function(a, b) {
+                    // TODO: for the moment, it will work only if
+                    // summary returns a string, not if it returns a
+                    // formated jQuery object.
+                    if (a.label < b.label) { return -1; }
+                    if (a.label > b.label) { return 1; }
+                    return 0;
+                });
+                $(input).autocomplete({source: res,
                         minLength: 0,
                         scroll: true,
                         delay: 500
@@ -195,14 +202,17 @@ var autocomplete = {
                         var res = [];
                         // TODO: use summary
                         var search = null;
+                        var type = null;
                         if ('places' in data) {
                             search = data.places;
-                        }else if ('pt_objects' in data) {
+                            type = 'place';
+                        } else if ('pt_objects' in data) {
                             search = data.pt_objects;
+                            type = 'pt_object';
                         }
                         if (search) {
                             search.forEach(function(s) {
-                                res.push({ value: s.id, label: s.name });
+                                res.push({ value: s.id, label: summary(type, s).get() });
                             });
                         }
                         response(res);
@@ -212,6 +222,8 @@ var autocomplete = {
                     }
                 });
             }
-        });
+        }).autocomplete('instance')._renderItem = function(ul, item) {
+            return $('<li>').append(item.label).appendTo(ul);
+        };
     }
 }

@@ -22,18 +22,14 @@ function setColors(elt, json) {
 }
 
 function defaultSummary(json) {
-    var result = $('<span/>');
     if ('label' in json) {
-        result.text(json.label);
-    } else if ('code' in json) {
-        result.text(json.code);
-    }else if ('name' in json) {
-        result.text(json.name);
+        return json.label;
+    } else if ('name' in json) {
+        return json.name;
     } else if ('id' in json) {
-        result.text(json.id);
+        return json.id;
     }
-    setColors(result, json);
-    return result;
+    return 'no summary';
 }
 
 function responseSummary(json) {
@@ -128,11 +124,10 @@ function linksSummary(json) {
         return res;
     }
     function makeData(link) {
-        var res = link.type;
         if (link.templated) {
-            res = sprintf('%s', res);
+            return sprintf('{%s}', link.type);
         }
-        return res;
+        return link.type;
     }
     if ($.isArray(json)) {
         json.forEach(function(link) {
@@ -184,6 +179,21 @@ function sectionSummary(section) {
     return res;
 }
 
+function regionSummary(region) {
+    return region.id + (region.name ? sprintf(' (%s)', region.name) : '');
+}
+
+function lineSummary(line) {
+    var code = $('<span>')
+        .addClass('line_code')
+        .append(line.code);
+    setColors(code, line);
+    return $('<span>')
+        .append(code)
+        .append(' ')
+        .append(document.createTextNode(line.name));
+}
+
 function summary(type, json) {
     switch (type) {
     case 'response': return responseSummary(json);
@@ -193,6 +203,8 @@ function summary(type, json) {
     case 'place':
         return embeddedSummary(json);
     case 'section': return sectionSummary(json);
+    case 'region': return regionSummary(json);
+    case 'line': return lineSummary(json);
         // insert here your custom summary
     default: return defaultSummary(json);
     }
