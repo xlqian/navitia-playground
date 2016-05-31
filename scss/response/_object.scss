@@ -9,10 +9,10 @@
 }
 
 div.object {
-    margin: 1ex;
+    margin: 1ex 0 1ex 2ex;
     padding: 0;
     border-style: solid;
-    border-width: 0.1ex;
+    border-width: 0.1ex 0 0.1ex 0.1ex;
     border-color: $gray;
     background-color: $light-gray;
 
@@ -54,4 +54,9 @@ div.object {
     div.leaflet {
         height: 80vh;
     }
+}
+
+#data > div {
+    margin: 0;
+    border-width: 0.1ex;
 }
