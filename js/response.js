@@ -46,7 +46,7 @@ function render(context, json, type, key, idx) {
 
     var head = $('<div class="head">');
     head.append($('<div class="name">').html(name));
-    head.append($('<div class="summary">').html(summary(type, json)));
+    head.append($('<div class="summary">').html(summary.run(context, type, json)));
     head.append($('<div class="button">')
                 .append(makeObjectButton('Ext', makeObjectButtonHandle('div.extended', function() {
                     return extended.run(context, type, json);
@@ -79,7 +79,7 @@ function Context(data) {
 
     // the link map: type -> template
     this.links = {};
-    if ('links' in data && $.isArray(data.links)) {
+    if (typeof data === 'object' && 'links' in data && $.isArray(data.links)) {
         var self = this;
         data.links.forEach(function(link) {
             if (! link.templated) { return; }

@@ -80,3 +80,19 @@ function getType(key) {
     // just the key
     return key;
 }
+
+function getTextColor(json) {
+    function _toNum(c, i) { return +('0x' + c.slice(i, i + 2)); }
+
+    if ('text_color' in json) {
+        return '#' + json.text_color;
+    }
+    if ('color' in json) {
+        var c = json.color;
+        var grey = 0.21 * _toNum(c, 0) + 0.72 * _toNum(c, 2) + 0.07 * _toNum(c, 4);
+        if (grey < 128) {
+            return 'white';
+        }
+    }
+    return 'black';
+}

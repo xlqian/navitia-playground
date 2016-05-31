@@ -123,7 +123,8 @@ var autocomplete = {
                 var res = [];
                 staticType = (staticType==='coverage') ? 'regions' :  staticType;
                 data[staticType].forEach(function(elt) {
-                    res.push({ value: elt.id, label: summary(getType(staticType), elt) });
+                    var s = summary.run(new Context(), getType(staticType), elt);
+                    res.push({ value: elt.id, label: s });
                 });
                 res = res.sort(function(a, b) {
                     // TODO: for the moment, it will work only if
@@ -215,7 +216,8 @@ var autocomplete = {
                         }
                         if (search) {
                             search.forEach(function(s) {
-                                res.push({ value: s.id, label: summary(type, s).get() });
+                                var sum = summary.run(new Context(), type, s);
+                                res.push({ value: s.id, label: sum.get() });
                             });
                         }
                         response(res);
