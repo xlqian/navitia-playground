@@ -36,8 +36,14 @@ var map = {
         if (typeof map.makeFeatures[type] == 'function') {
             div.addClass('leaflet');
             var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+            mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+            mapquestLink = '<a href="http://www.mapquest.com//">MapQuest</a>';
+            mapquestPic = '<img src="http://developer.mapquest.com/content/osm/mq_logo.png">';
+            L.tileLayer(
+                'http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
+                    attribution: '&copy; '+mapLink+'. Tiles courtesy of '+mapquestLink+mapquestPic,
+                    maxZoom: 18,
+                    subdomains: '1234',
             }).addTo(m);
             var overlay = L.featureGroup(map.makeFeatures[type](json)).addTo(m);
             setTimeout(function(){ m.invalidateSize(), m.fitBounds(overlay.getBounds());}, 100);
