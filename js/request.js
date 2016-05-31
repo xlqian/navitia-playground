@@ -169,7 +169,6 @@ function parseUrl() {
 
     var vxxFound = false;
     paths.forEach(function(r) {
-        if (!r) { return; }
         if (vxxFound) {
             api_path.push(decodeURIComponent(r));
         } else {
