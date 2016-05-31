@@ -39,13 +39,13 @@ function makeObjectButtonHandle(selector, renderHandle) {
     };
 }
 
-function render(name, type, json) {
+function render(context, json, type, name, key) {
     var head = $('<div class="head">');
     head.append($('<div class="name">').html(name));
     head.append($('<div class="summary">').html(summary(type, json)));
     head.append($('<div class="button">')
                 .append(makeObjectButton('Ext', makeObjectButtonHandle('div.extended', function() {
-                    return extended(type, json);
+                    return extended.run(context, type, json);
                 })))
                 .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
                     return map.run(type, json);
@@ -65,6 +65,10 @@ function render(name, type, json) {
     return result;
 }
 
+function Context(data) {
+    this.links = 'links' in data ? data.links : [];
+}
+
 $(document).ready(function() {
     var request = parseUrl();
     if (request === null) {
@@ -81,7 +85,7 @@ $(document).ready(function() {
     }).then(
         function(data, status, xhr) {
             setStatus(xhr);
-            $('#data').html(render('response', 'response', data));
+            $('#data').html(render(new Context(data), data, 'response', 'response'));
             $('#data input').first().click();
             saveToken(request.api, request.token);
         },

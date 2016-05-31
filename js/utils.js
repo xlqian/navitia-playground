@@ -57,10 +57,26 @@ function flatMap(array, f) {
     return result;
 }
 
-
 function notifyOnError(data, typeError) {
     if (data.status === 401) {
         $('#token').addClass('templateInput');
     }
     $.notify(sprintf("%s error: %s", typeError, data.statusText));
+}
+
+function getType(key) {
+    if (!key || typeof key !== 'string') {
+        return null;
+    }
+    // hardcoded cases:
+    switch (key) {
+    case 'addresses': return 'address';
+    case 'from': return 'place';
+    case 'to': return 'place';
+    }
+    // generic plural
+    if (key.slice(-1) === 's') { return key.slice(0, -1); }
+
+    // just the key
+    return key;
 }
