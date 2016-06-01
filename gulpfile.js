@@ -106,7 +106,7 @@ function copy_vendor_image(env){
     return function(){
         return bower()
             .pipe(gulpFilter([
-                '**/leaflet/dist/images/*.png'                
+                '**/leaflet/dist/images/*.png'
             ]
             ))
             .pipe(image({
@@ -126,16 +126,12 @@ function copy_vendor_image(env){
 gulp.task('dev:bowerImg', copy_vendor_image('dev'));
 gulp.task('prod:bowerImg', copy_vendor_image('prod'));
 
-gulp.task('bowerInstall', function() {
-  return bower({ cmd: 'update'});
-})
-
 gulp.task('dev:bower', function(cb){
-    runSequence('bowerInstall', ['dev:bowerJs', 'dev:bowerCss', 'dev:bowerImg'], cb);
+    runSequence(['dev:bowerJs', 'dev:bowerCss', 'dev:bowerImg'], cb);
 });
 
 gulp.task('prod:bower', function(cb){
-    runSequence('bowerInstall', ['prod:bowerJs', 'prod:bowerCss', 'prod:bowerImg'], cb);
+    runSequence(['prod:bowerJs', 'prod:bowerCss', 'prod:bowerImg'], cb);
 });
 
 // Compress img
