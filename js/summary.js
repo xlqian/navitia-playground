@@ -136,37 +136,35 @@ summary.make.line = function(context, line) {
         .append(document.createTextNode(line.name));
 };
 
-summary.make.departure = function(context, line) {
+summary.make.departure = function(context, json) {
     var res = $('<span>');
-    res.append(sprintf('%s : ', summary.formatTime(line.stop_date_time.departure_date_time)));
-    res.append(summary.makeRoutePoint(res, line));
+    res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.departure_date_time)));
+    res.append(summary.makeRoutePoint(res, json));
     return res;
 };
 
-summary.make.arrival = function(context, line) {
+summary.make.arrival = function(context, json) {
     var res = $('<span>');
-    res.append(sprintf('%s : ', summary.formatTime(line.stop_date_time.arrival_date_time)));
-    res.append(summary.makeRoutePoint(res, line));
+    res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.arrival_date_time)));
+    res.append(summary.makeRoutePoint(res, json));
     return res;
 };
 
-summary.make.stop_schedule = function(context, line) {
+summary.make.stop_schedule = function(context, json) {
     var res = $('<span>');
-    res.append(summary.makeRoutePoint(res, line));
+    return summary.makeRoutePoint(res, json);
+};
+
+summary.make.date_time = function(context, json) {
+    var res = $('<span>');
+    res.append(summary.formatTime(json.date_time));
+    res.append(' (' + json.data_freshness + ')');
     return res;
 };
 
-summary.make.date_time = function(context, line) {
+summary.make.route_schedule = function(context, json) {
     var res = $('<span>');
-    res.append(summary.formatDatetime(line.date_time).split(' ')[1]);
-    res.append(' (' + line.data_freshness + ')');
-    return res;
-};
-
-summary.make.route_schedule = function(context, line) {
-    var res = $('<span>');
-    res.append(summary.makeRoutePoint(res, line));
-    return res;
+    return summary.makeRoutePoint(res, json);
 };
 
 // add your summary view by addind:
@@ -212,13 +210,13 @@ summary.makeLineCode = function(display_informations) {
     return elt;
 };
 
-summary.makeRoutePoint = function(res, line) {
-    res.append(summary.makeLineCode(line.display_informations));
+summary.makeRoutePoint = function(res, json) {
+    res.append(summary.makeLineCode(json.display_informations));
     res.append(' > ');
-    res.append(line.display_informations.direction);
-    if (line.stop_point) {
+    res.append(json.display_informations.direction);
+    if (json.stop_point) {
         res.append(' at ');
-        res.append(summary.defaultSummary(undefined, undefined, line.stop_point));
+        res.append(summary.run(new Context(), 'stop_point', json.stop_point));
     }
     return res;
 }
