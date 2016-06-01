@@ -39,13 +39,17 @@ function makeObjectButtonHandle(selector, renderHandle) {
     };
 }
 
-function render(name, type, json) {
+function render(context, json, type, key, idx) {
+    var name = key;
+    if (typeof idx === 'number') { name += sprintf('[%s]', idx); }
+    name = context.makeLink(key, json, name);
+
     var head = $('<div class="head">');
     head.append($('<div class="name">').html(name));
-    head.append($('<div class="summary">').html(summary(type, json)));
+    head.append($('<div class="summary">').html(summary.run(context, type, json)));
     head.append($('<div class="button">')
                 .append(makeObjectButton('Ext', makeObjectButtonHandle('div.extended', function() {
-                    return extended(type, json);
+                    return extended.run(context, type, json);
                 })))
                 .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
                     return map.run(type, json);
@@ -65,6 +69,42 @@ function render(name, type, json) {
     return result;
 }
 
+function Context(data) {
+    // the token, used to create links
+    var token = URI(window.location).search(true).token;
+
+    // the regex corresponding to the thing that should be replacced
+    // in a templated link
+    var templateRegex = /\{.*\.id\}/;
+
+    // the link map: type -> template
+    var links = {};
+    if (data instanceof Object && 'links' in data && $.isArray(data.links)) {
+        data.links.forEach(function(link) {
+            if (! link.templated) { return; }
+            if (link.type === 'related') { return; }
+            if (! link.href.match(templateRegex)) { return; }
+            links[link.type] = link.href;
+        });
+    }
+
+    this.makeHref = function(href) {
+        var res = sprintf('?request=%s', encodeURIComponent(href));
+        if (token) {
+            res += sprintf('&token=%s', encodeURIComponent(token));
+        }
+        return res;
+    };
+
+    this.makeLink = function(key, obj, name) {
+        if (! (key in links) || ! ('id' in obj)) {
+            return $(document.createTextNode(name));
+        }
+        var href = links[key].replace(templateRegex, obj.id);
+        return $('<a>').attr('href', this.makeHref(href)).text(name);
+    };
+}
+
 $(document).ready(function() {
     var request = parseUrl();
     if (request === null) {
@@ -81,7 +121,7 @@ $(document).ready(function() {
     }).then(
         function(data, status, xhr) {
             setStatus(xhr);
-            $('#data').html(render('response', 'response', data));
+            $('#data').html(render(new Context(data), data, 'response', 'response'));
             $('#data input').first().click();
             saveToken(request.api, request.token);
         },
