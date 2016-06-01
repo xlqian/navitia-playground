@@ -31,7 +31,8 @@ var map = {
                         };
                     }
                 })
-            ];
+            ].concat(map._makeMarker(json.from.embedded_type, json.from[json.from.embedded_type]))
+            .concat(map._makeMarker(json.to.embedded_type, json.to[json.to.embedded_type]));
         },
         journey: function(json) {
             return flatMap(json.sections, map.makeFeatures.section);
