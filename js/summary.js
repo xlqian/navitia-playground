@@ -147,6 +147,7 @@ summary.setColors = function(elt, json) {
 };
 
 summary.defaultSummary = function(context, type, json) {
+    if (! (json instanceof Object)) { return 'Invalid object'; }
     if ('label' in json) {
         return json.label;
     } else if ('name' in json) {
