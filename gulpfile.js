@@ -100,13 +100,41 @@ function compile_vendor_css(env){
 gulp.task('dev:bowerCss', compile_vendor_css('dev'));
 gulp.task('prod:bowerCss', compile_vendor_css('prod'));
 
+// Concatenate & Minify vendor css
+function copy_vendor_image(env){
+
+    return function(){
+        return bower()
+            .pipe(gulpFilter(
+                '**/leaflet/dist/images/*.png'
+            ))
+            .pipe(image({
+                pngquant: true,
+                optipng: false,
+                zopflipng: true,
+                advpng: true,
+                jpegRecompress: false,
+                jpegoptim: true,
+                mozjpeg: true,
+                gifsicle: true,
+                svgo: true
+            }))
+            .pipe(gulp.dest(config[env] + '/img'));
+    }
+}
+gulp.task('dev:bowerImg', copy_vendor_image('dev'));
+gulp.task('prod:bowerImg', copy_vendor_image('prod'));
+
+gulp.task('bowerInstall', function() {
+  return bower({ cmd: 'update'});
+})
 
 gulp.task('dev:bower', function(cb){
-    runSequence(['dev:bowerJs', 'dev:bowerCss'], cb);
+    runSequence('bowerInstall', ['dev:bowerJs', 'dev:bowerCss', 'dev:bowerImg'], cb);
 });
 
 gulp.task('prod:bower', function(cb){
-    runSequence(['prod:bowerJs', 'prod:bowerCss'], cb);
+    runSequence('bowerInstall', ['prod:bowerJs', 'prod:bowerCss', 'prod:bowerImg'], cb);
 });
 
 // Compress img
