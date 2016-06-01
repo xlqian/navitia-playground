@@ -10,9 +10,9 @@ var map = {
                     });
                 } else {
                     var from = json['from'];
-                    markers = markers.concat(map._makeMarker(from.embedded_type, from[from.embedded_type]));
                     var to = json['to'];
-                    markers = markers.concat(map._makeMarker(to.embedded_type, to[to.embedded_type]));
+                    markers = markers.concat(map._makeMarker(from.embedded_type, from[from.embedded_type]))
+                                    .concat(map._makeMarker(to.embedded_type, to[to.embedded_type]));
                 }
                 return markers;
 
