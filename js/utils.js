@@ -57,10 +57,43 @@ function flatMap(array, f) {
     return result;
 }
 
-
 function notifyOnError(data, typeError) {
     if (data.status === 401) {
         $('#token').addClass('templateInput');
     }
     $.notify(sprintf("%s error: %s", typeError, data.statusText));
+}
+
+function getType(key) {
+    if (!key || typeof key !== 'string') {
+        return null;
+    }
+    // hardcoded cases:
+    switch (key) {
+    case 'places_nearby': return 'place';
+    case 'addresses': return 'address';
+    case 'from': return 'place';
+    case 'to': return 'place';
+    }
+    // generic plural
+    if (key.slice(-1) === 's') { return key.slice(0, -1); }
+
+    // just the key
+    return key;
+}
+
+function getTextColor(json) {
+    function _toNum(c, i) { return +('0x' + c.slice(i, i + 2)); }
+
+    if ('text_color' in json) {
+        return '#' + json.text_color;
+    }
+    if ('color' in json) {
+        var c = json.color;
+        var grey = 0.21 * _toNum(c, 0) + 0.72 * _toNum(c, 2) + 0.07 * _toNum(c, 4);
+        if (grey < 128) {
+            return 'white';
+        }
+    }
+    return 'black';
 }
