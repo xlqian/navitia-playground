@@ -127,7 +127,7 @@ $(document).ready(function() {
         },
         function(xhr, status, error) {
             setStatus(xhr);
-            $('#data').html(render('error', 'response', xhr.responseJSON));
+            $('#data').html(render(new Context(), xhr.responseJSON, 'error', 'response'));
             $('#data input').last().click();
             notifyOnError(xhr, 'Response');
         }
