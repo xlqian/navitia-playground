@@ -66,7 +66,7 @@ var map = {
 
     run: function(type, json) {
         var div = $('<div/>');
-        // setting for defulat path of images used by leaflet
+        // setting for default path of images used by leaflet
         L.Icon.Default.imagePath='lib/img/leaflet/dist/images';
         if (map.makeFeatures[type] instanceof Function) {
             div.addClass('leaflet');
