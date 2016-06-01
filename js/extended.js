@@ -29,6 +29,14 @@ extended.make.journey = function(context, json) {
     return result;
 }
 
+extended.make.stop_schedule = function(context, json) {
+    var result = $('<div class="list"/>');
+    json.date_times.forEach(function(stop_schedule, i) {
+        result.append(render(context, stop_schedule, 'date_time', 'date_times', i));
+    });
+    return result;
+}
+
 // add your extended view by addind:
 //   extended.make.{type} = function(context, json) { ... }
 
