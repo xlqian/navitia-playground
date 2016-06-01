@@ -79,12 +79,12 @@ function Context(data) {
 
     // the link map: type -> template
     this.links = {};
-    if (typeof data === 'object' && 'links' in data && $.isArray(data.links)) {
+    if (data instanceof Object && 'links' in data && $.isArray(data.links)) {
         var self = this;
         data.links.forEach(function(link) {
             if (! link.templated) { return; }
             if (link.type === 'related') { return; }
-            if (! link.href.match(this.templateRegex)) { return; }
+            if (! link.href.match(self.templateRegex)) { return; }
             self.links[link.type] = link.href;
         });
     }
