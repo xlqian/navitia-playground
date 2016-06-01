@@ -15,7 +15,6 @@ var map = {
                                     .concat(map._makeMarker(to.embedded_type, to[to.embedded_type]));
                 }
                 return markers;
-
             };
             if (!( "geojson" in json)) {
                return [];
