@@ -145,10 +145,7 @@ var autocomplete = {
                 }
             },
             error: function(data, status, xhr) {
-                if (data.status === 401) {
-                    $('#token').addClass('templateInput');
-                }
-                $.notify(sprintf("Autocomplete error: %s", xhr));
+                notifyOnError(data, 'Autocomplete');
             }
         });
     },
@@ -225,7 +222,7 @@ var autocomplete = {
                     },
                     error: function(data, status, xhr) {
                         response([]);
-                        $.notify(sprintf("Autocomplete error: %s", xhr));
+                        notifyOnError(data, 'Autocomplete');
                     }
                 });
             }
