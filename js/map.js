@@ -68,7 +68,9 @@ var map = {
         var div = $('<div/>');
         // setting for default path of images used by leaflet
         L.Icon.Default.imagePath='lib/img/leaflet/dist/images';
-        if (map.makeFeatures[type] instanceof Function) {
+        var features = [];
+        if (map.makeFeatures[type] instanceof Function &&
+            (features = map.makeFeatures[type](json)).length) {
             div.addClass('leaflet');
             var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
             mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
@@ -80,8 +82,11 @@ var map = {
                     maxZoom: 17,
                     subdomains: '1234',
             }).addTo(m);
-            var overlay = L.featureGroup(map.makeFeatures[type](json)).addTo(m);
-            setTimeout(function(){ m.invalidateSize(), m.fitBounds(overlay.getBounds());}, 100);
+            var overlay = L.featureGroup(features).addTo(m);
+            setTimeout(function() {
+                m.invalidateSize();
+                m.fitBounds(overlay.getBounds());
+            }, 100);
         } else {
             div.addClass('noMap');
             div.append('No map');
