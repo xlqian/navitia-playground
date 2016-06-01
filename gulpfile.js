@@ -120,7 +120,7 @@ function copy_vendor_image(env){
                 gifsicle: true,
                 svgo: true
             }))
-            .pipe(gulp.dest(config[env] + '/img'));
+            .pipe(gulp.dest(config[env] + '/lib/img'));
     }
 }
 gulp.task('dev:bowerImg', copy_vendor_image('dev'));

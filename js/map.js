@@ -36,23 +36,20 @@ var map = {
         journey: function(json) {
             return flatMap(json.sections, map.makeFeatures.section);
         },
-        _makeMarker: function(latlon, label) {
-            return [L.marker(latlon).bindPopup(label)];
-        },
         addresse: function(json) {
-            return this._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
         },
         administrative_region: function(json) {
-            return this._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
         },
         stop_area: function(json) {
-            return this._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
         },
         stop_point: function(json) {
-            return this._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
         },
         poi: function(json) {
-            return this._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
         },
         response: function(json) {
             var key = responseCollectionName(json);
@@ -70,7 +67,7 @@ var map = {
     run: function(type, json) {
         var div = $('<div/>');
         // setting for defulat path of images used by leaflet
-        L.Icon.Default.imagePath='/img/leaflet/dist/images';
+        L.Icon.Default.imagePath='lib/img/leaflet/dist/images';
         if (map.makeFeatures[type] instanceof Function) {
             div.addClass('leaflet');
             var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
@@ -90,5 +87,9 @@ var map = {
             div.append('No map');
         }
         return div;
-    }
+    },
+
+    _makeMarker: function(latlon, label) {
+        return [L.marker(latlon).bindPopup(label)];
+    },
 };
