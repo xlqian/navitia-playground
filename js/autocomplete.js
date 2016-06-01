@@ -1,4 +1,4 @@
-var _paramValueEverywhere = ['depth'];
+var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]'];
 
 var autocomplete = {
     autocompleteTree: {
@@ -7,6 +7,7 @@ var autocomplete = {
             all : ['addresses',
             'commercial_modes',
             'companies',
+            'coverage',
             'disruptions',
             'lines',
             'networks',
@@ -45,14 +46,16 @@ var autocomplete = {
             ].sort(),
         },
         paramKey: {
-            departures : ['from_datetime', 'duration', 'forbidden_uris[]', 'data_freshness'].concat(_paramValueEverywhere).sort(),
-            journeys : ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'forbidden_uris[]', 'data_freshness', 'count'].concat(_paramValueEverywhere).sort(),
+            departures : ['from_datetime', 'duration', 'data_freshness'].concat(_paramValueEverywhere).sort(),
+            journeys : ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'data_freshness'].concat(_paramValueEverywhere).sort(),
             places_nearby : ['distance', 'type[]', 'admin_uri[]', 'filter'].concat(_paramValueEverywhere).sort(),
-            places: ['q', 'type[]', 'count', 'admin_uri[]'].concat(_paramValueEverywhere).sort(),
+            places: ['q', 'type[]', 'admin_uri[]'].concat(_paramValueEverywhere).sort(),
             pois : ['distance'].concat(_paramValueEverywhere),
-            pt_objects: ['q', 'type[]', 'count'].concat(_paramValueEverywhere),
-            route_schedule : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'].concat(_paramValueEverywhere).sort(),
-            stop_schedules : ['from_datetime', 'duration', 'items_per_schedule', 'forbidden_uris[]', 'data_freshness'].concat(_paramValueEverywhere).sort(),
+            pt_objects: ['q', 'type[]'].concat(_paramValueEverywhere),
+            stop_areas : _paramValueEverywhere,
+            stop_points: _paramValueEverywhere,
+            route_schedule : ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort(),
+            stop_schedules : ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort(),
         },
         paramValue : {
             traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'].sort(),
