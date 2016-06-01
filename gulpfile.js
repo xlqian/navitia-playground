@@ -105,8 +105,9 @@ function copy_vendor_image(env){
 
     return function(){
         return bower()
-            .pipe(gulpFilter(
-                '**/leaflet/dist/images/*.png'
+            .pipe(gulpFilter([
+                '**/leaflet/dist/images/*.png'                
+            ]
             ))
             .pipe(image({
                 pngquant: true,
