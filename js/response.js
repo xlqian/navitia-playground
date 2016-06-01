@@ -71,37 +71,36 @@ function render(context, json, type, key, idx) {
 
 function Context(data) {
     // the token, used to create links
-    this.token = URI(window.location).search(true).token;
+    var token = URI(window.location).search(true).token;
 
     // the regex corresponding to the thing that should be replacced
     // in a templated link
-    this.templateRegex = /\{.*\.id\}/;
+    var templateRegex = /\{.*\.id\}/;
 
     // the link map: type -> template
-    this.links = {};
+    var links = {};
     if (data instanceof Object && 'links' in data && $.isArray(data.links)) {
-        var self = this;
         data.links.forEach(function(link) {
             if (! link.templated) { return; }
             if (link.type === 'related') { return; }
-            if (! link.href.match(self.templateRegex)) { return; }
-            self.links[link.type] = link.href;
+            if (! link.href.match(templateRegex)) { return; }
+            links[link.type] = link.href;
         });
     }
 
     this.makeHref = function(href) {
         var res = sprintf('?request=%s', encodeURIComponent(href));
-        if (this.token) {
-            res += sprintf('&token=%s', encodeURIComponent(this.token));
+        if (token) {
+            res += sprintf('&token=%s', encodeURIComponent(token));
         }
         return res;
     };
 
     this.makeLink = function(key, obj, name) {
-        if (! (key in this.links) || ! ('id' in obj)) {
+        if (! (key in links) || ! ('id' in obj)) {
             return $(document.createTextNode(name));
         }
-        var href = this.links[key].replace(this.templateRegex, obj.id);
+        var href = links[key].replace(templateRegex, obj.id);
         return $('<a>').attr('href', this.makeHref(href)).text(name);
     };
 }
