@@ -15,7 +15,7 @@ module.exports = {
       port: 4242,
       files: [
         dev + '/*.html',
-        dev + '/css/*.css',
+        dev + '/css/**',
         dev + '/js/*.js',
         dev + '/img/**',
         dev + '/fonts/*'

@@ -7,62 +7,13 @@
         height: auto;
     }
 
-    .inputDiv {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: stretch;
-        width: 25em;
-        margin: 0 1em 1.25em 0;
-        padding: 0;
-        background-color: white;
-        border-style: solid;
-        border-width: 0 0 0.3em 0;
-        border-color: $gray;
-    }
-
     .templateInput {
         box-shadow: 0 0 0.5em $blue;
-    }
-
-    input {
-        width: 100%;
-        min-width: 5em;
-        border: none;
-        padding: 0.5em;
-        background-color: inherit;
-        font: inherit;
-    }
-    input:focus {
-        outline: 0;
-    }
-
-    .key {
-        margin: 0;
-        padding: 0.5em;
-        font-weight: bold;
-        background-color: $gray;
-        color: $dark-gray;
     }
 
     button::-moz-focus-inner {
         border-style: none;
         padding: 0;
-    }
-
-    button.delete, button.add {
-        background-color: inherit;
-        color: inherit;
-        width: auto;
-        height: auto;
-        padding: 0.5em 0.5em 0.5em 0;
-        margin: 0;
-        font: inherit;
-        font-weight: bold;
-        color: $dark-blue;
-        text-transform: uppercase;
-    }
-    button.add:disabled {
-        color: $gray;
     }
 
     img.deleteButton {
