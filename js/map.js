@@ -36,6 +36,21 @@ var map = {
         journey: function(json) {
             return flatMap(json.sections, map.makeFeatures.section);
         },
+        address: function(json) {
+            return map._makeMarker('address', json);
+        },
+        administrative_region: function(json) {
+            return map._makeMarker('administrative_region', json);
+        },
+        stop_area: function(json) {
+            return map._makeMarker('stop_area', json);
+        },
+        stop_point: function(json) {
+            return map._makeMarker('stop_point', json);
+        },
+        poi: function(json) {
+            return map._makeMarker('poi', json);
+        },
         response: function(json) {
             var key = responseCollectionName(json);
             if (key === null) {
@@ -48,10 +63,12 @@ var map = {
             return flatMap(json[key], map.makeFeatures[type]);
         }
     },
-    
+
     run: function(type, json) {
         var div = $('<div/>');
-        if (typeof map.makeFeatures[type] == 'function') {
+        // setting for default path of images used by leaflet
+        L.Icon.Default.imagePath='lib/img/leaflet/dist/images';
+        if (map.makeFeatures[type] instanceof Function) {
             div.addClass('leaflet');
             var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
             mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
@@ -70,5 +87,9 @@ var map = {
             div.append('No map');
         }
         return div;
-    }
+    },
+
+    _makeMarker: function(type, json) {
+        return [L.marker([json.coord.lat, json.coord.lon]).bindPopup(summary.run(new Context(json), type, json))];
+    },
 };
