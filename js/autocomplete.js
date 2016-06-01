@@ -143,7 +143,13 @@ var autocomplete = {
                     if ($(input).is(':focus')) {
                         $(input).autocomplete('search', '');
                     }
+                },
+            error: function(data, status, xhr) {
+                $('.token').addClass('templateInput');
+                if (xhr == 'UNAUTHORIZED') {
+                    $.notify("Missing token!");
                 }
+            }
         });
     },
     dynamicAutocompleteTypes: [
@@ -217,8 +223,10 @@ var autocomplete = {
                         }
                         response(res);
                     },
-                    error: function() {
-                        response([]);
+                    error: function(data, status, xhr) {
+                        if (xhr == 'NOT FOUND') {
+                            $.notify("Autocomplete is missing because coverage is not found!");
+                        }
                     }
                 });
             }
