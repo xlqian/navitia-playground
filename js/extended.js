@@ -40,8 +40,34 @@ extended.make.stop_schedule = function(context, json) {
 // add your extended view by addind:
 //   extended.make.{type} = function(context, json) { ... }
 
+extended.defaultExtended = function(context, type, json) {
+    var noExt = 'No extended view yet!';
+    if (! (json instanceof Object)) {
+        return noExt;
+    }
+    var empty = true;
+    var result = $('<div class="list"/>');
+    for (var key in context.links) {
+        if (! (key in json)) { continue; }
+        empty = false;
+        var type = getType(key);
+        if ($.isArray(json[key])) {
+            json[key].forEach(function(obj, i) {
+                result.append(render(context, obj, type, key, i));
+            });
+        } else {
+            result.append(render(context, json[key], type, key));
+        }
+    }
+    if (empty) {
+        return noExt;
+    } else {
+        return result;
+    }
+}
+
 // main method
 extended.run = function(context, type, json) {
     if (type in this.make) { return this.make[type](context, json); }
-    return 'No extended view yet!';
+    return extended.defaultExtended(context, type, json);
 }
