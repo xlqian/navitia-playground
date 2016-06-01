@@ -1,3 +1,6 @@
+@import '../defs';
+@import '../global';
+
 body {
     background-color: #Fff;
     margin: 0;
@@ -6,110 +9,104 @@ body {
     color: #4e4e4e;
     background: #EFEFEF;
 }
-#titre{
+
+header{
+    display: flex;
+    flex-flow: row wrap;
     width: 100%;
-    background: #EFEFEF;
-}
-
-h1{
-    color: #353535;
-    padding-bottom: 0.25em;
-    line-height: 1.2em;
-    font-weight: normal;
-}
-
-/* ---------------------------------
-AND THE URL IS
---------------------------------- */
-#urlForm form{
-    text-align: center;
-    background: #F5F5F5;
-    padding: 1em 0;
-    margin: 0;
-}
-
-input{
-    height: 5ex;
-    padding-left: 0.5em;
-    border: solid 1px #DEDEDE;
+    margin: 0; 
     background: #FFF;
+    border-bottom: 0.063em solid #EFEFEF;
 }
 
-button{
-    height: 5ex;
-    padding: 0 2em;
-    border: none;
-    border-radius: 0.25em;
-    color: #fff;
-    background: #56b5db;
+#back{
+    width: 30em;
+    margin: 0 2em 0 0;
+}
+
+#logo{
+    width: 26.563em;
+    height: 5em;
+    margin: 0.2em 0 0.3em 0;
+}
+
+#doc{
+    width: 5em;
+    height: 2.8ex;
+    margin: 0;
+    padding: 2.6em 0 0 0;
     text-transform: uppercase;
+    border-top: solid 0.4em #fff;
+    font-size: 80%;
 }
 
-#urlFormToken{
-    margin-bottom: 3em;
+#doc:hover{
+    border-top: solid 0.4em #56B5DB;
+    color: #353535; 
 }
 
-p{
-    float: right;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-}
-
-.raw{
+#picto{
     float: left;
-    width: 70%;
-    margin: 0 15%;
+    height: 2ex;
+    width: 2ex;
+    padding: 0;
+    margin: 0.2em 1em 0 0;
 }
 
-#urlForm{
-    
+#raw{ 
+    display: flex;
+    width: 100%;
+    flex-flow: row wrap;
 }
 
 .col{
-    float: left;
-    padding: 2em 0 0 0;
-    width: 33.3%;
+    display: flex;
+    width: 65%;
+    flex-flow: row wrap;
+    background: #F5F5F5;
+    padding: 0;
 }
 
-
-#visu{
-    display: block;
-    margin: 0 auto;
-    width: 8em;
-    height: 8em;
-}
 img{
     display: block;
     margin: 0 auto;
-    width: 5em;
-    height: 5em;
+    width: 4em;
+    height: 4em;
 }
 
-h1, h2, p, h3{
-    text-align: center;
+#pro{
+    width: 15.625em;
+    height: 8.438em;
+    margin: 0 auto;
+    padding: 2em 0 1em 0;
+}
+
+.col > h2{
+    width: 100%;
 }
 
 h2{
-    margin: 0 auto;
+    width: auto;
     font-weight: normal;
+    color: #353535;
     text-align: center;
-       padding: 0.5em 0 1em 0;
-       background: #F5F5F5;
-       color: #353535;
+    margin: 0;
+    padding: 2em 0;
 }
 
 h3{
     font-weight: normal;
     font-size: 100%;
-    padding: 0 0 2em 0;
+    padding: 0;
+    text-align: center;
 }
 
 .rubriques{
+    display: flex;
+    flex-direction: column; 
+    padding: 0 1em 1em 1em;
     margin: 0 auto;
-    width: 18em;
-    padding: 0 0 1em 0;
+    width: 20em;
 
     a::before {
         float: right;
@@ -124,52 +121,56 @@ a{
     font-size: 90%;
     text-decoration: none;
     text-align: left;
-    padding: 1em 2em;
-    border-bottom: solid 0.1em #D8D8D8;
+    padding: 0.5em 1em 0.5em 2em;
     margin: 0;
-    background: #FFF;
     color: #4e4e4e;
 }
 
 a:hover{
-    color: #56b5db;
-    border-bottom: solid 0.1em #56b5db;
+    color: #56B5DB;
 }
 
-
-@media screen and (max-width: 81em) {
-    img{
-        width: 3em;
-        height: 3em;
-    }
-
-    .raw{
-        width: 80%;
-        margin: 0 10%;
-    }
-
-    .col{
-        width: 50%;
-    }
+/* ---------------------------------
+PRO
+--------------------------------- */
+#urlForm{
+    width: 35%;
+    background: #FFF;
+    padding-bottom: 2em;
 }
 
-@media screen and (max-width: 63em) {
-    img{
-        display: none;
-    }
+#urlForm form{
+    text-align: center;
+    padding: 1em 0;
+    margin: 0;
+}
 
-    h2{
-        padding: 0.5em 0;
-    }
+#urlinput{
+    width: 100%;
+}
 
-    .raw{
+#urlDiv.inputDiv{
+    margin: 2em 3em;
+    width: auto;
+}
+
+#or{
+    width: 100%; 
+}
+
+button{
+    margin: 0 1.5em;
+}
+/* ---------------------------------
+RESPONSIVE
+--------------------------------- */
+@media screen and (max-width: 64em) {
+    .col, #urlForm{
         width: 100%;
-        margin: 0;
-    }
-
-    .col{
-        width: 100%;
     }
 }
+
+
+
 
 

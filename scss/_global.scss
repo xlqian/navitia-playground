@@ -41,3 +41,53 @@ button {
     font: inherit;
     font-weight: bold;
 }
+
+.inputDiv {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    width: 25em;
+    margin: 0 1em 1.25em 0;
+    padding: 0;
+    background-color: white;
+    border-style: solid;
+    border-width: 0 0 0.3em 0;
+    border-color: $light-gray;
+}
+
+input {
+    width: 100%;
+    min-width: 5em;
+    border: none;
+    padding: 0.5em;
+    background-color: inherit;
+    font: inherit;
+    text-overflow: ellipsis; 
+}
+
+input:focus {
+    outline: 0;
+}
+
+.key {
+    margin: 0;
+    padding: 0.5em;
+    font-weight: bold;
+    background-color: $light-gray;  
+}
+
+.inputDiv button {
+    background-color: inherit;
+    color: inherit;
+    width: auto;
+    height: auto;
+    padding: 0.5em 0.5em 0.5em 0;
+    margin: 0;
+    font: inherit;
+    font-weight: bold;
+    color: $dark-blue;
+    text-transform: uppercase;
+}
+.inputDiv button:disabled {
+    color: $gray;
+}

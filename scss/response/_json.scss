@@ -6,6 +6,9 @@ div.object pre.renderjson {
     overflow-x: auto;
     font-size: 1em;
 
+    * {
+        background: none;
+    }
     .disclosure {
         font-size: 1.5em;
     }
