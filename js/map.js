@@ -1,6 +1,22 @@
 var map = {
     makeFeatures: {
         section: function(json) {
+            var makeStopTimesMarker = function() {
+                var stopTimes = json['stop_date_times'];
+                var markers = []
+                if (stopTimes) {
+                    stopTimes.forEach(function(st) {
+                        markers = markers.concat(map._makeMarker('stop_point', st['stop_point']));
+                    });
+                } else {
+                    var from = json['from'];
+                    markers = markers.concat(map._makeMarker(from.embedded_type, from[from.embedded_type]));
+                    var to = json['to'];
+                    markers = markers.concat(map._makeMarker(to.embedded_type, to[to.embedded_type]));
+                }
+                return markers;
+
+            };
             if (!( "geojson" in json)) {
                return [];
             }
@@ -31,8 +47,7 @@ var map = {
                         };
                     }
                 })
-            ].concat(map._makeMarker(json.from.embedded_type, json.from[json.from.embedded_type]))
-            .concat(map._makeMarker(json.to.embedded_type, json.to[json.to.embedded_type]));
+            ].concat(makeStopTimesMarker());
         },
         journey: function(json) {
             return flatMap(json.sections, map.makeFeatures.section);
