@@ -48,6 +48,12 @@ var map = {
         stop_point: function(json) {
             return map._makeMarker('stop_point', json);
         },
+        place: function(json) {
+            return [
+                L.marker([json[json.embedded_type].coord.lat, json[json.embedded_type].coord.lon])
+                    .bindPopup(summary.run(new Context(json), 'place', json))
+            ];
+        },
         poi: function(json) {
             return map._makeMarker('poi', json);
         },

@@ -15,12 +15,12 @@ summary.make.response = function(context, json) {
     var result = '';
     var key = responseCollectionName(json);
     if (key) {
-        result = result + sprintf(' %s&nbsp;%s ', json[key].length, key);
+        result = result + sprintf(' %s %s ', json[key].length, key);
     }
     if ('pagination' in json) {
         var p = json.pagination;
         var first_number = p.start_page * p.items_per_page + 1;
-        result = result + sprintf('(%s-%s of %s&nbsp;results)',
+        result = result + sprintf('(%s-%s of %s results)',
             first_number,
             first_number + p.items_on_page - 1,
             p.total_result);
@@ -181,8 +181,16 @@ summary.makeLineCode = function(display_informations) {
 };
 
 summary.run = function(context, type, json) {
+    var res;
     if (type in summary.make) {
-        return summary.make[type](context, json);
+        res = summary.make[type](context, json);
+    } else {
+        res = summary.defaultSummary(context, type, json);
     }
-    return summary.defaultSummary(context, type, json);
+    if (res instanceof jQuery) {
+        return res.get(0);
+    } else if (typeof res === 'string') {
+        return $('<span>').text(res).get(0);
+    }
+    return res;
 };

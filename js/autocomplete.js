@@ -126,12 +126,12 @@ var autocomplete = {
                     var s = summary.run(new Context(), getType(staticType), elt);
                     res.push({ value: elt.id, label: s });
                 });
-                res = res.sort(function(a, b) {
-                    // TODO: for the moment, it will work only if
-                    // summary returns a string, not if it returns a
-                    // formated jQuery object.
-                    if (a.label < b.label) { return -1; }
-                    if (a.label > b.label) { return 1; }
+                res = res.sort(function(aHTML, bHTML) {
+                    // sorting on HTML code...
+                    var a = aHTML.label.outerHTML;
+                    var b = bHTML.label.outerHTML;
+                    if (a < b) { return -1; }
+                    if (a > b) { return 1; }
                     return 0;
                 });
                 $(input).autocomplete({source: res,
@@ -140,7 +140,9 @@ var autocomplete = {
                     delay: 500
                 }).focus(function() {
                     $(input).autocomplete('search', '');
-                });
+                }).autocomplete('instance')._renderItem = function(ul, item) {
+                    return $('<li>').append(item.label).appendTo(ul);
+                };
                 if ($(input).is(':focus')) {
                     $(input).autocomplete('search', '');
                 }

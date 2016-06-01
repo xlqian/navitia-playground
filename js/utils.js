@@ -70,6 +70,7 @@ function getType(key) {
     }
     // hardcoded cases:
     switch (key) {
+    case 'places_nearby': return 'place';
     case 'addresses': return 'address';
     case 'from': return 'place';
     case 'to': return 'place';
