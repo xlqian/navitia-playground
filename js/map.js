@@ -83,12 +83,10 @@ var map = {
                     subdomains: '1234',
             }).addTo(m);
             var overlay = L.featureGroup(features).addTo(m);
-            setTimeout(function(){
+            setTimeout(function() {
                 m.invalidateSize();
                 m.fitBounds(overlay.getBounds());
-
             }, 100);
-
         } else {
             div.addClass('noMap');
             div.append('No map');
