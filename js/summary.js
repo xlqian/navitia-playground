@@ -139,20 +139,20 @@ summary.make.line = function(context, line) {
 summary.make.departure = function(context, json) {
     var res = $('<span>');
     res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.departure_date_time)));
-    res.append(summary.makeRoutePoint(res, json));
+    res.append(summary.makeRoutePoint(context, res, json));
     return res;
 };
 
 summary.make.arrival = function(context, json) {
     var res = $('<span>');
     res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.arrival_date_time)));
-    res.append(summary.makeRoutePoint(res, json));
+    res.append(summary.makeRoutePoint(context, res, json));
     return res;
 };
 
 summary.make.stop_schedule = function(context, json) {
     var res = $('<span>');
-    return summary.makeRoutePoint(res, json);
+    return summary.makeRoutePoint(context, res, json);
 };
 
 summary.make.date_time = function(context, json) {
@@ -164,7 +164,7 @@ summary.make.date_time = function(context, json) {
 
 summary.make.route_schedule = function(context, json) {
     var res = $('<span>');
-    return summary.makeRoutePoint(res, json);
+    return summary.makeRoutePoint(context, res, json);
 };
 
 // add your summary view by addind:
@@ -210,13 +210,13 @@ summary.makeLineCode = function(display_informations) {
     return elt;
 };
 
-summary.makeRoutePoint = function(res, json) {
+summary.makeRoutePoint = function(context, res, json) {
     res.append(summary.makeLineCode(json.display_informations));
     res.append(' > ');
     res.append(json.display_informations.direction);
     if (json.stop_point) {
         res.append(' at ');
-        res.append(summary.run(new Context(), 'stop_point', json.stop_point));
+        res.append(summary.run(context, 'stop_point', json.stop_point));
     }
     return res;
 }
