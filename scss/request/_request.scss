@@ -17,7 +17,7 @@
         background-color: white;
         border-style: solid;
         border-width: 0 0 0.3em 0;
-        border-color: $gray;
+        border-color: $light-gray;
     }
 
     .templateInput {
@@ -31,6 +31,7 @@
         padding: 0.5em;
         background-color: inherit;
         font: inherit;
+        text-overflow: ellipsis;
     }
     input:focus {
         outline: 0;
@@ -40,8 +41,7 @@
         margin: 0;
         padding: 0.5em;
         font-weight: bold;
-        background-color: $gray;
-        color: $dark-gray;
+        background-color: $light-gray;
     }
 
     button::-moz-focus-inner {
