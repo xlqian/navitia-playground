@@ -145,10 +145,10 @@ var autocomplete = {
                     }
                 },
             error: function(data, status, xhr) {
-                $('.token').addClass('templateInput');
-                if (xhr == 'UNAUTHORIZED') {
-                    $.notify("Missing token!");
+                if (data.status === 401) {
+                    $('#token').addClass('templateInput');
                 }
+                $.notify(sprintf("Autocomplete error: %s", xhr));
             }
         });
     },
@@ -224,9 +224,7 @@ var autocomplete = {
                         response(res);
                     },
                     error: function(data, status, xhr) {
-                        if (xhr == 'NOT FOUND') {
-                            $.notify("Autocomplete is missing because coverage is not found!");
-                        }
+                        $.notify(sprintf("Autocomplete error: %s", xhr));
                     }
                 });
             }

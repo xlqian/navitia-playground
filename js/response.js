@@ -89,6 +89,10 @@ $(document).ready(function() {
             setStatus(xhr);
             $('#data').html(render('error', 'response', xhr.responseJSON));
             $('#data input').last().click();
+            if (xhr.status === 401) {
+                $('#token').addClass('templateInput');
+            }
+            $.notify(sprintf("Response error: %s", error));
         }
     );
 });
