@@ -37,19 +37,19 @@ var map = {
             return flatMap(json.sections, map.makeFeatures.section);
         },
         addresse: function(json) {
-            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker('addresse', json);
         },
         administrative_region: function(json) {
-            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker('administrative_region', json);
         },
         stop_area: function(json) {
-            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker('stop_area', json);
         },
         stop_point: function(json) {
-            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker('stop_point', json);
         },
         poi: function(json) {
-            return map._makeMarker([json.coord.lat, json.coord.lon], json.label);
+            return map._makeMarker('poi', json);
         },
         response: function(json) {
             var key = responseCollectionName(json);
@@ -89,7 +89,7 @@ var map = {
         return div;
     },
 
-    _makeMarker: function(latlon, label) {
-        return [L.marker(latlon).bindPopup(label)];
+    _makeMarker: function(type, json) {
+        return [L.marker([json.coord.lat, json.coord.lon]).bindPopup(summary.run(new Context(json), type, json))];
     },
 };
