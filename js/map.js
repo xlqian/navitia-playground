@@ -36,8 +36,8 @@ var map = {
         journey: function(json) {
             return flatMap(json.sections, map.makeFeatures.section);
         },
-        addresse: function(json) {
-            return map._makeMarker('addresse', json);
+        address: function(json) {
+            return map._makeMarker('address', json);
         },
         administrative_region: function(json) {
             return map._makeMarker('administrative_region', json);
