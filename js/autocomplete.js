@@ -134,16 +134,19 @@ var autocomplete = {
                     return 0;
                 });
                 $(input).autocomplete({source: res,
-                        minLength: 0,
-                        scroll: true,
-                        delay: 500
-                    }).focus(function() {
-                        $(input).autocomplete('search', '');
-                    });
-                    if ($(input).is(':focus')) {
-                        $(input).autocomplete('search', '');
-                    }
+                    minLength: 0,
+                    scroll: true,
+                    delay: 500
+                }).focus(function() {
+                    $(input).autocomplete('search', '');
+                });
+                if ($(input).is(':focus')) {
+                    $(input).autocomplete('search', '');
                 }
+            },
+            error: function(data, status, xhr) {
+                notifyOnError(data, 'Autocomplete');
+            }
         });
     },
     dynamicAutocompleteTypes: [
@@ -217,8 +220,9 @@ var autocomplete = {
                         }
                         response(res);
                     },
-                    error: function() {
+                    error: function(data, status, xhr) {
                         response([]);
+                        notifyOnError(data, 'Autocomplete');
                     }
                 });
             }

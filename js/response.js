@@ -89,6 +89,7 @@ $(document).ready(function() {
             setStatus(xhr);
             $('#data').html(render('error', 'response', xhr.responseJSON));
             $('#data input').last().click();
+            notifyOnError(xhr, 'Response');
         }
     );
 });

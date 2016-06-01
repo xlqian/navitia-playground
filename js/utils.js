@@ -56,3 +56,11 @@ function flatMap(array, f) {
     });
     return result;
 }
+
+
+function notifyOnError(data, typeError) {
+    if (data.status === 401) {
+        $('#token').addClass('templateInput');
+    }
+    $.notify(sprintf("%s error: %s", typeError, data.statusText));
+}
