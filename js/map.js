@@ -1,37 +1,10 @@
 var map = {
     makeFeatures: {
         section: function(json) {
-            if (!( "geojson" in json)) {
-               return [];
-            }
-            return [
-                L.geoJson(json.geojson, {
-                    style: function() {
-                        var color = '#fff';
-                        if ("display_informations" in json) {
-                            color = getTextColor(json.display_informations);
-                        }
-                        return {
-                            color: color,
-                            weight: 6,
-                            opacity: 1
-                        };
-                    }
-                }),
-                L.geoJson(json.geojson, {
-                    style: function() {
-                        var color = '#008ACA';
-                        if ("display_informations" in json) {
-                            color = "#" + json.display_informations.color;
-                        }
-                        return {
-                            color: color,
-                            weight: 5,
-                            opacity: 1
-                        };
-                    }
-                })
-            ];
+            return map._makeString('section', json, json.display_informations);
+        },
+        line: function(json) {
+            return map._makeString('line', json, json);
         },
         journey: function(json) {
             return flatMap(json.sections, map.makeFeatures.section);
@@ -103,4 +76,34 @@ var map = {
     _makeMarker: function(type, json) {
         return [L.marker([json.coord.lat, json.coord.lon]).bindPopup(summary.run(new Context(json), type, json))];
     },
+
+    _makeString: function(type, json, colorJson) {
+        if (! ( "geojson" in json) || ! json.geojson.coordinates.length) {
+            return [];
+        }
+        if (! (colorJson instanceof Object) || ! ('color' in colorJson)) {
+            colorJson = { color: '008ACA' };
+        }
+        return [
+            L.geoJson(json.geojson, {
+                style: function() {
+                    return {
+                        color: getTextColor(colorJson),
+                        weight: 6,
+                        opacity: 1
+                    };
+                }
+            }),
+            L.geoJson(json.geojson, {
+                style: function() {
+                    var color = "#" + colorJson.color;
+                    return {
+                        color: color,
+                        weight: 5,
+                        opacity: 1
+                    };
+                }
+            }).bindPopup(summary.run(new Context(), type, json))
+        ];
+    }
 };
