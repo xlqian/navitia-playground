@@ -13,7 +13,7 @@ var map = {
                         }
                         return {
                             color: color,
-                            weight: 7,
+                            weight: 6,
                             opacity: 1
                         };
                     }
