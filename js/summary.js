@@ -136,6 +136,13 @@ summary.make.line = function(context, line) {
         .append(document.createTextNode(line.name));
 };
 
+summary.make.stop_time = function(context, stop_time) {
+    return summary.formatTime(stop_time.departure_date_time) +' > '
+         + summary.formatTime(stop_time.arrival_date_time)
+        + ' ' + summary.defaultSummary(context, '', stop_time.stop_point);
+
+};
+
 summary.make.departure = function(context, json) {
     var res = $('<span>');
     res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.departure_date_time)));

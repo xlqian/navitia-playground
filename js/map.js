@@ -6,7 +6,7 @@ var map = {
                 var markers = []
                 if (stopTimes) {
                     stopTimes.forEach(function(st) {
-                        markers = markers.concat(map._makeMarker('stop_point', st['stop_point']));
+                        markers = markers.concat(map._makeMarker('stop_time', st));
                     });
                 } else {
                     var from = json['from'];
@@ -116,6 +116,14 @@ var map = {
     },
 
     _makeMarker: function(type, json) {
-        return [L.marker([json.coord.lat, json.coord.lon]).bindPopup(summary.run(new Context(json), type, json))];
+        var lat, lon;
+        if (type === 'stop_time') {
+            lat = json.stop_point.coord.lat;
+            lon = json.stop_point.coord.lon;
+        } else {
+            lat = json.coord.lat;
+            lon = json.coord.lon;
+        }
+        return [L.marker([lat, lon]).bindPopup(summary.run(new Context(json), type, json))];
     },
 };
