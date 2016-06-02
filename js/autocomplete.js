@@ -57,16 +57,6 @@ var autocomplete = {
                 }
             });
     },
-    tokenAutocomplete: function (){
-        var input = $("#token input.token");
-        var tokens = [];
-        for (var elt in window.localStorage) {
-            if (elt.indexOf(apiStoragePrefix) === 0 ) {
-                tokens.push({value: window.localStorage.getItem(elt)} );
-            }
-        }
-        autocomplete._customAutocompleteHelper(input, tokens);
-    },
     valueAutoComplete: function (input, key) {
         if (isDatetimeType(key)) {
             makeDatetime(input);

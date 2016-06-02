@@ -1,5 +1,4 @@
-/* exported localStorageAvailable */
-/* exported apiStoragePrefix */
+/* exported localStorageAvailable apiStoragePrefix saveToken getTokenFromStorage*/
 /* TODO: Complete the jshint*/
 
 function localStorageAvailable() {
