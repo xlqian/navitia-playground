@@ -1,5 +1,16 @@
 var map = {
     makeFeatures: {
+        region: function(json) {
+            if (json.shape) {
+                var geoJsonShape = wkt2geojson(json.shape);
+                var geoJsonCoords = geoJsonShape.coordinates[0];
+                geoJsonCoords.forEach(function(coord) {
+                    coord[0] = [coord[1], coord[1] = coord[0]][0];
+                }); 
+                return map._makePolygon('region', geoJsonCoords, json);
+            }
+            return [];
+        },
         section: function(json) {
             var color = json.display_informations;
             if (json.type === 'street_network') {
@@ -142,5 +153,10 @@ var map = {
                             .concat(map._makeMarker('place', to));
         }
         return markers;
+    },
+    _makePolygon: function(type, geoJsonCoords, json) {
+        var polygon = L.polygon(geoJsonCoords).bindPopup(summary.run(new Context(), type, json));
+        return [polygon];
+                
     }
 };
