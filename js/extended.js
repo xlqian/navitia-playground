@@ -42,15 +42,16 @@ extended.make.route_schedule = function(context, json) {
     var table = $('<table/>');
     // Add the data rows
     json.table.rows.forEach(function(route_schedule, i) {
-        row = $(table[0].insertRow(-1));
-        var cellName = $("<td />").addClass("stop-point");
+        var row = $(table[0].insertRow(-1));
+        var cellName = $('<td />').addClass('stop-point');
         cellName.html(summary.run(context, 'stop_point', route_schedule.stop_point));
         row.append(cellName);
         route_schedule.date_times.forEach(function(route_schedule, i) {
-            var cellValue = $("<td />").addClass("time");
+            var cellValue = $('<td />').addClass('time');
             cellValue.html(summary.formatTime(route_schedule.date_time));
             row.append(cellValue);
         });
+        table.append(row);
     });
     result.append(table);
     return result;

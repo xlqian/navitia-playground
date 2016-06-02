@@ -61,20 +61,20 @@ div.object {
             
         table {
             background-color: white;
-            border-spacing: 0px;
+            border-spacing: 0;
             border-collapse: collapse;
             text-align: center;
       
             th {
                 font-weight: bold;
                 padding: 0.5ex;
-                border: 1px solid $gray;
+                border: 0.1ex solid $gray;
                 color: inherit;
             }
              
             td {
                 padding: 0.5ex;
-                border: 1px solid $gray;
+                border: 0.1ex solid $gray;
             }
             
             td.stop-point {
