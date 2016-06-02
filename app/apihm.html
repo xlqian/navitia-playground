@@ -9,11 +9,27 @@
     <link rel="icon" href="img/favicon.ico">
   </head>
   <body>
-    <header>
-      <a id="back" href="index.html" rel="nofollow" title="Go to Homepage">
-        <img id="logo" src="img/logo_transitoire.png" alt="Logo Apihm">
-      </a>
-    </header>
+    <ul id="header">
+      <li><a id="back" href="index.html" title="Go to Homepage">
+          <img id="logo" src="img/logo_nplaygournd.svg" alt="Logo">
+        </a>
+      </li>
+      <li>
+        <img id="picto" src="img/picto_doc.svg" alt="picto documentation">
+        <a id="doc" href="http://doc.navitia.io" title="Go to Navitia documentation">
+            doc
+        </a>
+    </li>
+    <li id="urlheader">
+      <form action='apihm.html' method='get'>
+        <div id="urlDiv" class="inputDiv">
+            <div class="key">URL</div>
+              <input id="urlinput" name="request" type="text">
+                <button>go</button>
+            </div>
+      </form> 
+      </li>
+    </ul>
 
     <div id="content">
       <div id="request">

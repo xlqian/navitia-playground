@@ -1,58 +1,6 @@
 @import '../defs';
 @import '../global';
-
-body {
-    background-color: #Fff;
-    margin: 0;
-    font-family: 'OpenSans', sans-serif;
-    font-size: 100%;
-    color: #4e4e4e;
-    background: #EFEFEF;
-}
-
-#back{
-    padding: 0; 
-}
-
-#logo{
-    width: 26.563em;
-    margin: 0.8em 0;
-}
-
-#picto{
-    float: left;
-    height: 3ex;
-    width: 3ex;
-    margin: 0;
-    padding-top: 1.8em;
-}
-
-#doc{
-    float: left;
-    padding: 1.8em 2em 0 1em; 
-    border-top: solid 0.4em #ffffff;
-    text-transform: uppercase;
-}
-
-#doc:hover{
-    border-top: solid 0.4em #56B5DB;
-    color: #353535; 
-}
-
-#header{
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    background: #FFF;
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
-    border-bottom: solid 0.15em #F5F5F5;
-}
-
-li{
-    list-style: none;
-}
+@import '../header';
 
 #raw{ 
     display: flex;
@@ -69,17 +17,12 @@ li{
     padding: 0;
 }
 
-img{
-    display: block;
+#krakensuperhero{
+    display: flex;
+    flex-flow: row;
     margin: 0 auto;
-    width: 4em;
-    height: 4em;
-}
-
-#pro{
-    width: 15.625em;
-    height: 8.438em;
-    margin: 0 auto;
+    width: 21.875em;
+    height: 11.813em;
     padding: 2em 0 1em 0;
 }
 
@@ -103,6 +46,11 @@ h3{
     text-align: center;
 }
 
+.pictofeatures{
+    height: 4em;
+    width: 4em;
+}
+
 .rubriques{
     display: flex;
     flex-direction: column; 
@@ -120,7 +68,6 @@ a{
     display: list-item;
     list-style-type: none;
     font-family: 'OpenSans', sans-serif;
-    font-size: 90%;
     text-decoration: none;
     text-align: left;
     padding: 0.5em 1em 0.5em 2em;
@@ -197,38 +144,5 @@ RESPONSIVE
 @media screen and (max-width: 64em) {
     .col, #urlForm{
         width: 100%;
-    }
-}
-
-@media screen and (max-width:62em) {
-    #urlheader{
-        display: none;
-    }
-}
-
-@media screen and (max-width:33.438em) {
-    #header{
-        flex-direction: column;
-    }
-    #logo{
-        float: left;
-        margin: 0 0 0 1em;
-        width: 15em;
-    }
-    #picto{
-        height: 2.5ex;
-        width: 2.5ex;
-        margin: 0 auto;
-        padding: 0.5em 0.2em 0 1.3em;  
-    }
-    #doc{
-        padding: 0.5em 1em 1em 1em;
-        margin: 0 auto; 
-        border-bottom: solid 0.4em #ffffff;
-        border-top: none;
-    }
-    #doc:hover{
-        border-bottom: solid 0.4em #56B5DB;
-        border-top: none;
     }
 }
