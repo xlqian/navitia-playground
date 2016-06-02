@@ -226,7 +226,7 @@ var autocomplete = {
                         if (search) {
                             search.forEach(function(s) {
                                 var sum = summary.run(new Context(), type, s);
-                                res.push({ value: s.id, label: sum.get() });
+                                res.push({ value: s.id, label: sum });
                             });
                         }
                         response(res);
