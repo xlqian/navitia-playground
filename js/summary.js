@@ -44,7 +44,8 @@ summary.make.journey = function(context, json) {
                 break;
             case 'street_network': add(s.mode); break;
             case 'public_transport':
-                add(summary.makeLineCode(s.display_informations));
+                add(summary.makePhysicalModesFromSection(s)
+                    .append(summary.makeLineCode(s.display_informations)));
                 break;
             default: add(s.type); break;
             }
@@ -98,6 +99,7 @@ summary.make.section = function(context, section) {
     case 'transfer': res.append(section.transfer_type); break;
     case 'public_transport':
         pt = true;
+        res.append(summary.makePhysicalModesFromSection(section));
         res.append(summary.makeLineCode(section.display_informations));
         break;
     default: res.append(section.type); break;
@@ -126,11 +128,15 @@ summary.make.region = function(context, region) {
 };
 
 summary.make.line = function(context, line) {
-    var code = $('<span>')
-        .addClass('line_code')
-        .append(line.code);
-    summary.setColors(code, line);
+    var code = $('');
+    if (line.code) {
+        code = $('<span>')
+            .addClass('line_code')
+            .append(line.code);
+        summary.setColors(code, line);
+    }
     return $('<span>')
+        .append(modes.makePicto(line.physical_modes))
         .append(code)
         .append(' ')
         .append(document.createTextNode(line.name));
@@ -173,6 +179,13 @@ summary.make.route_schedule = function(context, json) {
     return summary.makeRoutePoint(context, res, json);
 };
 
+summary.make.physical_mode = function(context, json) {
+    console.log(json);
+    return $('<span/>')
+        .append(modes.makePicto(json))
+        .append(document.createTextNode(' ' + json.name));
+};
+
 // add your summary view by addind:
 //   summary.make.{type} = function(context, json) { ... }
 
@@ -185,14 +198,24 @@ summary.setColors = function(elt, json) {
 
 summary.defaultSummary = function(context, type, json) {
     if (! (json instanceof Object)) { return 'Invalid object'; }
-    if ('label' in json) {
-        return json.label;
-    } else if ('name' in json) {
-        return json.name;
-    } else if ('id' in json) {
-        return json.id;
+
+    var res = $('<span/>');
+    if ('physical_modes' in json && $.isArray(json.physical_modes)) {
+        console.log(json.physical_modes);
+        json.physical_modes.forEach(function(mode) {
+            res.append(modes.makePicto(mode));
+        });
     }
-    return 'no summary';
+    if ('label' in json) {
+        res.append(document.createTextNode(json.label));
+    } else if ('name' in json) {
+        res.append(document.createTextNode(json.name));
+    } else if ('id' in json) {
+        res.append(document.createTextNode(json.id));
+    } else {
+        res.append('no summary');
+    }
+    return res;
 };
 
 summary.formatDatetime = function(datetime) {
@@ -209,7 +232,22 @@ summary.formatTime = function(datetime) {
     return summary.formatDatetime(datetime).split(' ')[1];
 };
 
+summary.makePhysicalModesFromSection = function(section) {
+    if ('links' in section) {
+        var pms = section.links
+            .map(function(o) {
+                if (o.type == 'physical_mode') {
+                    return { id: o.id, name: section.display_informations.physical_mode };
+                } else {
+                    return null;
+                }
+            });
+        return modes.makePicto(pms);
+    }
+};
+
 summary.makeLineCode = function(display_informations) {
+    if (! display_informations.code) { return $(''); }
     var elt = $('<span>')
         .addClass('line_code')
         .append(display_informations.code);
