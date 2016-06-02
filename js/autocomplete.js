@@ -46,7 +46,7 @@ var autocomplete = {
         var apis = [];
         for (var elt in window.localStorage) {
             if (elt.indexOf(apiStoragePrefix) === 0 ) {
-                apis.push({value: elt.replace(apiStoragePrefix, ''), desc: elt} );
+                apis.push({value: elt.slice(apiStoragePrefix.length), desc: elt} );
             }
         }
         autocomplete._customAutocompleteHelper(input, apis,
@@ -61,7 +61,6 @@ var autocomplete = {
         if (isDatetimeType(key)) {
             makeDatetime(input);
         } else if (key in this.autocompleteTree.paramValue){
-            // TODO : factorize this code
             autocomplete._customAutocompleteHelper(input, this.autocompleteTree.paramValue[key]);
         } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
             this.staticAutocomplete(input, key);
