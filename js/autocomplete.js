@@ -1,4 +1,4 @@
-var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]'];
+var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter'];
 var _collections = ['addresses', 'commercial_modes', 'companies', 'coverage', 'disruptions', 'lines', 'networks', 'places',
                'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicles_journeys', ].sort();
 var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
@@ -8,7 +8,6 @@ var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_object
 var _depArrParams = ['from_datetime', 'duration', 'data_freshness'].concat(_paramValueEverywhere).sort();
 var _schedulesParams = ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort();
 var _placesParams = ['q', 'type[]', 'admin_uri[]'].concat(_paramValueEverywhere).sort();
-var _filter = ['filter'];
 
 var autocomplete = {
     autocompleteTree: {
@@ -27,9 +26,9 @@ var autocomplete = {
             journeys: ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'data_freshness',
             'first_section_mode[]', 'last_sectoin_mode[]'].concat(_paramValueEverywhere).sort(),
             lines: _paramValueEverywhere,
-            places_nearby: _placesParams.concat(_filter).sort(),
+            places_nearby: _placesParams.sort(),
             places: _placesParams,
-            pois: ['distance'].concat(_paramValueEverywhere).concat(_filter).sort(),
+            pois: ['distance'].concat(_paramValueEverywhere).sort(),
             pt_objects: ['q', 'type[]'].concat(_paramValueEverywhere),
             stop_areas: _paramValueEverywhere,
             stop_points: _paramValueEverywhere,
