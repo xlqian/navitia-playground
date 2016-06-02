@@ -1,4 +1,4 @@
-/* exported localStorageAvailable */
+/* exported localStorageAvailable apiStoragePrefix saveToken getTokenFromStorage*/
 /* TODO: Complete the jshint*/
 
 function localStorageAvailable() {
@@ -14,13 +14,15 @@ function localStorageAvailable() {
     }
 }
 
+var apiStoragePrefix = 'navitiaPlayground.';
+
 function saveToken(api, token) {
     if (! localStorageAvailable()) { return; }
     if (! token) { return; }
-    window.localStorage.setItem(api, token);
+    window.localStorage.setItem(apiStoragePrefix + api, token);
 }
 
 function getTokenFromStorage(api) {
     if (! localStorageAvailable()) { return; }
-    return window.localStorage.getItem(api);
+    return window.localStorage.getItem(apiStoragePrefix + api);
 }

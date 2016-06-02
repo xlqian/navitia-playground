@@ -46,19 +46,27 @@ var autocomplete = {
             'last_section_mode[]': _fallbackMode,            
         }
     },
+    apiAutocomplete: function() {
+        var input = $("#api input.api");
+        var apis = [];
+        for (var elt in window.localStorage) {
+            if (elt.indexOf(apiStoragePrefix) === 0 ) {
+                apis.push({value: elt.slice(apiStoragePrefix.length), desc: elt} );
+            }
+        }
+        autocomplete._customAutocompleteHelper(input, apis,
+            {
+                select: function (event, ui) {
+                    $(input).val(ui.item.value);
+                    $("#token input.token").val(window.localStorage.getItem(ui.item.desc));
+                }
+            });
+    },
     valueAutoComplete: function (input, key) {
         if (isDatetimeType(key)) {
             makeDatetime(input);
         } else if (key in this.autocompleteTree.paramValue){
-            // TODO : factorize this code
-            $(input).autocomplete({
-                source: this.autocompleteTree.paramValue[key],
-                minLength: 0,
-                scroll: true,
-                delay: 500
-            }).focus(function() {
-                    $(this).autocomplete('search', '');
-            });
+            autocomplete._customAutocompleteHelper(input, this.autocompleteTree.paramValue[key]);
         } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
             this.staticAutocomplete(input, key);
         } else if (this.dynamicAutocompleteTypes.indexOf(key) > -1) {
@@ -66,7 +74,7 @@ var autocomplete = {
         }
     },
     addKeyAutocomplete: function(input, type) {
-        var  source;
+        var source;
         if (type === 'pathKey' && ! $('#pathFrame').find('.value').length) {
             source = this.autocompleteTree[type].empty;
         } else if (type === 'paramKey'){
@@ -75,18 +83,11 @@ var autocomplete = {
         } else {
             source = this.autocompleteTree[type].all;
         }
-        source = source ? source : [];
-        $(input).autocomplete({
-            source: source,
-            minLength: 0,
-            scroll: true,
-            delay: 500,
-            select: function (event, ui) {
-                $(input).val(ui.item.value).change();
-            }
-        }).focus(function() {
-            $(this).autocomplete('search', '');
-        });
+        source = source || [];
+        autocomplete._customAutocompleteHelper(input, source,
+            {
+                select: function(event, ui) { $(input).val(ui.item.value).change(); }
+            });
     },
     staticAutocompleteTypes: ['coverage',
         'physical_modes',
@@ -217,5 +218,17 @@ var autocomplete = {
         }).autocomplete('instance')._renderItem = function(ul, item) {
             return $('<li>').append(item.label).appendTo(ul);
         };
-    }
+    },
+    _customAutocompleteHelper: function(input, source, customOptions) {
+        var options = {
+            source: source,
+            minLength: 0,
+            scroll: true,
+            delay: 500
+        };
+        if (customOptions) { $.extend(true, options, customOptions); }
+        $(input).autocomplete(options).focus(function() {
+            $(this).autocomplete('search', '');
+        });
+    },
 }
