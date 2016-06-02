@@ -1,65 +1,40 @@
-var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]'];
+var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter'];
+var _collections = ['addresses', 'commercial_modes', 'companies', 'coverage', 'disruptions', 'lines', 'networks', 'places',
+               'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicles_journeys', ].sort();
+var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
+                            'arrivals', 'places'];
+
+// ParamKey
+var _depArrParams = ['from_datetime', 'duration', 'data_freshness'].concat(_paramValueEverywhere).sort();
+var _schedulesParams = ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort();
+var _placesParams = ['q', 'type[]', 'admin_uri[]'].concat(_paramValueEverywhere).sort();
 
 var autocomplete = {
     autocompleteTree: {
         pathKey: {
             empty : ['coverage', 'places', 'coord'],
-            all : ['addresses',
-            'commercial_modes',
-            'companies',
-            'coverage',
-            'disruptions',
-            'lines',
-            'networks',
-            'places',
-            'poi_types',
-            'pois',
-            'physical_modes',
-            'routes',
-            'stop_areas',
-            'stop_points',
-            'vehicles_journeys',
-            ].sort(),
+            all : _collections,
         },
         features: {
-            all: ['addresses',
-            'commercial_modes',
-            'companies',
-            'coverage',
-            'departures',
-            'disruptions',
-            'journeys',
-            'lines',
-            'networks',
-            'places_nearby',
-            'places',
-            'poi_types',
-            'pois',
-            'physical_modes',
-            'pt_objects',
-            'route_schedules',
-            'routes',
-            'stop_areas',
-            'stop_points',
-            'stop_schedules',
-            'vehicles_journeys',
-            ].sort(),
+            all: _collections.concat(_additionalFeatures).sort(),
         },
         paramKey: {
+            arrivals: _depArrParams,
             coord: _paramValueEverywhere,
             coverage: _paramValueEverywhere,
-            departures: ['from_datetime', 'duration', 'data_freshness'].concat(_paramValueEverywhere).sort(),
-            journeys: ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'data_freshness'].concat(_paramValueEverywhere).sort(),
+            departures: _depArrParams,
+            journeys: ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'data_freshness',
+            'first_section_mode[]', 'last_sectoin_mode[]'].concat(_paramValueEverywhere).sort(),
             lines: _paramValueEverywhere,
-            places_nearby: ['distance', 'type[]', 'admin_uri[]', 'filter'].concat(_paramValueEverywhere).sort(),
-            places: ['q', 'type[]', 'admin_uri[]'].concat(_paramValueEverywhere).sort(),
-            pois: ['distance'].concat(_paramValueEverywhere),
+            places_nearby: _placesParams.sort(),
+            places: _placesParams,
+            pois: ['distance'].concat(_paramValueEverywhere).sort(),
             pt_objects: ['q', 'type[]'].concat(_paramValueEverywhere),
             stop_areas: _paramValueEverywhere,
             stop_points: _paramValueEverywhere,
             routes: _paramValueEverywhere,
-            route_schedules: ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort(),
-            stop_schedules: ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort(),
+            route_schedules: _schedulesParams,
+            stop_schedules: _schedulesParams,
         },
         paramValue : {
             traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'].sort(),
