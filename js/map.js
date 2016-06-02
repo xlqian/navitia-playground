@@ -8,7 +8,9 @@ var map = {
                 case 'car': color = map.carColor; break;
                 }
             }
-            return map._makeString('section', json, color);
+
+            return map._makeString('section', json, color)
+                .concat(map._makeStopTimesMarker(json));
         },
         line: function(json) {
             return map._makeString('line', json, json);
@@ -29,10 +31,7 @@ var map = {
             return map._makeMarker('stop_point', json);
         },
         place: function(json) {
-            return [
-                L.marker([json[json.embedded_type].coord.lat, json[json.embedded_type].coord.lon])
-                    .bindPopup(summary.run(new Context(json), 'place', json))
-            ];
+            return map._makeMarker('place', json);
         },
         poi: function(json) {
             return map._makeMarker('poi', json);
@@ -81,7 +80,21 @@ var map = {
     },
 
     _makeMarker: function(type, json) {
-        return [L.marker([json.coord.lat, json.coord.lon]).bindPopup(summary.run(new Context(json), type, json))];
+        var lat, lon;
+        switch (type){
+            case 'stop_time':
+                lat = json.stop_point.coord.lat;
+                lon = json.stop_point.coord.lon;
+                break;
+            case 'place':
+                lat = json[json.embedded_type].coord.lat;
+                lon = json[json.embedded_type].coord.lon;
+                break;
+            default:
+                lat = json.coord.lat;
+                lon = json.coord.lon;
+        }
+        return [L.marker([lat, lon]).bindPopup(summary.run(new Context(json), type, json))];
     },
 
     bikeColor: { color: 'CED480' },
@@ -110,5 +123,24 @@ var map = {
                 }
             }).bindPopup(summary.run(new Context(), type, json))
         ];
+    },
+    _makeStopTimesMarker: function(json) {
+        var stopTimes = json['stop_date_times'];
+        var markers = []
+
+        if (stopTimes) {
+            // when section is PT
+            stopTimes.forEach(function(st) {
+                markers = markers.concat(map._makeMarker('stop_time', st));
+            });
+        } else {
+            // when section is Walking
+            var from = json.from;
+            var to = json.to;
+            if (! from || ! to) { return markers; }
+            markers = markers.concat(map._makeMarker('place', from))
+                            .concat(map._makeMarker('place', to));
+        }
+        return markers;
     }
 };
