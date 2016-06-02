@@ -9,6 +9,9 @@ var _depArrParams = ['from_datetime', 'duration', 'data_freshness'].concat(_para
 var _schedulesParams = ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort();
 var _placesParams = ['q', 'type[]', 'admin_uri[]'].concat(_paramValueEverywhere).sort();
 
+// ParamValue
+var _fallbackMode = ['walking', 'car', 'bike', 'bss'].sort();
+
 var autocomplete = {
     autocompleteTree: {
         pathKey: {
@@ -39,6 +42,8 @@ var autocomplete = {
         paramValue : {
             traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'].sort(),
             datetime_represents : ['arrival', 'departure'].sort(),
+            'first_section_mode[]': _fallbackMode,
+            'last_section_mode[]': _fallbackMode,            
         }
     },
     valueAutoComplete: function (input, key) {
