@@ -125,6 +125,9 @@ $(document).ready(function() {
             $('#data').html(render(new Context(data), data, 'response', 'response'));
             $('#data input').first().click();
             saveToken(request.api, request.token);
+            // update the drop list of autocompletion for API
+            autocomplete.apiAutocomplete();
+            autocomplete.tokenAutocomplete();
         },
         function(xhr, status, error) {
             setStatus(xhr);

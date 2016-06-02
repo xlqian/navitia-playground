@@ -238,6 +238,8 @@ $(document).ready(function() {
     autocomplete.addKeyAutocomplete($('#featureInput'), 'features');
     autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
     autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
+    autocomplete.apiAutocomplete();
+    autocomplete.tokenAutocomplete();
 
     updateUrl(null);
 });
