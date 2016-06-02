@@ -1,38 +1,19 @@
 var map = {
     makeFeatures: {
         section: function(json) {
-
-            if (!( "geojson" in json)) {
-               return [];
+            var color = json.display_informations;
+            if (json.type === 'street_network') {
+                switch (json.mode) {
+                case 'bike': color = map.bikeColor; break;
+                case 'car': color = map.carColor; break;
+                }
             }
-            return [
-                L.geoJson(json.geojson, {
-                    style: function() {
-                        var color = '#fff';
-                        if ("display_informations" in json) {
-                            color = getTextColor(json.display_informations);
-                        }
-                        return {
-                            color: color,
-                            weight: 6,
-                            opacity: 1
-                        };
-                    }
-                }),
-                L.geoJson(json.geojson, {
-                    style: function() {
-                        var color = '#008ACA';
-                        if ("display_informations" in json) {
-                            color = "#" + json.display_informations.color;
-                        }
-                        return {
-                            color: color,
-                            weight: 5,
-                            opacity: 1
-                        };
-                    }
-                })
-            ].concat(map._makeStopTimesMarker(json));
+
+            return map._makeString('section', json, color)
+                .concat(map._makeStopTimesMarker(json));
+        },
+        line: function(json) {
+            return map._makeString('line', json, json);
         },
         journey: function(json) {
             return flatMap(json.sections, map.makeFeatures.section);
@@ -112,16 +93,48 @@ var map = {
         }
         return [L.marker([lat, lon]).bindPopup(summary.run(new Context(json), type, json))];
     },
+
+    bikeColor: { color: 'CED480' },
+    carColor: { color: 'EFBF8F' },
+
+    _makeString: function(type, json, colorJson) {
+        if (! ( "geojson" in json) || ! json.geojson.coordinates.length) {
+            return [];
+        }
+        if (! (colorJson instanceof Object) || ! ('color' in colorJson)) {
+            colorJson = { color: '89C6E5' };
+        }
+        return [
+            L.geoJson(json.geojson, {
+                style: {
+                    color: getTextColor(colorJson),
+                    weight: 6,
+                    opacity: 1
+                }
+            }),
+            L.geoJson(json.geojson, {
+                style: {
+                    color: "#" + colorJson.color,
+                    weight: 5,
+                    opacity: 1
+                }
+            }).bindPopup(summary.run(new Context(), type, json))
+        ];
+    },
     _makeStopTimesMarker: function(json) {
         var stopTimes = json['stop_date_times'];
         var markers = []
+
         if (stopTimes) {
+            // when section is PT
             stopTimes.forEach(function(st) {
                 markers = markers.concat(map._makeMarker('stop_time', st));
             });
         } else {
-            var from = json['from'];
-            var to = json['to'];
+            // when section is Walking
+            var from = json.from;
+            var to = json.to;
+            if (! from || ! to) { return markers; }
             markers = markers.concat(map._makeMarker(from.embedded_type, from[from.embedded_type]))
                             .concat(map._makeMarker(to.embedded_type, to[to.embedded_type]));
         }
