@@ -54,6 +54,38 @@ div.object {
     div.leaflet {
         height: 80vh;
     }
+    
+    div.table {
+        overflow-x: auto;
+        padding: 1ex 0 1ex 2ex;
+            
+        table {
+            background-color: white;
+            border-spacing: 0;
+            border-collapse: collapse;
+            text-align: center;
+      
+            th {
+                font-weight: bold;
+                padding: 0.5ex;
+                border: 0.1ex solid $gray;
+                color: inherit;
+            }
+             
+            td {
+                padding: 0.5ex;
+                border: 0.1ex solid $gray;
+            }
+            
+            td.stop-point {
+                text-align: right;
+            }
+            
+            td.time {
+                text-align: left;
+            }
+        }
+    }
 }
 
 #data > div {

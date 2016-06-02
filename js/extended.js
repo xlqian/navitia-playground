@@ -37,6 +37,26 @@ extended.make.stop_schedule = function(context, json) {
     return result;
 }
 
+extended.make.route_schedule = function(context, json) {
+    var result = $('<div class="table"/>');
+    var table = $('<table/>');
+    // Add the data rows
+    json.table.rows.forEach(function(route_schedule, i) {
+        var row = $('<tr/>');
+        var cellName = $('<td />').addClass('stop-point');
+        cellName.html(summary.run(context, 'stop_point', route_schedule.stop_point));
+        row.append(cellName);
+        route_schedule.date_times.forEach(function(route_schedule, i) {
+            var cellValue = $('<td />').addClass('time');
+            cellValue.html(summary.formatTime(route_schedule.date_time));
+            row.append(cellValue);
+        });
+        table.append(row);
+    });
+    result.append(table);
+    return result;
+}
+
 // add your extended view by addind:
 //   extended.make.{type} = function(context, json) { ... }
 
@@ -50,13 +70,12 @@ extended.defaultExtended = function(context, type, json) {
     for (var key in context.links) {
         if (! (key in json)) { continue; }
         empty = false;
-        var type = getType(key);
         if ($.isArray(json[key])) {
             json[key].forEach(function(obj, i) {
-                result.append(render(context, obj, type, key, i));
+                result.append(render(context, obj, getType(key), key, i));
             });
         } else {
-            result.append(render(context, json[key], type, key));
+            result.append(render(context, json[key], getType(key), key));
         }
     }
     if (empty) {
