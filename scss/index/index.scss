@@ -1,55 +1,11 @@
 @import '../defs';
 @import '../global';
-
-body {
-    background-color: #Fff;
-    margin: 0;
-    font-family: 'OpenSans', sans-serif;
-    font-size: 100%;
-    color: #4e4e4e;
-    background: #EFEFEF;
-}
-
-header{
-    display: flex;
-    flex-flow: row wrap;
-    width: 100%;
-    margin: 0; 
-    background: #FFF;
-    border-bottom: 0.063em solid #EFEFEF;
-}
-
-#back{
-    width: 30em;
-    margin: 0 2em 0 0;
-}
-
-#doc{
-    width: 5em;
-    height: 2.8ex;
-    margin: 0;
-    padding: 2.6em 0 0 0;
-    text-transform: uppercase;
-    border-top: solid 0.4em #fff;
-    font-size: 80%;
-}
-
-#doc:hover{
-    border-top: solid 0.4em #56B5DB;
-    color: #353535; 
-}
-
-#picto{
-    float: left;
-    height: 2ex;
-    width: 2ex;
-    padding: 0;
-    margin: 0.2em 1em 0 0;
-}
+@import '../header';
 
 #raw{ 
     display: flex;
     width: 100%;
+    height: auto;
     flex-flow: row wrap;
 }
 
@@ -61,17 +17,12 @@ header{
     padding: 0;
 }
 
-img{
-    display: block;
+#krakensuperhero{
+    display: flex;
+    flex-flow: row;
     margin: 0 auto;
-    width: 4em;
-    height: 4em;
-}
-
-#pro{
-    width: 15.625em;
-    height: 8.438em;
-    margin: 0 auto;
+    width: 21.875em;
+    height: 11.813em;
     padding: 2em 0 1em 0;
 }
 
@@ -95,6 +46,11 @@ h3{
     text-align: center;
 }
 
+.pictofeatures{
+    height: 4em;
+    width: 4em;
+}
+
 .rubriques{
     display: flex;
     flex-direction: column; 
@@ -112,7 +68,6 @@ a{
     display: list-item;
     list-style-type: none;
     font-family: 'OpenSans', sans-serif;
-    font-size: 90%;
     text-decoration: none;
     text-align: left;
     padding: 0.5em 1em 0.5em 2em;
@@ -144,16 +99,44 @@ PRO
 }
 
 #urlDiv.inputDiv{
-    margin: 2em 3em;
+    margin: 1.2em 2.5em;
     width: auto;
 }
 
 #or{
-    width: 100%; 
+    display: flex;
+    flex-flow: row;
+    margin: 0 auto;
+}
+
+#playground{
+    color: #FFF; 
+    text-align: center;
+    margin: 0;
+}
+
+#ou{
+    text-align: center;
 }
 
 button{
-    margin: 0 1.5em;
+    margin: 0 auto;
+}
+
+footer p{
+    margin: 0;
+    background: #353535;
+    color: #aaaaaa;
+    font-size: 80%;
+    text-align: center;
+    padding: 1em 0;
+}
+
+footer{
+    position: fixed;
+    bottom: 0em;
+    width: 100%;
+
 }
 /* ---------------------------------
 RESPONSIVE
@@ -163,8 +146,3 @@ RESPONSIVE
         width: 100%;
     }
 }
-
-
-
-
-
