@@ -1,5 +1,12 @@
 var map = {
     makeFeatures: {
+        region: function(json) {
+            if (json.shape) {
+                var geoJsonShape = wkt2geojson(json.shape);
+                return map._makePolygon('region', geoJsonShape, json);
+            }
+            return [];
+        },
         section: function(json) {
             var color = json.display_informations;
             if (json.type === 'street_network') {
@@ -142,5 +149,16 @@ var map = {
                             .concat(map._makeMarker('place', to));
         }
         return markers;
+    },
+    _makePolygon: function(type, geoJsonCoords, json) {
+        return [
+            L.geoJson(geoJsonCoords, {
+                color: '#0000FF',
+                opacity: 1.0,
+                weight: 3,
+                fillColor: '#0000FF',
+                fillOpacity: 0.35
+            }).bindPopup(summary.run(new Context(), type, json))
+        ];         
     }
 };

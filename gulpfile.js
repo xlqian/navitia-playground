@@ -74,6 +74,7 @@ function compile_vendor_js(env){
             '**/sprintf/src/sprintf.js',
             '**/leaflet/dist/leaflet-src.js',
             '**/notifyjs/dist/notify.js',
+            '**/wkt2geojson/wkt2geojson.js',
             '!**/*.min.js']))
             .pipe(concat('lib.min.js'))
             .pipe(gulpif(isProd(env),uglify()))
