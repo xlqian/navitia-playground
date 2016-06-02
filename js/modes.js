@@ -2,7 +2,6 @@ var modes = {};
 
 modes.makePicto = function(json) {
     if ($.isArray(json)) {
-        console.log(json);
         var res = $('<span/>');
         json.forEach(function(elt) {
             res.append(modes.makePicto(elt));

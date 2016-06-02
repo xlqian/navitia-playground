@@ -180,7 +180,6 @@ summary.make.route_schedule = function(context, json) {
 };
 
 summary.make.physical_mode = function(context, json) {
-    console.log(json);
     return $('<span/>')
         .append(modes.makePicto(json))
         .append(document.createTextNode(' ' + json.name));
@@ -201,7 +200,6 @@ summary.defaultSummary = function(context, type, json) {
 
     var res = $('<span/>');
     if ('physical_modes' in json && $.isArray(json.physical_modes)) {
-        console.log(json.physical_modes);
         json.physical_modes.forEach(function(mode) {
             res.append(modes.makePicto(mode));
         });
