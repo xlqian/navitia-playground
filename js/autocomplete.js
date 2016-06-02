@@ -1,8 +1,10 @@
 var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]'];
-var _pathAll = ['addresses', 'commercial_modes', 'companies', 'coverage', 'disruptions', 'lines', 'networks', 'places',
-               'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicles_journeys', ];
-var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules'];
+var _collections = ['addresses', 'commercial_modes', 'companies', 'coverage', 'disruptions', 'lines', 'networks', 'places',
+               'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicles_journeys', ].sort();
+var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
+                            'arrivals', 'places'];
 
+// ParamKey
 var _depArrParams = ['from_datetime', 'duration', 'data_freshness'].concat(_paramValueEverywhere).sort();
 var _schedulesParams = ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort();
 var _placesParams = ['q', 'type[]', 'admin_uri[]'].concat(_paramValueEverywhere).sort();
@@ -12,17 +14,18 @@ var autocomplete = {
     autocompleteTree: {
         pathKey: {
             empty : ['coverage', 'places', 'coord'],
-            all : _pathAll.sort(),
+            all : _collections,
         },
         features: {
-            all: _pathAll.concat(_additionalFeatures).sort(),
+            all: _collections.concat(_additionalFeatures).sort(),
         },
         paramKey: {
+            arrivals: _depArrParams,
             coord: _paramValueEverywhere,
             coverage: _paramValueEverywhere,
             departures: _depArrParams,
-            arrivals: _depArrParams,
-            journeys: ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'data_freshness'].concat(_paramValueEverywhere).sort(),
+            journeys: ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'data_freshness',
+            'first_section_mode[]', 'last_sectoin_mode[]'].concat(_paramValueEverywhere).sort(),
             lines: _paramValueEverywhere,
             places_nearby: _placesParams.concat(_filter).sort(),
             places: _placesParams,
