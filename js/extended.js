@@ -42,7 +42,7 @@ extended.make.route_schedule = function(context, json) {
     var table = $('<table/>');
     // Add the data rows
     json.table.rows.forEach(function(route_schedule, i) {
-        var row = $(table[0].insertRow(-1));
+        var row = $('<tr/>');
         var cellName = $('<td />').addClass('stop-point');
         cellName.html(summary.run(context, 'stop_point', route_schedule.stop_point));
         row.append(cellName);
