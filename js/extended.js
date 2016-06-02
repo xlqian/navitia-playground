@@ -69,13 +69,12 @@ extended.defaultExtended = function(context, type, json) {
     for (var key in context.links) {
         if (! (key in json)) { continue; }
         empty = false;
-        var type = getType(key);
         if ($.isArray(json[key])) {
             json[key].forEach(function(obj, i) {
-                result.append(render(context, obj, type, key, i));
+                result.append(render(context, obj, getType(key), key, i));
             });
         } else {
-            result.append(render(context, json[key], type, key));
+            result.append(render(context, json[key], getType(key), key));
         }
     }
     if (empty) {
