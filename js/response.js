@@ -78,13 +78,14 @@ function Context(data) {
     var templateRegex = /\{.*\.id\}/;
 
     // the link map: type -> template
-    var links = {};
+    this.links = {};
     if (data instanceof Object && 'links' in data && $.isArray(data.links)) {
+        var self = this;
         data.links.forEach(function(link) {
             if (! link.templated) { return; }
             if (link.type === 'related') { return; }
             if (! link.href.match(templateRegex)) { return; }
-            links[link.type] = link.href;
+            self.links[link.type] = link.href;
         });
     }
 
@@ -97,10 +98,10 @@ function Context(data) {
     };
 
     this.makeLink = function(key, obj, name) {
-        if (! (key in links) || ! ('id' in obj)) {
+        if (! (key in this.links) || ! ('id' in obj)) {
             return $(document.createTextNode(name));
         }
-        var href = links[key].replace(templateRegex, obj.id);
+        var href = this.links[key].replace(templateRegex, obj.id);
         return $('<a>').attr('href', this.makeHref(href)).text(name);
     };
 }
