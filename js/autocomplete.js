@@ -70,7 +70,7 @@ var autocomplete = {
         }
     },
     addKeyAutocomplete: function(input, type) {
-        var  source = [];
+        var source;
         if (type === 'pathKey' && ! $('#pathFrame').find('.value').length) {
             source = this.autocompleteTree[type].empty;
         } else if (type === 'paramKey'){
@@ -79,17 +79,11 @@ var autocomplete = {
         } else {
             source = this.autocompleteTree[type].all;
         }
-        $(input).autocomplete({
-            source: source,
-            minLength: 0,
-            scroll: true,
-            delay: 500,
-            select: function (event, ui) {
-                $(input).val(ui.item.value).change();
-            }
-        }).focus(function() {
-            $(this).autocomplete('search', '');
-        });
+        source = source || [];
+        autocomplete._customAutocompleteHelper(input, source,
+            {
+                select: function(event, ui) { $(input).val(ui.item.value).change(); }
+            });
     },
     staticAutocompleteTypes: ['coverage',
         'physical_modes',
