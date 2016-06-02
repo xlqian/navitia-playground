@@ -10,28 +10,28 @@ body {
     background: #EFEFEF;
 }
 
-header{
-    display: flex;
-    flex-flow: row wrap;
-    width: 100%;
-    margin: 0; 
-    background: #FFF;
-    border-bottom: 0.063em solid #EFEFEF;
+#back{
+    padding: 0; 
 }
 
-#back{
-    width: 30em;
-    margin: 0 2em 0 0;
+#logo{
+    width: 26.563em;
+    margin: 0.8em 0;
+}
+
+#picto{
+    float: left;
+    height: 3ex;
+    width: 3ex;
+    margin: 0;
+    padding-top: 1.8em;
 }
 
 #doc{
-    width: 5em;
-    height: 2.8ex;
-    margin: 0;
-    padding: 2.6em 0 0 0;
+    float: left;
+    padding: 1.8em 2em 0 1em; 
+    border-top: solid 0.4em #ffffff;
     text-transform: uppercase;
-    border-top: solid 0.4em #fff;
-    font-size: 80%;
 }
 
 #doc:hover{
@@ -39,17 +39,25 @@ header{
     color: #353535; 
 }
 
-#picto{
-    float: left;
-    height: 2ex;
-    width: 2ex;
+#header{
+    width: 100%;
     padding: 0;
-    margin: 0.2em 1em 0 0;
+    margin: 0;
+    background: #FFF;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    border-bottom: solid 0.15em #F5F5F5;
+}
+
+li{
+    list-style: none;
 }
 
 #raw{ 
     display: flex;
     width: 100%;
+    height: auto;
     flex-flow: row wrap;
 }
 
@@ -144,16 +152,44 @@ PRO
 }
 
 #urlDiv.inputDiv{
-    margin: 2em 3em;
+    margin: 1.2em 2.5em;
     width: auto;
 }
 
 #or{
-    width: 100%; 
+    display: flex;
+    flex-flow: row;
+    margin: 0 auto;
+}
+
+#playground{
+    color: #FFF; 
+    text-align: center;
+    margin: 0;
+}
+
+#ou{
+    text-align: center;
 }
 
 button{
-    margin: 0 1.5em;
+    margin: 0 auto;
+}
+
+footer p{
+    margin: 0;
+    background: #353535;
+    color: #aaaaaa;
+    font-size: 80%;
+    text-align: center;
+    padding: 1em 0;
+}
+
+footer{
+    position: fixed;
+    bottom: 0em;
+    width: 100%;
+
 }
 /* ---------------------------------
 RESPONSIVE
@@ -164,7 +200,35 @@ RESPONSIVE
     }
 }
 
+@media screen and (max-width:62em) {
+    #urlheader{
+        display: none;
+    }
+}
 
-
-
-
+@media screen and (max-width:33.438em) {
+    #header{
+        flex-direction: column;
+    }
+    #logo{
+        float: left;
+        margin: 0 0 0 1em;
+        width: 15em;
+    }
+    #picto{
+        height: 2.5ex;
+        width: 2.5ex;
+        margin: 0 auto;
+        padding: 0.5em 0.2em 0 1.3em;  
+    }
+    #doc{
+        padding: 0.5em 1em 1em 1em;
+        margin: 0 auto; 
+        border-bottom: solid 0.4em #ffffff;
+        border-top: none;
+    }
+    #doc:hover{
+        border-bottom: solid 0.4em #56B5DB;
+        border-top: none;
+    }
+}

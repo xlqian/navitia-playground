@@ -11,17 +11,29 @@
     </head>
 </html>
 
-	<body>
-    <header>
-    	<a id="back" href="index.html" title="Go to Homepage">
-    		<img id="logo" src="img/logo_transitoire.png" alt="Logo">
-    	</a>
-    	<a id="doc" href="http://doc.navitia.io.html" title="Go to the documentation">
-    		<img id="picto" src="img/picto_doc.svg" alt="picto documentation">
-    		doc
-    	</a>
+<body><!-- alias site-container -->
+    <ul id="header">
+	    <li><a id="back" href="index.html" title="Go to Homepage">
+	    		<img id="logo" src="img/logo_nplaygournd.svg" alt="Logo">
+	    	</a>
+	    </li>
+	    <li>
+		    <img id="picto" src="img/picto_doc.svg" alt="picto documentation">
+		    <a id="doc" href="http://doc.navitia.io" title="Go to Navitia documentation">
+		    		doc
+		    </a>
+		</li>
+		<li id="urlheader">
+			<form action='apihm.html' method='get'>
+				<div id="urlDiv" class="inputDiv">
+		        <div class="key">URL</div>
+		        	<input id="urlinput" name="request" type="text">
+		           	<button>go</button>
+		        </div>
+			</form> 
+  		</li>
+    </ul>
 
-    </header>
 	<div id="raw">
 		<div class="col">
 			<h2>You’re beginner? Use templated examples</h2>
@@ -69,18 +81,24 @@
 		<div id='urlForm'><!-- url -->
 			<h2>Or, you’re an expert?</h2>
 			<img id="pro" src='img/visuel_pro.png'>
-			<form action='' method='get'>
+			<form action='apihm.html' method='get'>
 			    <div id="urlDiv" class="inputDiv">
 	            	<div class="key">URL</div>
 	           		<input id="urlinput" name="request" type="text">
-	           		<button onclick="submit()">go</button>
+	           		<button>go</button>
 	          	</div>
-			    	
-			    <div id="or">or
-			   		<button>Start with playground</button>
+			</form> 
+				<p id="ou">or</p>
+			    <div id="or">
+			   		<button><a id="playground" href="apihm.html">Start with playground</a></button>
 			   	</div>
-			</form>
+			
 		</div><!-- url -->
 	</div><!-- raw -->
+
+	<footer>
+		<p>All rights restricted © Copyright Canal TP 2016</p>
+	</footer>
+
 	</body>
 </html>
