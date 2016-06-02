@@ -1,21 +1,7 @@
 var map = {
     makeFeatures: {
         section: function(json) {
-            var makeStopTimesMarker = function() {
-                var stopTimes = json['stop_date_times'];
-                var markers = []
-                if (stopTimes) {
-                    stopTimes.forEach(function(st) {
-                        markers = markers.concat(map._makeMarker('stop_time', st));
-                    });
-                } else {
-                    var from = json['from'];
-                    var to = json['to'];
-                    markers = markers.concat(map._makeMarker(from.embedded_type, from[from.embedded_type]))
-                                    .concat(map._makeMarker(to.embedded_type, to[to.embedded_type]));
-                }
-                return markers;
-            };
+
             if (!( "geojson" in json)) {
                return [];
             }
@@ -46,7 +32,7 @@ var map = {
                         };
                     }
                 })
-            ].concat(makeStopTimesMarker());
+            ].concat(map._makeStopTimesMarker(json));
         },
         journey: function(json) {
             return flatMap(json.sections, map.makeFeatures.section);
@@ -126,4 +112,19 @@ var map = {
         }
         return [L.marker([lat, lon]).bindPopup(summary.run(new Context(json), type, json))];
     },
+    _makeStopTimesMarker: function(json) {
+        var stopTimes = json['stop_date_times'];
+        var markers = []
+        if (stopTimes) {
+            stopTimes.forEach(function(st) {
+                markers = markers.concat(map._makeMarker('stop_time', st));
+            });
+        } else {
+            var from = json['from'];
+            var to = json['to'];
+            markers = markers.concat(map._makeMarker(from.embedded_type, from[from.embedded_type]))
+                            .concat(map._makeMarker(to.embedded_type, to[to.embedded_type]));
+        }
+        return markers;
+    }
 };
