@@ -1,7 +1,14 @@
 var map = {
     makeFeatures: {
         section: function(json) {
-            return map._makeString('section', json, json.display_informations);
+            var color = json.display_informations;
+            if (json.type === 'street_network') {
+                switch (json.mode) {
+                case 'bike': color = map.bikeColor; break;
+                case 'car': color = map.carColor; break;
+                }
+            }
+            return map._makeString('section', json, color);
         },
         line: function(json) {
             return map._makeString('line', json, json);
@@ -77,31 +84,29 @@ var map = {
         return [L.marker([json.coord.lat, json.coord.lon]).bindPopup(summary.run(new Context(json), type, json))];
     },
 
+    bikeColor: { color: 'CED480' },
+    carColor: { color: 'EFBF8F' },
+
     _makeString: function(type, json, colorJson) {
         if (! ( "geojson" in json) || ! json.geojson.coordinates.length) {
             return [];
         }
         if (! (colorJson instanceof Object) || ! ('color' in colorJson)) {
-            colorJson = { color: '008ACA' };
+            colorJson = { color: '89C6E5' };
         }
         return [
             L.geoJson(json.geojson, {
-                style: function() {
-                    return {
-                        color: getTextColor(colorJson),
-                        weight: 6,
-                        opacity: 1
-                    };
+                style: {
+                    color: getTextColor(colorJson),
+                    weight: 6,
+                    opacity: 1
                 }
             }),
             L.geoJson(json.geojson, {
-                style: function() {
-                    var color = "#" + colorJson.color;
-                    return {
-                        color: color,
-                        weight: 5,
-                        opacity: 1
-                    };
+                style: {
+                    color: "#" + colorJson.color,
+                    weight: 5,
+                    opacity: 1
                 }
             }).bindPopup(summary.run(new Context(), type, json))
         ];
