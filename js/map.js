@@ -3,11 +3,7 @@ var map = {
         region: function(json) {
             if (json.shape) {
                 var geoJsonShape = wkt2geojson(json.shape);
-                var geoJsonCoords = geoJsonShape.coordinates[0];
-                geoJsonCoords.forEach(function(coord) {
-                    coord[0] = [coord[1], coord[1] = coord[0]][0];
-                }); 
-                return map._makePolygon('region', geoJsonCoords, json);
+                return map._makePolygon('region', geoJsonShape, json);
             }
             return [];
         },
@@ -155,8 +151,14 @@ var map = {
         return markers;
     },
     _makePolygon: function(type, geoJsonCoords, json) {
-        var polygon = L.polygon(geoJsonCoords).bindPopup(summary.run(new Context(), type, json));
-        return [polygon];
-                
+        return [
+            L.geoJson(geoJsonCoords, {
+                color: '#0000FF',
+                opacity: 1.0,
+                weight: 3,
+                fillColor: '#0000FF',
+                fillOpacity: 0.35
+            }).bindPopup(summary.run(new Context(), type, json))
+        ];         
     }
 };
