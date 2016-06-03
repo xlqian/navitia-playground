@@ -52,7 +52,7 @@ function render(context, json, type, key, idx) {
                     return extended.run(context, type, json);
                 })))
                 .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
-                    return map.run(type, json, context);
+                    return map.run(context, type, json);
                 })))
                 .append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
                     return renderjson(json);

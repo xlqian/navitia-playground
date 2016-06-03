@@ -7,7 +7,7 @@ var map = {
             }
             return [];
         },
-        section: function(json, context) {
+        section: function(context, json) {
             var color = json.display_informations;
             if (json.type === 'street_network') {
                 switch (json.mode) {
@@ -15,37 +15,37 @@ var map = {
                 case 'car': color = map.carColor; break;
                 }
             }
-            return map._makeString('section', json, color, context)
-                .concat(map._makeStopTimesMarker(json, context));
+            return map._makeString(context, 'section', json, color)
+                .concat(map._makeStopTimesMarker(context, json));
         },
-        line: function(json, context) {
-            return map._makeString('line', json, json, context);
+        line: function(context, json) {
+            return map._makeString(text, 'line', json, json);
         },
-        journey: function(json, context) {
+        journey: function(context, json) {
             var bind = function(s) {
-                return map.makeFeatures.section(s, context);
+                return map.makeFeatures.section(context, s);
             }
             return flatMap(json.sections, bind);
         },
-        address: function(json, context) {
-            return map._makeMarker('address', json, context);
+        address: function(context, json) {
+            return map._makeMarker(context, 'address', json);
         },
-        administrative_region: function(json, context) {
+        administrative_region: function(context, json) {
             return map._makeMarker('administrative_region', json);
         },
-        stop_area: function(json, context) {
-            return map._makeMarker('stop_area', json, context);
+        stop_area: function(context, json) {
+            return map._makeMarker(context, 'stop_area', json);
         },
-        stop_point: function(json, context) {
-            return map._makeMarker('stop_point', json, context);
+        stop_point: function(context, json) {
+            return map._makeMarker(context, 'stop_point', json);
         },
-        place: function(json, context) {
-            return map._makeMarker('place', json, context);
+        place: function(context, json) {
+            return map._makeMarker(context, 'place', json);
         },
-        poi: function(json, context) {
-            return map._makeMarker('poi', json, context);
+        poi: function(context, json) {
+            return map._makeMarker(context, 'poi', json);
         },
-        response: function(json, context) {
+        response: function(context, json) {
             var key = responseCollectionName(json);
             if (key === null) {
                 return [];
@@ -55,19 +55,19 @@ var map = {
                 return [];
             }
             var bind = function(s) {
-                return map.makeFeatures[type](s, context);
+                return map.makeFeatures[type](context, s);
             }
             return flatMap(json[key], bind);
         }
     },
 
-    run: function(type, json, context) {
+    run: function(context, type, json) {
         var div = $('<div/>');
         // setting for default path of images used by leaflet
         L.Icon.Default.imagePath='lib/img/leaflet/dist/images';
         var features = [];
         if (map.makeFeatures[type] instanceof Function &&
-            (features = map.makeFeatures[type](json, context)).length) {
+            (features = map.makeFeatures[type](context, json)).length) {
             div.addClass('leaflet');
             var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
             mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
@@ -91,7 +91,7 @@ var map = {
         return div;
     },
 
-    _makeMarker: function(type, json, context) {
+    _makeMarker: function(context, type, json) {
         var lat, lon;
         var obj = json;
         switch (type){
@@ -111,19 +111,20 @@ var map = {
         var sum = summary.run(context, type, json);
         var linkType = map._getLinkType(type, json);
 
-        return [L.marker([lat, lon]).bindPopup(map._makeLink(linkType, obj, sum, context )[0])];
+        return [L.marker([lat, lon]).bindPopup(map._makeLink(context, linkType, obj, sum)[0])];
     },
 
     bikeColor: { color: 'CED480' },
     carColor: { color: 'EFBF8F' },
 
-    _makeString: function(type, json, colorJson, context) {
+    _makeString: function(context, type, json, colorJson) {
         if (! ( "geojson" in json) || ! json.geojson.coordinates.length) {
             return [];
         }
         if (! (colorJson instanceof Object) || ! ('color' in colorJson)) {
             colorJson = { color: '89C6E5' };
         }
+        var sum = summary.run(context, type, json);
         return [
             L.geoJson(json.geojson, {
                 style: {
@@ -138,25 +139,25 @@ var map = {
                     weight: 5,
                     opacity: 1
                 }
-            }).bindPopup(summary.run(context, type, json))
+            }).bindPopup(sum)
         ];
     },
-    _makeStopTimesMarker: function(json, context) {
+    _makeStopTimesMarker: function(context, json) {
         var stopTimes = json['stop_date_times'];
         var markers = []
 
         if (stopTimes) {
             // when section is PT
             stopTimes.forEach(function(st) {
-                markers = markers.concat(map._makeMarker('stop_date_time', st, context));
+                markers = markers.concat(map._makeMarker(context, 'stop_date_time', st));
             });
         } else {
             // when section is Walking
             var from = json.from;
             var to = json.to;
             if (! from || ! to) { return markers; }
-            markers = markers.concat(map._makeMarker('place', from, context))
-                            .concat(map._makeMarker('place', to, context));
+            markers = markers.concat(map._makeMarker(context, 'place', from))
+                            .concat(map._makeMarker(context, 'place', to));
         }
         return markers;
     },
@@ -171,7 +172,7 @@ var map = {
             }).bindPopup(summary.run(new Context(), type, json))
         ];
     },
-    _makeLink: function(type, obj, name, context) {
+    _makeLink: function(context, type, obj, name) {
         return context.makeLink(type, obj, name);
     },
     _getLinkType: function(type, json) {
