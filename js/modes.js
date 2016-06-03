@@ -62,7 +62,7 @@ modes.makeSnPicto = function(mode) {
         img = 'Walking';
     } else if (mode === 'bike') {
         img = 'Bike';
-    } else if (mode.startsWith('bss')) {
+    } else if (mode.indexOf('bss') === 0) {
         img = 'BikeSharingService';
     } else if (mode === 'car' || mode === 'park' || mode === 'leave_parking') {
         img = 'Car';
