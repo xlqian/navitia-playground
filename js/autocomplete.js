@@ -43,7 +43,7 @@ var autocomplete = {
             traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'].sort(),
             datetime_represents : ['arrival', 'departure'].sort(),
             'first_section_mode[]': _fallbackMode,
-            'last_section_mode[]': _fallbackMode,            
+            'last_section_mode[]': _fallbackMode,
         }
     },
     apiAutocomplete: function() {

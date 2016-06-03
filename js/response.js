@@ -53,9 +53,9 @@ function render(context, json, type, key, idx) {
                     return extended.run(context, type, json);
                 })))
     }
-    if (map.hasMap(type, json)) {
+    if (map.hasMap(context, type, json)) {
         button.append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
-                    return map.run(type, json);
+                    return map.run(context, type, json);
                 })))
     }
     button.append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
@@ -90,7 +90,7 @@ function Context(data) {
             if (! link.templated) { return; }
             if (link.type === 'related') { return; }
             if (! link.href.match(templateRegex)) { return; }
-            self.links[link.type] = link.href;
+            self.links[getType(link.type)] = link.href;
         });
     }
 
@@ -102,12 +102,13 @@ function Context(data) {
         return res;
     };
 
-    this.makeLink = function(key, obj, name) {
+    this.makeLink = function(k, obj, name) {
+        var key = getType(k);
         if (! (key in this.links) || ! ('id' in obj)) {
-            return $(document.createTextNode(name));
+            return $(name);
         }
         var href = this.links[key].replace(templateRegex, obj.id);
-        return $('<a>').attr('href', this.makeHref(href)).text(name);
+        return $('<a>').attr('href', this.makeHref(href)).html(name);
     };
 }
 

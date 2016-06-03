@@ -142,10 +142,14 @@ summary.make.line = function(context, line) {
         .append(document.createTextNode(line.name));
 };
 
-summary.make.stop_date_time = function(context, stop_date_time) {
-    return summary.formatTime(stop_date_time.departure_date_time) +' > '
-         + summary.formatTime(stop_date_time.arrival_date_time)
-        + ' ' + summary.defaultSummary(context, 'stop_point', stop_date_time.stop_point);
+summary.make.stop_date_time = function(context, stop_time) {
+    var sum = summary.run(context, 'stop_point', stop_time.stop_point)
+    var res = $('<span>').append(summary.formatTime(stop_time.departure_date_time))
+                         .append(' > ')
+                         .append(summary.formatTime(stop_time.arrival_date_time))
+                         .append(' ') 
+                         .append(sum);
+    return res;
 };
 
 summary.make.departure = function(context, json) {
