@@ -108,10 +108,10 @@ var map = {
                 lat = json.coord.lat;
                 lon = json.coord.lon;
         };
-        var text = summary.run(context, type, json).textContent;
+        var sum = summary.run(context, type, json);
         var linkType = map._getLinkType(type, json);
 
-        return [L.marker([lat, lon]).bindPopup(map._makeLink(linkType, obj, text, context )[0])];
+        return [L.marker([lat, lon]).bindPopup(map._makeLink(linkType, obj, sum, context )[0])];
     },
 
     bikeColor: { color: 'CED480' },

@@ -102,7 +102,7 @@ function Context(data) {
             return $(document.createTextNode(name));
         }
         var href = this.links[key].replace(templateRegex, obj.id);
-        return $('<a>').attr('href', this.makeHref(href)).text(name);
+        return $('<a>').attr('href', this.makeHref(href)).html(name);
     };
 }
 
