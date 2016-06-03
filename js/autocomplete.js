@@ -1,6 +1,6 @@
 var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter'];
-var _collections = ['addresses', 'commercial_modes', 'companies', 'coverage', 'disruptions', 'lines', 'networks', 'places',
-               'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicles_journeys', ].sort();
+var _collections = ['addresses', 'commercial_modes', 'companies', 'coord', 'coverage', 'disruptions', 'lines', 'networks', 'places',
+               'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicles_journeys'].sort();
 var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
                             'arrivals', 'places'];
 
