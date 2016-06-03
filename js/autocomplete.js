@@ -27,7 +27,7 @@ var autocomplete = {
             coverage: _paramValueEverywhere,
             departures: _depArrParams,
             journeys: ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'data_freshness',
-            'first_section_mode[]', 'last_sectoin_mode[]'].concat(_paramValueEverywhere).sort(),
+            'first_section_mode[]', 'last_section_mode[]'].concat(_paramValueEverywhere).sort(),
             lines: _paramValueEverywhere,
             places_nearby: _placesParams.sort(),
             places: _placesParams,

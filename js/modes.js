@@ -1,10 +1,10 @@
 var modes = {};
 
-modes.makePicto = function(json) {
+modes.makePtPicto = function(json) {
     if ($.isArray(json)) {
         var res = $('<span/>');
         json.forEach(function(elt) {
-            res.append(modes.makePicto(elt));
+            res.append(modes.makePtPicto(elt));
         });
         return res;
     }
@@ -23,6 +23,7 @@ modes.makePicto = function(json) {
     case 'physical_mode:Metro': img = 'Metro'; break;
     case 'physical_mode:Taxi': img = 'Taxi'; break;
     case 'physical_mode:Tramway': img = 'Tramway'; break;
+    case 'physical_mode:Walking': img = 'Walking'; break;
 
     case 'physical_mode:Bus':
     case 'physical_mode:BusRapidTransit':
@@ -44,9 +45,27 @@ modes.makePicto = function(json) {
         break;
     }
 
+    return modes.makeImg(img, json.name);
+};
+
+modes.makeImg = function(img, name) {
     var tag = $('<img/>')
         .addClass('mode')
         .attr('src', sprintf('img/modes/%s.svg', img));
-    if ('name' in json) { tag.attr('alt', json.name); }
+    if (name) { tag.attr('alt', name); }
     return tag;
 };
+
+modes.makeSnPicto = function(mode) {
+    var img = 'Unknown';
+    if (mode === 'walking') {
+        img = 'Walking';
+    } else if (mode === 'bike') {
+        img = 'Bike';
+    } else if (mode.indexOf('bss') === 0) {
+        img = 'BikeSharingService';
+    } else if (mode === 'car' || mode === 'park' || mode === 'leave_parking') {
+        img = 'Car';
+    }
+    return modes.makeImg(img, mode);
+}
