@@ -76,8 +76,8 @@ extended.defaultExtended = function(context, type, json) {
     }
     var empty = true;
     var result = $('<div class="list"/>');
-    for (var key in context.links) {
-        if (! (key in json)) { continue; }
+    for (var key in json) {
+        if (! (getType(key) in context.links)) { continue; }
         empty = false;
         if ($.isArray(json[key])) {
             json[key].forEach(function(obj, i) {
