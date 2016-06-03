@@ -8,6 +8,12 @@
     padding: 0.4em;
 }
 
+img.mode {
+    vertical-align: middle;
+    height: 2em;
+}
+
+
 div.object {
     margin: 1ex 0 1ex 2ex;
     padding: 0;
@@ -75,6 +81,7 @@ div.object {
             td {
                 padding: 0.5ex;
                 border: 0.1ex solid $gray;
+                white-space: nowrap;
             }
             
             td.stop-point {
