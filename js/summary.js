@@ -254,6 +254,9 @@ summary.makeLineCode = function(display_informations) {
 };
 
 summary.makeRoutePoint = function(context, res, json) {
+    if ('route' in json) {
+        res.append(modes.makePicto(json.route.physical_modes));
+    }
     res.append(summary.makeLineCode(json.display_informations));
     res.append(' > ');
     res.append(json.display_informations.direction);
