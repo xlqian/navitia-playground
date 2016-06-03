@@ -105,7 +105,7 @@ function Context(data) {
     this.makeLink = function(k, obj, name) {
         var key = getType(k);
         if (! (key in this.links) || ! ('id' in obj)) {
-            return $(name);
+            return $('<span/>').html(name);
         }
         var href = this.links[key].replace(templateRegex, obj.id);
         return $('<a>').attr('href', this.makeHref(href)).html(name);
