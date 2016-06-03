@@ -98,7 +98,6 @@ function Context(data) {
     };
 
     this.makeLink = function(key, obj, name) {
-        console.log(this.links);
         if (! (key in this.links) || ! ('id' in obj)) {
             return $(document.createTextNode(name));
         }

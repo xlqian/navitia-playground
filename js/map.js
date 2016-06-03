@@ -7,7 +7,7 @@ var map = {
             }
             return [];
         },
-        section: function(json) {
+        section: function(json, context) {
             var color = json.display_informations;
             if (json.type === 'street_network') {
                 switch (json.mode) {
@@ -57,7 +57,6 @@ var map = {
             var bind = function(s) {
                 return map.makeFeatures[type](s, context);
             }
-
             return flatMap(json[key], bind);
         }
     },
@@ -94,10 +93,12 @@ var map = {
 
     _makeMarker: function(type, json, context) {
         var lat, lon;
+        var obj = json;
         switch (type){
-            case 'stop_time':
-                lat = json.stop_point.coord.lat;
-                lon = json.stop_point.coord.lon;
+            case 'stop_date_time':
+                obj = json.stop_point;
+                lat = obj.coord.lat;
+                lon = obj.coord.lon;
                 break;
             case 'place':
                 lat = json[json.embedded_type].coord.lat;
@@ -107,7 +108,10 @@ var map = {
                 lat = json.coord.lat;
                 lon = json.coord.lon;
         };
-        return [L.marker([lat, lon]).bindPopup(summary.run(context, 'stop_points', json))];
+        var text = summary.run(context, type, json).textContent;
+        var linkType = map._getLinkType(type, json);
+
+        return [L.marker([lat, lon]).bindPopup(map._makeLink(linkType, obj, text, context )[0])];
     },
 
     bikeColor: { color: 'CED480' },
@@ -144,7 +148,7 @@ var map = {
         if (stopTimes) {
             // when section is PT
             stopTimes.forEach(function(st) {
-                markers = markers.concat(map._makeMarker('stop_time', st, context));
+                markers = markers.concat(map._makeMarker('stop_date_time', st, context));
             });
         } else {
             // when section is Walking
@@ -165,9 +169,18 @@ var map = {
                 fillColor: '#0000FF',
                 fillOpacity: 0.35
             }).bindPopup(summary.run(new Context(), type, json))
-        ];         
+        ];
     },
     _makeLink: function(type, obj, name, context) {
-        return context.makeLink(type, obj, 'toto');
+        return context.makeLink(type, obj, name);
     },
+    _getLinkType: function(type, json) {
+        return {
+            place: json.embedded_type,
+            stop_area: 'stop_areas',
+            stop_point: 'stop_points',
+            poi: 'pois',
+            stop_date_time: 'stop_point',
+        }[type]
+    }
 };
