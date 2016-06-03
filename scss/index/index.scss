@@ -5,8 +5,9 @@
 #raw{ 
     display: flex;
     width: 100%;
-    height: auto;
     flex-flow: row wrap;
+    overflow:auto;
+    padding-bottom: 180px;
 }
 
 .col{
@@ -14,7 +15,7 @@
     width: 65%;
     flex-flow: row wrap;
     background: #F5F5F5;
-    padding: 0;
+    padding: 0 0 3em 0;
 }
 
 #krakensuperhero{
@@ -83,7 +84,7 @@ a:hover{
 PRO
 --------------------------------- */
 #urlForm{
-    width: 35%;
+    width: 35%; 
     background: #FFF;
     padding-bottom: 2em;
 }
@@ -109,10 +110,9 @@ PRO
     margin: 0 auto;
 }
 
-#playground{
-    color: #FFF; 
-    text-align: center;
-    margin: 0;
+#start_playground{
+    width: 100%; 
+    margin: 0 auto;
 }
 
 #ou{
@@ -123,21 +123,6 @@ button{
     margin: 0 auto;
 }
 
-footer p{
-    margin: 0;
-    background: #353535;
-    color: #aaaaaa;
-    font-size: 80%;
-    text-align: center;
-    padding: 1em 0;
-}
-
-footer{
-    position: fixed;
-    bottom: 0em;
-    width: 100%;
-
-}
 /* ---------------------------------
 RESPONSIVE
 --------------------------------- */
