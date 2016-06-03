@@ -19,7 +19,7 @@ var map = {
                 .concat(map._makeStopTimesMarker(context, json));
         },
         line: function(context, json) {
-            return map._makeString(text, 'line', json, json);
+            return map._makeString(context, 'line', json, json);
         },
         journey: function(context, json) {
             if (! ('sections' in json)) { return []; }
