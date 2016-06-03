@@ -191,6 +191,13 @@ function parseUrl() {
     };
 }
 
+function setAutocomplete(){
+    autocomplete.addKeyAutocomplete($('#featureInput'), 'features');
+    autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
+    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
+    autocomplete.apiAutocomplete();
+}
+
 $(document).ready(function() {
     // Manage add input/button
     $('button.add').prop('disabled', true);
@@ -211,7 +218,11 @@ $(document).ready(function() {
     autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
     autocomplete.apiAutocomplete();
 
-    if (request === null) { return; }
+    if (request === null) {
+        setAutocomplete();
+        return;
+    }
+
     if (isUndefined(request.token)) { request.token = ''; }
     $("#token input.token").attr('value', request.token);
     $("#api input.api").attr('value', request.api);
@@ -241,7 +252,6 @@ $(document).ready(function() {
             addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(value), 'parameters'));
         }
     }
-
-
+    setAutocomplete();
     updateUrl(null);
 });
