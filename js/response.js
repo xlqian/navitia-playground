@@ -52,7 +52,7 @@ function render(context, json, type, key, idx) {
                     return extended.run(context, type, json);
                 })))
                 .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
-                    return map.run(type, json);
+                    return map.run(type, json, context);
                 })))
                 .append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
                     return renderjson(json);
@@ -98,6 +98,7 @@ function Context(data) {
     };
 
     this.makeLink = function(key, obj, name) {
+        console.log(this.links);
         if (! (key in this.links) || ! ('id' in obj)) {
             return $(document.createTextNode(name));
         }

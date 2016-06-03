@@ -137,6 +137,7 @@ summary.make.line = function(context, line) {
 };
 
 summary.make.stop_time = function(context, stop_time) {
+    console.log(summary.defaultSummary(context, 'stop_point', stop_time.stop_point));
     return summary.formatTime(stop_time.departure_date_time) +' > '
          + summary.formatTime(stop_time.arrival_date_time)
         + ' ' + summary.defaultSummary(context, 'stop_point', stop_time.stop_point);
