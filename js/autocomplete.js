@@ -38,6 +38,7 @@ var autocomplete = {
             routes: _paramValueEverywhere,
             route_schedules: _schedulesParams,
             stop_schedules: _schedulesParams,
+            undefined: _paramValueEverywhere,
         },
         paramValue : {
             traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'].sort(),
@@ -79,7 +80,7 @@ var autocomplete = {
             source = this.autocompleteTree[type].empty;
         } else if (type === 'paramKey'){
             var feature = $('#featureInput').val();
-            source = this.autocompleteTree[type][feature];
+            source = this.autocompleteTree[type][feature] || this.autocompleteTree[type].undefined;
         } else {
             source = this.autocompleteTree[type].all;
         }

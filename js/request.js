@@ -205,6 +205,12 @@ $(document).ready(function() {
     $("#featureInput").focusout(updateAddParamAC);
 
     var request = parseUrl();
+
+    autocomplete.addKeyAutocomplete($('#featureInput'), 'features');
+    autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
+    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
+    autocomplete.apiAutocomplete();
+
     if (request === null) { return; }
     if (isUndefined(request.token)) { request.token = ''; }
     $("#token input.token").attr('value', request.token);
@@ -235,10 +241,7 @@ $(document).ready(function() {
             addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(value), 'parameters'));
         }
     }
-    autocomplete.addKeyAutocomplete($('#featureInput'), 'features');
-    autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
-    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
-    autocomplete.apiAutocomplete();
+
 
     updateUrl(null);
 });
