@@ -36,20 +36,43 @@ summary.make.journey = function(context, json) {
     }
 
     if ('sections' in json) {
+        var first_section_mode = null;
+        var last_section_mode = null;
         json.sections.forEach(function(s) {
             switch (s.type) {
-            case 'transfer':
-            case 'waiting':
-            case 'crow_fly':
-                break;
-            case 'street_network': add(s.mode); break;
             case 'public_transport':
-                add(summary.makePhysicalModesFromSection(s)
-                    .append(summary.makeLineCode(s.display_informations)));
+                if (! first_section_mode) {
+                    first_section_mode = last_section_mode;
+                }
+                last_section_mode = null;
                 break;
-            default: add(s.type); break;
+            case 'street_network':
+                switch (s.mode) {
+                case 'bike': last_section_mode = 'bike'; break;
+                case 'car': last_section_mode = 'car'; break;
+                case 'walking':
+                    if (! last_section_mode) { last_section_mode = 'walking'; }
+                    break;
+                }
+                break;
+            case 'bss_rent':
+            case 'bss_put_back':
+                last_section_mode = 'bss';
+                break;
             }
         });
+
+        if (first_section_mode) {
+            add(modes.makeSnPicto(first_section_mode));
+        }
+        json.sections.forEach(function(s) {
+            if (s.type !== 'public_transport') { return; }
+            add(summary.makePhysicalModesFromSection(s)
+                .append(summary.makeLineCode(s.display_informations)))
+        });
+        if (last_section_mode) {
+            add(modes.makeSnPicto(last_section_mode));
+        }
     } else {
         // isochron
         add(summary('place', json.from));
@@ -95,14 +118,26 @@ summary.make.section = function(context, section) {
     var pt = false;
 
     switch (section.type) {
-    case 'street_network': res.append(section.mode); break;
+    case 'street_network': res.append(modes.makeSnPicto(section.mode)); break;
+    case 'bss_rent':
+        res.append(modes.makeSnPicto('bss')).append(' rent');
+        break;
+    case 'bss_put_back':
+        res.append(modes.makeSnPicto('bss')).append(' put back');
+        break;
+    case 'leave_parking':
+        res.append(modes.makeSnPicto('car')).append(' leave parking');
+        break;
     case 'transfer': res.append(section.transfer_type); break;
     case 'public_transport':
         pt = true;
         res.append(summary.makePhysicalModesFromSection(section));
         res.append(summary.makeLineCode(section.display_informations));
         break;
-    default: res.append(section.type); break;
+    default:
+        res.append(modes.makeSnPicto(section.type))
+            .append(' ' + section.type);
+        break;
     }
 
     if ('from' in section) {
@@ -136,7 +171,7 @@ summary.make.line = function(context, line) {
         summary.setColors(code, line);
     }
     return $('<span>')
-        .append(modes.makePicto(line.physical_modes))
+        .append(modes.makePtPicto(line.physical_modes))
         .append(code)
         .append(' ')
         .append(document.createTextNode(line.name));
@@ -181,7 +216,7 @@ summary.make.route_schedule = function(context, json) {
 
 summary.make.physical_mode = function(context, json) {
     return $('<span/>')
-        .append(modes.makePicto(json))
+        .append(modes.makePtPicto(json))
         .append(document.createTextNode(' ' + json.name));
 };
 
@@ -201,7 +236,7 @@ summary.defaultSummary = function(context, type, json) {
     var res = $('<span/>');
     if ('physical_modes' in json && $.isArray(json.physical_modes)) {
         json.physical_modes.forEach(function(mode) {
-            res.append(modes.makePicto(mode));
+            res.append(modes.makePtPicto(mode));
         });
     }
     if ('label' in json) {
@@ -240,7 +275,7 @@ summary.makePhysicalModesFromSection = function(section) {
                     return null;
                 }
             });
-        return modes.makePicto(pms);
+        return modes.makePtPicto(pms);
     }
 };
 
@@ -255,7 +290,7 @@ summary.makeLineCode = function(display_informations) {
 
 summary.makeRoutePoint = function(context, res, json) {
     if ('route' in json) {
-        res.append(modes.makePicto(json.route.physical_modes));
+        res.append(modes.makePtPicto(json.route.physical_modes));
     }
     res.append(summary.makeLineCode(json.display_informations));
     res.append(' > ');
