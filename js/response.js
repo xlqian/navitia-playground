@@ -53,7 +53,7 @@ function render(context, json, type, key, idx) {
                     return extended.run(context, type, json);
                 })))
     }
-    if (map.hasMap(type, json)) {
+    if (map.hasMap(context, type, json)) {
         button.append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
                     return map.run(context, type, json);
                 })))
@@ -105,7 +105,7 @@ function Context(data) {
     this.makeLink = function(k, obj, name) {
         var key = getType(k);
         if (! (key in this.links) || ! ('id' in obj)) {
-            return $(document.createTextNode(name));
+            return $(name);
         }
         var href = this.links[key].replace(templateRegex, obj.id);
         return $('<a>').attr('href', this.makeHref(href)).html(name);

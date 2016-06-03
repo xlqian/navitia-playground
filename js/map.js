@@ -61,7 +61,7 @@ var map = {
             return flatMap(json[key], bind);
         }
     },
-    
+
     hasMap: function(context, type, json) {
         return map.makeFeatures[type] instanceof Function &&
             map.makeFeatures[type](context, json).length !== 0;
@@ -169,7 +169,7 @@ var map = {
     _makePolygon: function(context, type, geoJsonCoords, json) {
         var sum = summary.run(context, type, json);
         // TODO use link when navitia has debugged the ticket NAVITIAII-2133
-        // var link = map._makeLink(context, type, json, sum)[0];
+        var link = map._makeLink(context, type, json, sum)[0];
         return [
             L.geoJson(geoJsonCoords, {
                 color: '#0000FF',
@@ -177,7 +177,7 @@ var map = {
                 weight: 3,
                 fillColor: '#0000FF',
                 fillOpacity: 0.35
-            }).bindPopup(sum)
+            }).bindPopup(link)
         ];
     },
     _makeLink: function(context, type, obj, name) {
