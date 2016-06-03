@@ -109,9 +109,8 @@ var map = {
                 lon = json.coord.lon;
         };
         var sum = summary.run(context, type, json);
-        var linkType = map._getLinkType(type, json);
-
-        return [L.marker([lat, lon]).bindPopup(map._makeLink(context, linkType, obj, sum)[0])];
+        var t = type === 'place' ? json.embedded_type : type;
+        return [L.marker([lat, lon]).bindPopup(map._makeLink(context, t, obj, sum)[0])];
     },
 
     bikeColor: { color: 'CED480' },
@@ -177,8 +176,5 @@ var map = {
     },
     _makeLink: function(context, type, obj, name) {
         return context.makeLink(type, obj, name);
-    },
-    _getLinkType: function(type, json) {
-        return type;
     }
 };
