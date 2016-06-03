@@ -143,9 +143,13 @@ summary.make.line = function(context, line) {
 };
 
 summary.make.stop_date_time = function(context, stop_time) {
-    return summary.formatTime(stop_time.departure_date_time) +' > '
-         + summary.formatTime(stop_time.arrival_date_time)
-        + ' ' + summary.defaultSummary(context, 'stop_point', stop_time.stop_point);
+    var sum = summary.defaultSummary(context, 'stop_point', stop_time.stop_point)
+    var res = $('<span>').append(summary.formatTime(stop_time.departure_date_time))
+                         .append(' > ')
+                         .append(summary.formatTime(stop_time.arrival_date_time) + ' ')
+                         .append(summary.defaultSummary(context, 'stop_point', stop_time.stop_point));
+
+    return res;
 };
 
 summary.make.departure = function(context, json) {
