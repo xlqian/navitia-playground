@@ -50,6 +50,19 @@ li{
     margin: 1.6em;
 }
 
+footer p{
+    margin: 0;
+    color: #aaaaaa;
+    font-size: 80%;
+    text-align: center;
+    padding: 1em 0;
+}
+
+footer{
+    width: 100%;
+    background: #353535;
+}
+
 @media screen and (max-width:62em) {
     #urlheader{
         display: none;
