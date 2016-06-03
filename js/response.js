@@ -85,7 +85,7 @@ function Context(data) {
             if (! link.templated) { return; }
             if (link.type === 'related') { return; }
             if (! link.href.match(templateRegex)) { return; }
-            self.links[link.type] = link.href;
+            self.links[getType(link.type)] = link.href;
         });
     }
 
@@ -97,7 +97,8 @@ function Context(data) {
         return res;
     };
 
-    this.makeLink = function(key, obj, name) {
+    this.makeLink = function(k, obj, name) {
+        var key = getType(k);
         if (! (key in this.links) || ! ('id' in obj)) {
             return $(document.createTextNode(name));
         }

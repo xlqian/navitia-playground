@@ -1,9 +1,9 @@
 var map = {
     makeFeatures: {
-        region: function(json) {
+        region: function(context, json) {
             if (json.shape) {
                 var geoJsonShape = wkt2geojson(json.shape);
-                return map._makePolygon('region', geoJsonShape, json);
+                return map._makePolygon(context, 'region', geoJsonShape, json);
             }
             return [];
         },
@@ -161,7 +161,10 @@ var map = {
         }
         return markers;
     },
-    _makePolygon: function(type, geoJsonCoords, json) {
+    _makePolygon: function(context, type, geoJsonCoords, json) {
+        var sum = summary.run(context, type, json);
+        // TODO use link when navitia has debugged the ticket NAVITIAII-2133
+        // var link = map._makeLink(context, type, json, sum)[0];
         return [
             L.geoJson(geoJsonCoords, {
                 color: '#0000FF',
@@ -169,19 +172,13 @@ var map = {
                 weight: 3,
                 fillColor: '#0000FF',
                 fillOpacity: 0.35
-            }).bindPopup(summary.run(new Context(), type, json))
+            }).bindPopup(sum)
         ];
     },
     _makeLink: function(context, type, obj, name) {
         return context.makeLink(type, obj, name);
     },
     _getLinkType: function(type, json) {
-        return {
-            place: json.embedded_type,
-            stop_area: 'stop_areas',
-            stop_point: 'stop_points',
-            poi: 'pois',
-            stop_date_time: 'stop_point',
-        }[type]
+        return type;
     }
 };
