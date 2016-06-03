@@ -52,9 +52,9 @@ summary.make.journey = function(context, json) {
         });
     } else {
         // isochron
-        add(summary('place', json.from));
+        add(summary.run(context, 'place', json.from));
         add(sprintf('%s transfer(s)', json.nb_transfers));
-        add(summary('place', json.to));
+        add(summary.run(context, 'place', json.to));
     }
 
     add(summary.formatTime(json.arrival_date_time));
@@ -146,7 +146,8 @@ summary.make.stop_date_time = function(context, stop_time) {
     var sum = summary.run(context, 'stop_point', stop_time.stop_point)
     var res = $('<span>').append(summary.formatTime(stop_time.departure_date_time))
                          .append(' > ')
-                         .append(summary.formatTime(stop_time.arrival_date_time) + ' ')
+                         .append(summary.formatTime(stop_time.arrival_date_time))
+                         .append(' ') 
                          .append(sum);
     return res;
 };

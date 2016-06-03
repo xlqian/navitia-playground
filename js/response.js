@@ -47,16 +47,21 @@ function render(context, json, type, key, idx) {
     var head = $('<div class="head">');
     head.append($('<div class="name">').html(name));
     head.append($('<div class="summary">').html(summary.run(context, type, json)));
-    head.append($('<div class="button">')
-                .append(makeObjectButton('Ext', makeObjectButtonHandle('div.extended', function() {
+    var button = $('<div class="button">');
+    if (extended.hasExtended(context, type, json)) {
+        button.append(makeObjectButton('Ext', makeObjectButtonHandle('div.extended', function() {
                     return extended.run(context, type, json);
                 })))
-                .append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
+    }
+    if (map.hasMap(type, json)) {
+        button.append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
                     return map.run(context, type, json);
                 })))
-                .append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
-                    return renderjson(json);
-                }))));
+    }
+    button.append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
+        return renderjson(json);
+    })));
+    head.append(button);
 
     var data = $('<div class="data">')
         .append($('<div class="extended not_filled">'))

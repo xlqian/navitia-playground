@@ -22,6 +22,7 @@ var map = {
             return map._makeString(text, 'line', json, json);
         },
         journey: function(context, json) {
+            if (! ('sections' in json)) { return []; }
             var bind = function(s) {
                 return map.makeFeatures.section(context, s);
             }
@@ -59,6 +60,11 @@ var map = {
             }
             return flatMap(json[key], bind);
         }
+    },
+    
+    hasMap: function(context, type, json) {
+        return map.makeFeatures[type] instanceof Function &&
+            map.makeFeatures[type](context, json).length !== 0;
     },
 
     run: function(context, type, json) {
