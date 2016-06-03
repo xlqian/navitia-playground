@@ -52,9 +52,9 @@ summary.make.journey = function(context, json) {
         });
     } else {
         // isochron
-        add(summary('place', json.from));
+        add(summary.run(context, 'place', json.from));
         add(sprintf('%s transfer(s)', json.nb_transfers));
-        add(summary('place', json.to));
+        add(summary.run(context, 'place', json.to));
     }
 
     add(summary.formatTime(json.arrival_date_time));
@@ -142,10 +142,10 @@ summary.make.line = function(context, line) {
         .append(document.createTextNode(line.name));
 };
 
-summary.make.stop_time = function(context, stop_time) {
-    return summary.formatTime(stop_time.departure_date_time) +' > '
-         + summary.formatTime(stop_time.arrival_date_time)
-        + ' ' + summary.defaultSummary(context, 'stop_point', stop_time.stop_point);
+summary.make.stop_date_time = function(context, stop_date_time) {
+    return summary.formatTime(stop_date_time.departure_date_time) +' > '
+         + summary.formatTime(stop_date_time.arrival_date_time)
+        + ' ' + summary.defaultSummary(context, 'stop_point', stop_date_time.stop_point);
 };
 
 summary.make.departure = function(context, json) {

@@ -21,7 +21,7 @@ extended.make.response = function(context, json) {
 }
 
 extended.make.journey = function(context, json) {
-    if (! ('sections' in json)) { return $('No extended view for isochron'); }
+    if (! ('sections' in json)) { return extended.noExtendedMessage; }
     var result = $('<div class="list"/>');
     json.sections.forEach(function(section, i) {
         result.append(render(context, section, 'section', 'sections', i));
@@ -29,10 +29,19 @@ extended.make.journey = function(context, json) {
     return result;
 }
 
+extended.make.section = function(context, json) {
+    if (! ('stop_date_times' in json)) { return extended.noExtendedMessage; }
+    var result = $('<div class="list"/>');
+    json.stop_date_times.forEach(function(stop_date_time, i) {
+        result.append(render(context, stop_date_time, 'stop_date_time', 'stop_date_times', i));
+    });
+    return result;
+}
+
 extended.make.stop_schedule = function(context, json) {
     var result = $('<div class="list"/>');
-    json.date_times.forEach(function(stop_schedule, i) {
-        result.append(render(context, stop_schedule, 'date_time', 'date_times', i));
+    json.date_times.forEach(function(date_time, i) {
+        result.append(render(context, date_time, 'date_time', 'date_times', i));
     });
     return result;
 }
@@ -61,7 +70,7 @@ extended.make.route_schedule = function(context, json) {
 //   extended.make.{type} = function(context, json) { ... }
 
 extended.defaultExtended = function(context, type, json) {
-    var noExt = 'No extended view yet!';
+    var noExt = extended.noExtendedMessage;
     if (! (json instanceof Object)) {
         return noExt;
     }
@@ -83,6 +92,12 @@ extended.defaultExtended = function(context, type, json) {
     } else {
         return result;
     }
+}
+
+extended.noExtendedMessage = 'No extended view yet!';
+
+extended.hasExtended = function(context, type, json) {
+    return extended.run(context, type, json) !== extended.noExtendedMessage;
 }
 
 // main method

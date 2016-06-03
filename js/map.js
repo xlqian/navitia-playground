@@ -23,7 +23,10 @@ var map = {
             return map._makeString('line', json, json);
         },
         journey: function(json) {
-            return flatMap(json.sections, map.makeFeatures.section);
+            if ('sections' in json) {
+                return flatMap(json.sections, map.makeFeatures.section);
+            }
+            return [];
         },
         address: function(json) {
             return map._makeMarker('address', json);
@@ -54,6 +57,11 @@ var map = {
             }
             return flatMap(json[key], map.makeFeatures[type]);
         }
+    },
+    
+    hasMap: function(type, json) {
+        return map.makeFeatures[type] instanceof Function &&
+            map.makeFeatures[type](json).length !== 0;
     },
 
     run: function(type, json) {
@@ -89,7 +97,7 @@ var map = {
     _makeMarker: function(type, json) {
         var lat, lon;
         switch (type){
-            case 'stop_time':
+            case 'stop_date_time':
                 lat = json.stop_point.coord.lat;
                 lon = json.stop_point.coord.lon;
                 break;
@@ -138,7 +146,7 @@ var map = {
         if (stopTimes) {
             // when section is PT
             stopTimes.forEach(function(st) {
-                markers = markers.concat(map._makeMarker('stop_time', st));
+                markers = markers.concat(map._makeMarker('stop_date_time', st));
             });
         } else {
             // when section is Walking
