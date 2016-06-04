@@ -33,7 +33,11 @@ div.object {
     }
     @media screen and (max-width:35em) {
         div.head{
-            flex-direction: column;
+            flex-wrap: wrap;
+        }
+        div.summary {
+            order: 3;
+            min-width: 80%;
         }
     }
     div.name, div.button, div.summary {
