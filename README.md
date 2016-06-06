@@ -1,4 +1,4 @@
-# ![navitia playground](img/n_playground.svg?raw=true)
+# navitia playground
 
 Web UI for the navitia API
 
