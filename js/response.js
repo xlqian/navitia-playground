@@ -1,5 +1,10 @@
-function setStatus(xhr) {
-    $('#status').html(sprintf('Status: %s (%s)', xhr.statusText, xhr.status));
+function setStatus(xhr, start_time) {
+    var status = sprintf('Status: %s (%s)', xhr.statusText, xhr.status);
+    if (typeof start_time === 'number') {
+        var duration = new Date().getTime() - start_time;
+        status += sprintf(', duration of the request: %sms', duration);
+    }
+    $('#status').html(status);
 }
 
 function responseCollectionName(json) {
@@ -121,13 +126,14 @@ $(document).ready(function() {
     renderjson.set_show_to_level(3);
     renderjson.set_max_string_length(60);
     renderjson.set_sort_objects(true);
+    var start_time = new Date().getTime();
     $.ajax({
         headers: isUndefined(request.token) ? {} : { Authorization: 'Basic ' + btoa(request.token) },
         url: request.request,
         dataType: 'json',
     }).then(
         function(data, status, xhr) {
-            setStatus(xhr);
+            setStatus(xhr, start_time);
             $('#data').html(render(new Context(data), data, 'response', 'response'));
             $('#data input').first().click();
             saveToken(request.api, request.token);
@@ -135,7 +141,7 @@ $(document).ready(function() {
             autocomplete.apiAutocomplete();
         },
         function(xhr, status, error) {
-            setStatus(xhr);
+            setStatus(xhr, start_time);
             $('#data').html(render(new Context(), xhr.responseJSON, 'error', 'response'));
             $('#data input').last().click();
             notifyOnError(xhr, 'Response');
