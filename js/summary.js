@@ -128,16 +128,13 @@ summary.make.section = function(context, section) {
     case 'leave_parking':
         res.append(modes.makeSnPicto('car')).append(' leave parking');
         break;
-    case 'transfer': res.append(section.transfer_type); break;
+    case 'transfer': res.append(modes.makeSnPicto(section.transfer_type)); break;
     case 'public_transport':
         pt = true;
         res.append(summary.makePhysicalModesFromSection(section));
         res.append(summary.makeLineCode(section.display_informations));
         break;
-    default:
-        res.append(modes.makeSnPicto(section.type))
-            .append(' ' + section.type);
-        break;
+    default: res.append(section.type); break;
     }
 
     if ('from' in section) {
