@@ -12,4 +12,4 @@ To launch:
 
 # Demo
 
-Test the demo [here](http://texitoi.eu/apihm/)!
+Test the demo [here](http://texitoi.eu/navitia-playground/)!
