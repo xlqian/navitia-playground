@@ -131,8 +131,7 @@ summary.make.section = function(context, section) {
     case 'transfer': res.append(modes.makeSnPicto(section.transfer_type)); break;
     case 'public_transport':
         pt = true;
-        res.append(summary.makePhysicalModesFromSection(section));
-        res.append(summary.makeLineCode(section.display_informations));
+        res.append(summary.makeRoutePoint(context, section));
         break;
     default: res.append(section.type); break;
     }
@@ -187,20 +186,19 @@ summary.make.stop_date_time = function(context, stop_time) {
 summary.make.departure = function(context, json) {
     var res = $('<span>');
     res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.departure_date_time)));
-    res.append(summary.makeRoutePoint(context, res, json));
+    res.append(summary.makeRoutePoint(context, json));
     return res;
 };
 
 summary.make.arrival = function(context, json) {
     var res = $('<span>');
     res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.arrival_date_time)));
-    res.append(summary.makeRoutePoint(context, res, json));
+    res.append(summary.makeRoutePoint(context, json));
     return res;
 };
 
 summary.make.stop_schedule = function(context, json) {
-    var res = $('<span>');
-    return summary.makeRoutePoint(context, res, json);
+    return summary.makeRoutePoint(context, json);
 };
 
 summary.make.date_time = function(context, json) {
@@ -211,8 +209,7 @@ summary.make.date_time = function(context, json) {
 };
 
 summary.make.route_schedule = function(context, json) {
-    var res = $('<span>');
-    return summary.makeRoutePoint(context, res, json);
+    return summary.makeRoutePoint(context, json);
 };
 
 summary.make.physical_mode = function(context, json) {
@@ -289,9 +286,12 @@ summary.makeLineCode = function(display_informations) {
     return elt;
 };
 
-summary.makeRoutePoint = function(context, res, json) {
+summary.makeRoutePoint = function(context, json) {
+    var res = $('<span/>');
     if ('route' in json) {
         res.append(modes.makePtPicto(json.route.physical_modes));
+    } else if ('links' in json && 'display_informations' in json) {
+        res.append(summary.makePhysicalModesFromSection(json));
     }
     res.append(summary.makeLineCode(json.display_informations));
     res.append(' > ');
