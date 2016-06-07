@@ -128,7 +128,13 @@ summary.make.section = function(context, section) {
     case 'leave_parking':
         res.append(modes.makeSnPicto('car')).append(' leave parking');
         break;
-    case 'transfer': res.append(modes.makeSnPicto(section.transfer_type)); break;
+    case 'transfer':
+        if (section.transfer_type === 'walking') {
+            res.append(modes.makeSnPicto('walking'));
+        } else {
+            res.append(document.createTextNode(section.transfer_type));
+        }
+        break;
     case 'public_transport':
         pt = true;
         res.append(summary.makeRoutePoint(context, section));
