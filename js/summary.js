@@ -224,6 +224,14 @@ summary.make.physical_mode = function(context, json) {
         .append(document.createTextNode(' ' + json.name));
 };
 
+summary.make.connection = function(context, json) {
+    return $('<span/>').text(sprintf('%s > %s, duration: %s, display_duration: %s',
+                                     json.origin.id,
+                                     json.destination.id,
+                                     durationToString(json.duration),
+                                     durationToString(json.display_duration)));
+}
+
 // add your summary view by addind:
 //   summary.make.{type} = function(context, json) { ... }
 
