@@ -319,10 +319,16 @@ summary.makeRoutePoint = function(context, json) {
 
 summary.run = function(context, type, json) {
     var res;
-    if (type in summary.make) {
-        res = summary.make[type](context, json);
-    } else {
-        res = summary.defaultSummary(context, type, json);
+    try {
+        if (type in summary.make) {
+            res = summary.make[type](context, json);
+        } else {
+            res = summary.defaultSummary(context, type, json);
+        }
+    } catch (e) {
+        console.log(sprintf('summary(%s) thows an exception:', type));
+        console.log(e);
+        res = 'summary error';
     }
     if (res instanceof jQuery) {
         return res.get(0);

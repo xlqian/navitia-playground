@@ -102,6 +102,12 @@ extended.hasExtended = function(context, type, json) {
 
 // main method
 extended.run = function(context, type, json) {
-    if (type in this.make) { return this.make[type](context, json); }
-    return extended.defaultExtended(context, type, json);
+    try {
+        if (type in this.make) { return this.make[type](context, json); }
+        return extended.defaultExtended(context, type, json);
+    } catch (e) {
+        console.log(sprintf('extended(%s) thows an exception:', type));
+        console.log(e);
+        return noExtendedMessage;
+    }
 }

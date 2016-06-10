@@ -63,8 +63,18 @@ var map = {
     },
 
     hasMap: function(context, type, json) {
-        return map.makeFeatures[type] instanceof Function &&
-            map.makeFeatures[type](context, json).length !== 0;
+        return map.getFeatures(context, type, json).length !== 0;
+    },
+
+    getFeatures: function(context, type, json) {
+        if (! (map.makeFeatures[type] instanceof Function)) { return []; }
+        try {
+            return map.makeFeatures[type](context, json);
+        } catch (e) {
+            console.log(sprintf('map.makeFeatures[%s] thows an exception:', type));
+            console.log(e);
+            return [];
+        }
     },
 
     run: function(context, type, json) {
@@ -72,8 +82,7 @@ var map = {
         // setting for default path of images used by leaflet
         L.Icon.Default.imagePath='lib/img/leaflet/dist/images';
         var features = [];
-        if (map.makeFeatures[type] instanceof Function &&
-            (features = map.makeFeatures[type](context, json)).length) {
+        if ((features = map.getFeatures(context, type, json)).length) {
             div.addClass('leaflet');
             var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
             mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
