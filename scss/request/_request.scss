@@ -32,6 +32,7 @@
     #credentials { @include request-parts($light-orange); }
     #path { @include request-parts($light-green); }
     #parameters { @include request-parts($light-blue); }
+    #feature.inputDiv { border-color: $light-red; }
 
     #urlDiv {
         width: 100%;
@@ -51,6 +52,7 @@
 
         .api { @include url-colors($light-orange); }
         .path { @include url-colors($light-green); }
+        .feature { @include url-colors($light-red); }
         .parameters { @include url-colors($light-blue); }
     }
     #submitDiv {

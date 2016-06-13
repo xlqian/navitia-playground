@@ -10,10 +10,10 @@ function makeDeleteButton() {
 
 function insertPathElt() {
     var key = $('#addPathInput').val();
-    $("#feature").before(makeKeyValue(key, '', 'path'));
+    $("#addPathElt").before(makeKeyValue(key, '', 'path'));
     autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
     $('#addPathInput').val('').change();
-    $("#feature").prev().find('input').first().focus();
+    $("#addPathElt").prev().find('input').first().focus();
 }
 
 function insertParam() {
@@ -94,9 +94,10 @@ function finalUrl(focusedElem) {
     var api = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
 
     var path = '';
-    $("#path .key, #path input.value, #featureInput").each(function(){
+    $('#path .key, #path input.value').each(function(){
         path += '/' + getFocusedElemValue(this, focusedElem);
     });
+    var feature = getFocusedElemValue($('#featureInput')[0], focusedElem);
 
     var parameters = '?';
     $('#parameters .key, #parameters input.value').each(function(){
@@ -111,13 +112,14 @@ function finalUrl(focusedElem) {
 
     if (focusedElem === undefined) {
         // called without arg, we want pure text
-        return api + path + parameters;
+        return api + path + '/' + feature + parameters;
     } else {
         // with arg, we want a rendering thing
         return sprintf('<span class="api">%s</span>' +
                        '<span class="path">%s</span>' +
+                       '<span class="feature">/%s</span>' +
                        '<span class="parameters">%s</span>',
-                       api, path, parameters);
+                       api, path, feature, parameters);
     }
     return finalUrl;
 }
@@ -232,7 +234,7 @@ $(document).ready(function() {
         if (prevPathElt === null) {
             prevPathElt = r;
         } else {
-            $("#feature").before(makeKeyValue(prevPathElt, r, 'path'));
+            $("#addPathElt").before(makeKeyValue(prevPathElt, r, 'path'));
             prevPathElt = null;
         }
     });
