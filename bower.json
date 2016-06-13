@@ -1,11 +1,11 @@
 {
-  "name": "apihm",
-  "description": "ApiHm",
+  "name": "navitia playground",
+  "description": "Web UI for the navitia API",
   "main": "js/request.js",
   "authors": [
-    "Kisio Digital"
+    "CanalTP"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "homepage": "",
   "ignore": [
     "**/.*",
@@ -24,7 +24,7 @@
     "sprintf": "^1.0.3",
     "leaflet": "^0.7.7",
     "notifyjs": "^0.4.2",
-    "wkt2geojson": "git@github.com:CanalTP/wkt2geojson.git#gh-pages"
+    "wkt2geojson": "https://github.com/CanalTP/wkt2geojson.git#gh-pages"
   },
   "devDependencies": {}
 }
