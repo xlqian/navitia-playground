@@ -1,5 +1,5 @@
 {
-  "name": "navitia playground",
+  "name": "navitia-playground",
   "version": "0.0.1",
   "description": "Web UI for the navitia API",
   "main": "request.js",
