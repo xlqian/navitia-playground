@@ -1,8 +1,8 @@
 {
-  "name": "apihm",
+  "name": "navitia playground",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Web UI for the navitia API",
+  "main": "request.js",
   "dependencies": {
     "gulp-jslint": "^1.0.1"
   },
@@ -31,6 +31,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Kisio Digital",
-  "license": "ISC"
+  "author": "CanalTP",
+  "license": "MIT"
 }
