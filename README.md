@@ -4,7 +4,7 @@ Web UI for the navitia API.
 
 ## Demo
 
-Test the demo [here](http://texitoi.eu/navitia-playground/)!
+Test the demo [here](http://canaltp.github.io/navitia-playground/)!
 
 ## Setting your dev environment to contribute
 
