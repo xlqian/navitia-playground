@@ -1,0 +1,19 @@
+language: node_js
+node_js: node
+sudo: false
+before_script:
+- npm install -g gulp
+- npm install -g bower
+- bower install
+script: gulp dev:build
+after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  gulp prod:build
+  pip install --user ghp-import &&
+  export PATH="$PATH:$HOME/.local/bin" &&
+  ghp-import -n dist/prod &&
+  git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+env:
+  global:
+  - secure: Ap8pEa4SHNuLPjcEF15MnCnTpyEFnpaLOAtk6P3W1ufvPjS/VBnwmUbHlxuXoo8n403QmCx8XUwMD0zTt3C0qp07RZ0LaG0BtMMdzNVLGhLiLxn52+6c13jhRZKV/nifwAlTIrgvqI/rzKFRSWS0cH/Ty2w+uz9TmgNBwlw3gItd7MB+JZchR+uGV0BUiSyTeTkbo/xbVpNLOksbu6T2ub/WO35neKM6kcBdbQuO0g02+3p5kWz1zcLx25tQlRViyIR5g2PVNiho2SYHOp3/C/oZz1Gpv5Mlcd3dDhLHb8m4KJ5tyIjDW2f+SkaiSocfJtn9jtFshsjwSxPjYMgV0lLEbgLBnGJhQuGnGWkcGxEAec72kIJUYe9L5lW5t5vdaoOdDZ5el+eg83ob/tfcyO0iZLDv3o/HxAbkioHI01JGcxamnPcYGmyeliNTjUTyKyD0yTM52unuNrdh0QOKKLeTf3zSANjgi4kYrwWWnO9imbAOT8C4LIsiXozQokD/APYi425SbSsG1UTJteTe/CHx6x8eRajzhMFjqi9z4+EL03k7JTynL99xGP6+TcHPU22gsG/0Tcz0HFbJM09en6OVVystP2dPqfcQGNOHGgR7SzjH1rU38o+2selQc7Kb86GKtKVGaa3DMEH4h5qL/cpVvPqYazBGfSLE/fv3wO0=
