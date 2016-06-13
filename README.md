@@ -20,4 +20,4 @@ To launch:
 
 ## License
 
-This project is under the [MIT license](LICENSE). See the [bower file](bower.json) for the running depedencies and the [npm file](package.json) for dev depedencies.
+This project is under the [MIT license](LICENSE). See the [bower file](bower.json) for the running dependencies and the [npm file](package.json) for dev dependencies.
