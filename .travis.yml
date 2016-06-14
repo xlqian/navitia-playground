@@ -5,11 +5,10 @@ before_script:
 - npm install -g gulp
 - npm install -g bower
 - bower install
-script: gulp dev:build
+script: gulp dev:build && gulp prod:build
 after_success: |
   [ $TRAVIS_BRANCH = master ] &&
   [ $TRAVIS_PULL_REQUEST = false ] &&
-  gulp prod:build
   pip install --user ghp-import &&
   export PATH="$PATH:$HOME/.local/bin" &&
   ghp-import -n dist/prod &&
