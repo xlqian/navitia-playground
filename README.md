@@ -1,6 +1,6 @@
 # ![navitia playground](https://rawgithub.com/CanalTP/navitia-playground/master/img/n_playground.svg) [![Build status](https://travis-ci.org/CanalTP/navitia-playground.svg?branch=master)](https://travis-ci.org/CanalTP/navitia-playground)
 
-Web UI for the [navitia](https://github.com/CanalTP/navitia) API. You can get a token [here](http://www.navitia.io) and then use this UI [here](https://canaltp.github.io/navitia-playground/).
+Web UI for the [navitia](https://github.com/CanalTP/navitia) API. You can get a token [here](http://www.navitia.io) and then use this UI [here](http://canaltp.github.io/navitia-playground/).
 
 ## Screenshots
 
