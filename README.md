@@ -8,7 +8,8 @@ Web UI for the [navitia](https://github.com/CanalTP/navitia) API. You can get a 
 
 ## Setting your dev environment to contribute
 
-* Check first your node version with `node --version` and get a recent version if needed. [Ubuntu/Debian installation](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions).
+Installing the dependencies:
+* Check first your node version with `node --version` and get a recent version if needed (should work with node 4.4 and 6.0). [Ubuntu/Debian installation](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions).
 * `sudo npm install gulp -g && sudo npm install bower -g && npm install && bower install`
 
 To launch:
