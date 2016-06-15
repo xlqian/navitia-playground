@@ -125,7 +125,7 @@ var autocomplete = {
             request =  api +  '/coverage/' + cov + '/' + staticType;
         }
         $.ajax({
-            headers: isUndefined(token) ? {} : { Authorization: 'Basic ' + btoa(token) },
+            headers: token === undefined ? {} : { Authorization: 'Basic ' + btoa(token) },
             dataType: 'json',
             url: request,
             success: function(data) {
@@ -211,7 +211,7 @@ var autocomplete = {
                 cov = cov ? ('coverage/' + cov) : '';
                 $.ajax({
                     url: sprintf('%s/%s/%s%s', url, cov, httpReq, encodeURIComponent(request.term)),
-                    headers: isUndefined(token) ? {} : { Authorization: 'Basic ' + btoa(token) },
+                    headers: token === undefined ? {} : { Authorization: 'Basic ' + btoa(token) },
                     success: function (data) {
                         var res = [];
                         // TODO: use summary

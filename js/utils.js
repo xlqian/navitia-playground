@@ -18,12 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/* exported isUndefined */
 /* TODO: Complete the jshint*/
-
-function isUndefined(val) {
-    return typeof val === 'undefined';
-}
 
 function isPlaceType(key) {
     return $.inArray(key, ['from', 'to']) !== -1;
