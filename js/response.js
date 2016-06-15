@@ -55,11 +55,15 @@ function makeObjectButtonHandle(selector, renderHandle) {
     return function() {
         var div = $(this).closest('div.object').children('div.data').children(selector);
         if ($(this).is(':checked')) {
+            div.hide();
             div.removeClass('not_filled');
             div.html(renderHandle());
+            div.slideDown(600);
         } else {
-            div.addClass('not_filled');
-            div.empty();
+            div.slideUp(600, function() {
+                div.addClass('not_filled');
+                div.empty();
+            });
         }
     };
 }
