@@ -29,11 +29,21 @@ var map = {
         },
         section: function(context, json) {
             var color = json.display_informations;
-            if (json.type === 'street_network') {
+            switch (json.type) {
+            case 'street_network':
                 switch (json.mode) {
                 case 'bike': color = map.bikeColor; break;
                 case 'car': color = map.carColor; break;
+                case 'walking': color = map.walkingColor; break;
                 }
+                break;
+            case 'transfer':
+                switch (json.transfer_type) {
+                case 'guaranteed': color = map.carColor; break;
+                case 'extension': color = map.bikeColor; break;
+                case 'walking': color = map.walkingColor; break;
+                }
+                break;
             }
             return map._makeString(context, 'section', json, color)
                 .concat(map._makeStopTimesMarker(context, json));
@@ -150,13 +160,14 @@ var map = {
 
     bikeColor: { color: 'CED480' },
     carColor: { color: 'EFBF8F' },
+    walkingColor: { color: '89C6E5' },
 
     _makeString: function(context, type, json, colorJson) {
         if (! ( "geojson" in json) || ! json.geojson.coordinates.length) {
             return [];
         }
-        if (! (colorJson instanceof Object) || ! ('color' in colorJson)) {
-            colorJson = { color: '89C6E5' };
+        if (! (colorJson instanceof Object) || ! (colorJson.color)) {
+            colorJson = { color: '000000' };
         }
         var sum = summary.run(context, type, json);
         return [

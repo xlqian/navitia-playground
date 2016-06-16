@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/* global isUndefined */
 /* TODO: Complete the jshint*/
 
 function makeDeleteButton() {
@@ -181,7 +180,7 @@ function makeDatetime(elt) {
 function parseUrl() {
     var search = new URI(window.location).search(true);
     var request = search['request'];
-    if (isUndefined(request)) { return null; }
+    if (request === undefined) { return null; }
 
     var req_uri = new URI(request);
     var api = req_uri.origin();
@@ -202,14 +201,14 @@ function parseUrl() {
     var params = req_uri.search(true);
 
     var token = search['token'];
-    if (isUndefined(token)) { token = getTokenFromStorage(api); }
+    if (token === undefined) { token = getTokenFromStorage(api); }
 
     return {
         token: token,
         request: request,
         api: api,
         path: api_path,
-        query: isUndefined(params) ? {} : params
+        query: params === undefined ? {} : params
     };
 }
 
@@ -245,7 +244,7 @@ $(document).ready(function() {
         return;
     }
 
-    if (isUndefined(request.token)) { request.token = ''; }
+    if (request.token === undefined) { request.token = ''; }
     $("#token input.token").attr('value', request.token);
     $("#api input.api").attr('value', request.api);
 
