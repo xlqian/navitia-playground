@@ -23,6 +23,8 @@ var _collections = ['addresses', 'commercial_modes', 'companies', 'coord', 'cove
                'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicle_journeys'].sort();
 var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
                             'arrivals', 'places', 'isochrones'];
+var _paramJourneyCommon = ['from', 'to', 'datetime','traveler_type', 'data_freshness',
+            'first_section_mode[]', 'last_section_mode[]'].concat(_paramValueEverywhere).sort();
 
 // ParamKey
 var _depArrParams = ['from_datetime', 'duration', 'data_freshness'].concat(_paramValueEverywhere).sort();
@@ -46,10 +48,8 @@ var autocomplete = {
             coord: _paramValueEverywhere,
             coverage: _paramValueEverywhere,
             departures: _depArrParams,
-            journeys: ['from', 'to', 'datetime', 'datetime_represents', 'traveler_type', 'data_freshness',
-            'first_section_mode[]', 'last_section_mode[]'].concat(_paramValueEverywhere).sort(),
-            isochrones: ['from', 'to','datetime', 'traveler_type', 'max_duration','first_section_mode[]',
-            'last_section_mode[]', 'min_duration'].concat(_paramValueEverywhere).sort(),
+            journeys: ['datetime_represents'].concat(_paramJourneyCommon).sort(),
+            isochrones: [ 'max_duration', 'min_duration'].concat(_paramJourneyCommon).sort(),
             lines: _paramValueEverywhere,
             places_nearby: _placesParams.sort(),
             places: _placesParams,
@@ -127,7 +127,7 @@ var autocomplete = {
             request =  api +  '/coverage/' + cov + '/' + staticType;
         }
         $.ajax({
-            headers: token ? { Authorization: 'Basic ' + btoa(token) } : {},
+            headers: manage_token(token),
             dataType: 'json',
             url: request,
             success: function(data) {
@@ -213,7 +213,7 @@ var autocomplete = {
                 cov = cov ? ('coverage/' + cov) : '';
                 $.ajax({
                     url: sprintf('%s/%s/%s%s', url, cov, httpReq, encodeURIComponent(request.term)),
-                    headers: token ? { Authorization: 'Basic ' + btoa(token) } : {},
+                    headers: manage_token(token),
                     success: function (data) {
                         var res = [];
                         // TODO: use summary

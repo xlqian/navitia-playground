@@ -113,11 +113,12 @@ summary.make.isochrone = function(context, json) {
     if ('to' in json) {
       res.append(sprintf(' to %s, ', htmlEncode(json.to.name)));
     }
-    if('min_duration' in json && 'max_duration' in json) {
-        res.append(sprintf('duration: [%s', durationToString(json.min_duration)));
-        res.append(sprintf(', %s]', durationToString(json.max_duration)));
+    if ('min_duration' in json && 'max_duration' in json) {
+        res.append(sprintf('duration: [%s, %s]',
+                          durationToString(json.min_duration),
+                          durationToString(json.max_duration)));
     } else {
-        res.append('no summary');
+        res.text('no summary');
     }
     return res;
 };

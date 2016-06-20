@@ -60,8 +60,8 @@ var map = {
         },
         isochrone: function(context, json) {
             if (! ('geojson' in json)) { return []; }
-              var geoJsonShape = json.geojson;
-              return map._makePolygon(context, 'isochrone', json.geojson, json)
+            var geoJsonShape = json.geojson;
+            return map._makePolygon(context, 'isochrone', geoJsonShape, json);
         },
         address: function(context, json) {
             return map._makeMarker(context, 'address', json);
