@@ -142,7 +142,7 @@ function Context(data) {
 }
 
 function manage_token (token) {
-  return token ? { Authorization: 'Basic ' + btoa(token) } : {}
+  return token ? { Authorization: 'Basic ' + btoa(token) } : {};
 }
 
 $(document).ready(function() {
