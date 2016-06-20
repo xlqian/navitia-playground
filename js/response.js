@@ -141,6 +141,10 @@ function Context(data) {
     };
 }
 
+function manage_token (token) {
+  return token ? { Authorization: 'Basic ' + btoa(token) } : {};
+}
+
 $(document).ready(function() {
     var request = parseUrl();
     if (request === null) {
@@ -152,7 +156,7 @@ $(document).ready(function() {
     renderjson.set_sort_objects(true);
     var start_time = new Date().getTime();
     $.ajax({
-        headers: request.token === undefined ? {} : { Authorization: 'Basic ' + btoa(request.token) },
+        headers: manage_token(request.token),
         url: request.request,
         dataType: 'json',
     }).then(

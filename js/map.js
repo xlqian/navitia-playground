@@ -58,6 +58,10 @@ var map = {
             }
             return flatMap(json.sections, bind);
         },
+        isochrone: function(context, json) {
+            if (! ('geojson' in json)) { return []; }
+            return map._makePolygon(context, 'isochrone', json.geojson, json);
+        },
         address: function(context, json) {
             return map._makeMarker(context, 'address', json);
         },

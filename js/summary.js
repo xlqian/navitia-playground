@@ -105,6 +105,24 @@ summary.make.journey = function(context, json) {
     return res;
 };
 
+summary.make.isochrone = function(context, json) {
+    var res = $('<span>');
+    if ('from' in json) {
+      res.append(sprintf('from %s, ', htmlEncode(json.from.name)));
+    }
+    if ('to' in json) {
+      res.append(sprintf('to %s, ', htmlEncode(json.to.name)));
+    }
+    if ('min_duration' in json && 'max_duration' in json) {
+        res.append(sprintf('duration: [%s, %s]',
+                          durationToString(json.min_duration),
+                          durationToString(json.max_duration)));
+    } else {
+        res.text('no summary');
+    }
+    return res;
+};
+
 summary.make.links = function(context, json) {
     var res = $('<span>');
     function makeData(link) {
@@ -204,7 +222,7 @@ summary.make.stop_date_time = function(context, stop_time) {
     var res = $('<span>').append(summary.formatTime(stop_time.arrival_date_time))
                          .append(' > ')
                          .append(summary.formatTime(stop_time.departure_date_time))
-                         .append(' ') 
+                         .append(' ')
                          .append(sum);
     return res;
 };
