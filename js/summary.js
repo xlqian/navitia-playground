@@ -108,10 +108,10 @@ summary.make.journey = function(context, json) {
 summary.make.isochrone = function(context, json) {
     var res = $('<span>');
     if ('from' in json) {
-      res.append(sprintf(' from %s, ', htmlEncode(json.from.name)));
+      res.append(sprintf('from %s, ', htmlEncode(json.from.name)));
     }
     if ('to' in json) {
-      res.append(sprintf(' to %s, ', htmlEncode(json.to.name)));
+      res.append(sprintf('to %s, ', htmlEncode(json.to.name)));
     }
     if ('min_duration' in json && 'max_duration' in json) {
         res.append(sprintf('duration: [%s, %s]',
