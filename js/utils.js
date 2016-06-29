@@ -25,6 +25,8 @@ function isPlaceType(key) {
 }
 
 function isDatetimeType(str) {
+    if ($.inArray(str, ['since', 'until'])!== -1)
+        {return true;}
     return str.match(/datetime$/);
 }
 
