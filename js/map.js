@@ -23,7 +23,7 @@ var map = {
         region: function(context, json) {
             if (json.shape) {
                 var geoJsonShape = wkt2geojson(json.shape);
-                return map._makePolygon(context, 'region', geoJsonShape, json, '#0000FF', 3);
+                return map._makePolygon(context, 'region', geoJsonShape, json, {color : '008ACA'});
             }
             return [];
         },
@@ -62,7 +62,7 @@ var map = {
             if (! ('geojson' in json)) { return []; }
             var color = json.display_informations;
             color = context.color_isochrone().get(json.min_duration);
-            return map._makePolygon(context, 'isochrone', json.geojson, json, color, 0);
+            return map._makePolygon(context, 'isochrone', json.geojson, json, color);
         },
         address: function(context, json) {
             return map._makeMarker(context, 'address', json);
@@ -212,17 +212,17 @@ var map = {
         }
         return markers;
     },
-    _makePolygon: function(context, type, geoJsonCoords, json, colorJson, weight_border) {
+    _makePolygon: function(context, type, geoJsonCoords, json, colorJson) {
         var sum = summary.run(context, type, json);
         // TODO use link when navitia has debugged the ticket NAVITIAII-2133
         var link = map._makeLink(context, type, json, sum)[0];
         return [
             L.geoJson(geoJsonCoords, {
-                color:  "#" + colorJson.color,
-                opacity: 1.0,
-                weight: weight_border,
+                color:  "#" + '555555',
+                opacity: 1,
+                weight: 0.5,
                 fillColor:  "#" + colorJson.color,
-                fillOpacity: 0.35
+                fillOpacity: 0.25
             }).bindPopup(link)
         ];
     },
