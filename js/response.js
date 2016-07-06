@@ -29,7 +29,7 @@ function setStatus(xhr, start_time) {
 
 function responseCollectionName(json) {
     var key = null;
-    var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes'];
+    var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes', 'warnings'];
     for (var k in json) {
         if ($.isArray(json[k]) &&
             $.inArray(k, notCollectionKeys) === -1) {
@@ -82,6 +82,7 @@ function render(context, json, type, key, idx) {
                     return extended.run(context, type, json);
                 })))
     }
+
     if (map.hasMap(context, type, json)) {
         button.append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
                     return map.run(context, type, json);
@@ -106,7 +107,6 @@ function render(context, json, type, key, idx) {
 function Context(data) {
     // the token, used to create links
     var token = URI(window.location).search(true).token;
-
     // the regex corresponding to the thing that should be replacced
     // in a templated link
     var templateRegex = /\{.*\.id\}/;
@@ -139,6 +139,34 @@ function Context(data) {
         var href = this.links[key].replace(templateRegex, obj.id);
         return $('<a>').attr('href', this.makeHref(href)).html(name);
     };
+
+    this.color_isochrone = function() {
+      if ('isochrones' in data) {
+        var min_duration = [];
+        data.isochrones.forEach(function(isochrone) {
+          min_duration.push(isochrone.min_duration);
+        });
+        var green = '00FF00';
+        var red = 'FF0000';
+        var max_isochrone = data.isochrones.length;
+        var color_min_duration = new Map();
+        for (var i = 0; i < max_isochrone; i ++) {
+          var ratio = i / (max_isochrone - 1);
+          var g = 255;
+          var r = 255;
+          if (ratio < 1/2) {
+            g = Math.ceil(parseInt(green.substring(2,4), 16) * 2 * ratio);
+          } else {
+            r = Math.ceil(parseInt(red.substring(0,2), 16) * 2 * (1 - ratio));
+          }
+
+          var hex = sprintf("%02x%02x%02x", r, g, 0);
+          console.log(hex);
+          color_min_duration.set(min_duration[i], { color: hex })
+        }
+        return color_min_duration;
+      }
+    }
 }
 
 function manage_token (token) {
