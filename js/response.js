@@ -82,7 +82,6 @@ function render(context, json, type, key, idx) {
                     return extended.run(context, type, json);
                 })))
     }
-
     if (map.hasMap(context, type, json)) {
         button.append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
                     return map.run(context, type, json);
@@ -107,6 +106,7 @@ function render(context, json, type, key, idx) {
 function Context(data) {
     // the token, used to create links
     var token = URI(window.location).search(true).token;
+
     // the regex corresponding to the thing that should be replacced
     // in a templated link
     var templateRegex = /\{.*\.id\}/;
