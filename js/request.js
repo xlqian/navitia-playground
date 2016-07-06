@@ -111,6 +111,7 @@ function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
 
 function finalUrl(focusedElem) {
     var api = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
+    if (api.slice(-1) === "/") { api = api.slice(0, -1); }
 
     var path = '';
     $('#path .key, #path input.value').each(function(){
@@ -197,6 +198,11 @@ function parseUrl() {
             vxxFound = /^v\d+$/.test(r);
         }
     });
+    if (! vxxFound) {
+        api = req_uri.origin();
+        api_path = paths.map(decodeURIComponent);
+        $.notify('Version not found in the URL. Maybe you forgot "/v1" at the end of the API?');
+    }
 
     var params = req_uri.search(true);
 
