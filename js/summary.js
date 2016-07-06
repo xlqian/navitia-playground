@@ -270,6 +270,10 @@ summary.make.connection = function(context, json) {
                                      durationToString(json.display_duration)));
 }
 
+summary.make.tags = function(context, json) {
+    return $('<span/>').text(json.join(', '));
+};
+
 // add your summary view by addind:
 //   summary.make.{type} = function(context, json) { ... }
 
