@@ -38,10 +38,10 @@ extended.make.response = function(context, json) {
         result.append(render(context, obj, type, key, i));
     });
     if ('warnings' in json) {
-      json.warnings.forEach(function(warning, i) {
-        result.append(render(context, warning, 'warning', 'warnings', i));
-    });
-  }
+        json.warnings.forEach(function(warning, i) {
+            result.append(render(context, warning, 'warning', 'warnings', i));
+        });
+    }
   return result;
 }
 
