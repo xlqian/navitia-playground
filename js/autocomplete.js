@@ -22,7 +22,7 @@ var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter'];
 var _collections = ['addresses', 'commercial_modes', 'companies', 'coord', 'coverage', 'disruptions', 'lines', 'networks', 'places',
                'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicle_journeys'].sort();
 var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
-                            'arrivals', 'places', 'isochrones'];
+                            'arrivals', 'isochrones'];
 var _paramJourneyCommon = ['from', 'to', 'datetime','traveler_type', 'data_freshness',
             'first_section_mode[]', 'last_section_mode[]'].concat(_paramValueEverywhere).sort();
 
@@ -63,7 +63,7 @@ var autocomplete = {
             empty: _paramValueEverywhere,
         },
         paramValue : {
-            traveler_type : ['cyclist', 'luggage', 'wheelchair', 'standard', 'motorist', 'fast_walker', 'slow_walker'].sort(),
+            traveler_type : ['luggage', 'standard', 'fast_walker', 'slow_walker'].sort(),
             datetime_represents : ['arrival', 'departure'].sort(),
             'first_section_mode[]': _fallbackMode,
             'last_section_mode[]': _fallbackMode,

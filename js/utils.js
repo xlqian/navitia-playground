@@ -25,7 +25,7 @@ function isPlaceType(key) {
 }
 
 function isDatetimeType(str) {
-    return str.match(/datetime$/);
+    return $.inArray(str, ['since', 'until']) !== -1 || str.match(/datetime$/);
 }
 
 function isAutoCompleteInput(elt) {
