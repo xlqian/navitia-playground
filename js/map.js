@@ -60,8 +60,7 @@ var map = {
         },
         isochrone: function(context, json) {
             if (! ('geojson' in json)) { return []; }
-            var color = json.display_informations;
-            color = context.color_isochrone().get(json.min_duration);
+            var color = context.color_isochrone()[json.min_duration];
             return map._makePolygon(context, 'isochrone', json.geojson, json, color);
         },
         address: function(context, json) {
@@ -218,10 +217,10 @@ var map = {
         var link = map._makeLink(context, type, json, sum)[0];
         return [
             L.geoJson(geoJsonCoords, {
-                color:  "#" + '555555',
+                color:  '#555555',
                 opacity: 1,
                 weight: 0.5,
-                fillColor:  "#" + colorJson.color,
+                fillColor:  '#' + colorJson.color,
                 fillOpacity: 0.25
             }).bindPopup(link)
         ];

@@ -144,6 +144,10 @@ summary.make.links = function(context, json) {
     return res;
 };
 
+summary.make.warning = function(context, json) {
+    return $('<span>').text(json.message);
+}
+
 summary.make.pt_object = summary.make.place = function(context, json) {
     return $('<span>')
         .text(json.embedded_type)

@@ -141,31 +141,28 @@ function Context(data) {
     };
 
     this.color_isochrone = function() {
-      if ('isochrones' in data) {
-        var min_duration = [];
-        data.isochrones.forEach(function(isochrone) {
-          min_duration.push(isochrone.min_duration);
-        });
-        var green = '00FF00';
-        var red = 'FF0000';
-        var max_isochrone = data.isochrones.length;
-        var color_min_duration = new Map();
-        for (var i = 0; i < max_isochrone; i ++) {
-          var ratio = i / (max_isochrone - 1);
-          var g = 255;
-          var r = 255;
-          if (ratio < 1/2) {
-            g = Math.ceil(parseInt(green.substring(2,4), 16) * 2 * ratio);
-          } else {
-            r = Math.ceil(parseInt(red.substring(0,2), 16) * 2 * (1 - ratio));
-          }
-
-          var hex = sprintf("%02x%02x%02x", r, g, 0);
-          console.log(hex);
-          color_min_duration.set(min_duration[i], { color: hex })
+        if ('isochrones' in data) {
+            var min_duration = [];
+            data.isochrones.forEach(function(isochrone) {
+                min_duration.push(isochrone.min_duration);
+            });
+            var max_isochrone = data.isochrones.length;
+            var color_min_duration = {};
+            var scale = max_isochrone > 1 ? max_isochrone - 1 : 1;
+            for (var i = 0; i < max_isochrone; i ++) {
+                var ratio = i / scale;
+                var r = 255;
+                var g = 255;
+                if (ratio < 1/2) {
+                    r = Math.ceil(255 * ratio * 2);
+                } else {
+                    g = Math.ceil(255 * (1 - ratio) * 2);
+                }
+                var hex = sprintf("%02x%02x%02x", r, g, 0);
+                color_min_duration[min_duration[i]] = { color: hex };
+            }
+            return color_min_duration;
         }
-        return color_min_duration;
-      }
     }
 }
 
