@@ -20,16 +20,16 @@
 
 var map = {
     DrawSectionOption: {
-        DRAWSTART: '10',
-        DRAWEND: '01',
-        DRAWBOTH: '11',
-        DRAWNEITHER: '00'
+        DRAWSTART: 2, // 10
+        DRAWEND: 1, // 01
+        DRAWBOTH: 3, // 11
+        DRAWNEITHER: 0 // 00
     },
     _should_draw_section_start(option) {
-        return option & '10';
+        return option & 2;
     },
     _should_draw_section_end(option) {
-        return option & '01';
+        return option & 1;
     },
     STARTTEXT : 'Start',
     ENDTEXT : 'End',
@@ -59,7 +59,7 @@ var map = {
                 }
                 break;
             }
-            if (! draw_section_option) {
+            if (draw_section_option === undefined) {
                 draw_section_option = map.DrawSectionOption.DRAWBOTH
             }
             return map._makeString(context, 'section', json, color)
@@ -83,22 +83,22 @@ var map = {
             return map._makePolygon(context, 'isochrone', json.geojson, json);
         },
         address: function(context, json) {
-            return map._makeMarker(context, 'address', json, null, true);
+            return map._makeMarker(context, 'address', json);
         },
         administrative_region: function(context, json) {
-            return map._makeMarker('administrative_region', json, null, true);
+            return map._makeMarker('administrative_region', json);
         },
         stop_area: function(context, json) {
-            return map._makeMarker(context, 'stop_area', json, null, true);
+            return map._makeMarker(context, 'stop_area', json);
         },
         stop_point: function(context, json) {
-            return map._makeMarker(context, 'stop_point', json, null, true);
+            return map._makeMarker(context, 'stop_point', json);
         },
         place: function(context, json) {
-            return map._makeMarker(context, 'place', json, null, true);
+            return map._makeMarker(context, 'place', json);
         },
         poi: function(context, json) {
-            return map._makeMarker(context, 'poi', json, null, true);
+            return map._makeMarker(context, 'poi', json);
         },
         response: function(context, json) {
             var key = responseCollectionName(json);
@@ -160,7 +160,7 @@ var map = {
         return div;
     },
 
-    _makeMarker: function(context, type, json, colorJson, useDefaultMarker, label) {
+    _makeMarker: function(context, type, json, colorJson, useCustomMarker, label) {
         var lat, lon;
         var obj = json;
         switch (type){
@@ -180,7 +180,7 @@ var map = {
         var sum = summary.run(context, type, json);
         var t = type === 'place' ? json.embedded_type : type;
         var marker;
-        if (useDefaultMarker) {
+        if (! useCustomMarker) {
             marker = L.marker([lat, lon]);
         } else {
             var color = '#000000';
