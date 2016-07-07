@@ -19,6 +19,11 @@
 // SOFTWARE.
 
 var map = {
+    SectionPosition: {
+        START: 0,
+        MIDDLE:1,
+        END: 2
+    },
     makeFeatures: {
         region: function(context, json) {
             if (json.shape) {
@@ -27,7 +32,7 @@ var map = {
             }
             return [];
         },
-        section: function(context, json) {
+        section: function(context, json, section_position) {
             var color = json.display_informations;
             switch (json.type) {
             case 'street_network':
@@ -46,15 +51,19 @@ var map = {
                 break;
             }
             return map._makeString(context, 'section', json, color)
-                .concat(map._makeStopTimesMarker(context, json));
+                .concat(map._makeStopTimesMarker(context, json, color, section_position));
         },
         line: function(context, json) {
             return map._makeString(context, 'line', json, json);
         },
         journey: function(context, json) {
             if (! ('sections' in json)) { return []; }
-            var bind = function(s) {
-                return map.makeFeatures.section(context, s);
+            var bind = function(s, i, array) {
+                var section_position;
+                if ( i === 0) { section_position = map.SectionPosition.START; }
+                else if ( i === (array.length -1) ) { section_position = map.SectionPosition.END; }
+                else { section_position = map.SectionPosition.MIDDLE; }
+                return map.makeFeatures.section(context, s, section_position);
             }
             return flatMap(json.sections, bind);
         },
@@ -63,22 +72,22 @@ var map = {
             return map._makePolygon(context, 'isochrone', json.geojson, json);
         },
         address: function(context, json) {
-            return map._makeMarker(context, 'address', json);
+            return map._makeMarker(context, 'address', json, null, true);
         },
         administrative_region: function(context, json) {
-            return map._makeMarker('administrative_region', json);
+            return map._makeMarker('administrative_region', json, null, true);
         },
         stop_area: function(context, json) {
-            return map._makeMarker(context, 'stop_area', json);
+            return map._makeMarker(context, 'stop_area', json, null, true);
         },
         stop_point: function(context, json) {
-            return map._makeMarker(context, 'stop_point', json);
+            return map._makeMarker(context, 'stop_point', json, null, true);
         },
         place: function(context, json) {
-            return map._makeMarker(context, 'place', json);
+            return map._makeMarker(context, 'place', json, null, true);
         },
         poi: function(context, json) {
-            return map._makeMarker(context, 'poi', json);
+            return map._makeMarker(context, 'poi', json, null, true);
         },
         response: function(context, json) {
             var key = responseCollectionName(json);
@@ -140,7 +149,7 @@ var map = {
         return div;
     },
 
-    _makeMarker: function(context, type, json) {
+    _makeMarker: function(context, type, json, colorJson, useDefaultMarker, label) {
         var lat, lon;
         var obj = json;
         switch (type){
@@ -159,7 +168,27 @@ var map = {
         };
         var sum = summary.run(context, type, json);
         var t = type === 'place' ? json.embedded_type : type;
-        return [L.marker([lat, lon]).bindPopup(map._makeLink(context, t, obj, sum)[0])];
+        var marker;
+        if (useDefaultMarker) {
+            marker = L.marker([lat, lon]);
+        } else {
+            var color = '#000000';
+            if (colorJson  && (colorJson instanceof Object) && (colorJson.color)) {
+                color = '#' + colorJson.color;
+            }
+            var icon = L.divIcon({
+                iconSize: L.point(8, 8),
+                iconAnchor: L.point(6, 6),
+                popupAnchor: L.point(0, -4),
+                className: null,
+                html: $('<div class="my-div-icon"></div>').css('background-color', 'white').css('border-color', color)[0].outerHTML
+            });
+            marker = L.marker([lat, lon], {icon: icon});
+        }
+        if (label) {
+            marker.bindLabel(label, {noHide: true, offset: [20, -35] })
+        }
+        return [marker.bindPopup(map._makeLink(context, t, obj, sum)[0])];
     },
 
     bikeColor: { color: 'CED480' },
@@ -191,22 +220,44 @@ var map = {
             }).bindPopup(sum)
         ];
     },
-    _makeStopTimesMarker: function(context, json) {
+    _makeStopTimesMarker: function(context, json, color, section_position) {
         var stopTimes = json['stop_date_times'];
         var markers = []
 
         if (stopTimes) {
             // when section is PT
-            stopTimes.forEach(function(st) {
-                markers = markers.concat(map._makeMarker(context, 'stop_date_time', st));
+            stopTimes.forEach(function(st, i) {
+                var useDefaultMarker = false;
+                var label = null;
+                if (section_position === map.SectionPosition.START && i === 0) {
+                    useDefaultMarker = true
+                    label = "Start";
+                }else if (section_position === map.SectionPosition.END && i === (stopTimes.length -1 )) {
+                    useDefaultMarker = true
+                    label = "End";
+                }
+                markers = markers.concat(map._makeMarker(context, 'stop_date_time', st, color, useDefaultMarker, label));
             });
         } else {
             // when section is Walking
             var from = json.from;
             var to = json.to;
             if (! from || ! to) { return markers; }
-            markers = markers.concat(map._makeMarker(context, 'place', from))
-                            .concat(map._makeMarker(context, 'place', to));
+            var useDefaultMarker_from = false;
+            var useDefaultMarker_to = false;
+            var label_from= null;
+            var label_to= null;
+
+            if (section_position === map.SectionPosition.START) {
+                useDefaultMarker_from = true;
+                label_from = "Start";
+            }else if (section_position === map.SectionPosition.END) {
+                useDefaultMarker_to = true;
+                label_to = "End";
+            }
+
+            markers = markers.concat(map._makeMarker(context, 'place', from, color, useDefaultMarker_from, label_from))
+                            .concat(map._makeMarker(context, 'place', to, color, useDefaultMarker_to, label_to));
         }
         return markers;
     },

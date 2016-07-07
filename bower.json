@@ -24,7 +24,8 @@
     "sprintf": "^1.0.3",
     "leaflet": "^0.7.7",
     "notifyjs": "^0.4.2",
-    "wkt2geojson": "https://github.com/CanalTP/wkt2geojson.git#gh-pages"
+    "wkt2geojson": "https://github.com/CanalTP/wkt2geojson.git#gh-pages",
+    "leaflet.label": "https://github.com/Leaflet/Leaflet.label.git#gh-pages"
   },
   "devDependencies": {}
 }
