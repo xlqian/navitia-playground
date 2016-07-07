@@ -43,6 +43,9 @@ extended.make.response = function(context, json) {
 extended.make.journey = function(context, json) {
     if (! ('sections' in json)) { return extended.noExtendedMessage; }
     var result = $('<div class="list"/>');
+    if ('tags' in json && json.tags.length > 0) {
+        result.append(render(context, json.tags, 'tags', 'tags'));
+    }
     json.sections.forEach(function(section, i) {
         result.append(render(context, section, 'section', 'sections', i));
     });
