@@ -66,8 +66,8 @@ function isTemplate(str) {
 function flatMap(array, f) {
     var result = [];
 
-    array.forEach(function(obj) {
-        result = result.concat(f(obj));
+    array.forEach(function(obj, i, array) {
+        result = result.concat(f(obj, i, array));
     });
     return result;
 }

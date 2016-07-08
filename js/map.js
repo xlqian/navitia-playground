@@ -19,6 +19,20 @@
 // SOFTWARE.
 
 var map = {
+    DrawSectionOption: {
+        DRAWSTART: 2, // 10
+        DRAWEND: 1, // 01
+        DRAWBOTH: 3, // 11
+        DRAWNEITHER: 0 // 00
+    },
+    _should_draw_section_start: function(option) {
+        return option & 2;
+    },
+    _should_draw_section_end: function(option) {
+        return option & 1;
+    },
+    STARTTEXT : 'Start',
+    ENDTEXT : 'End',
     makeFeatures: {
         region: function(context, json) {
             if (json.shape) {
@@ -27,7 +41,7 @@ var map = {
             }
             return [];
         },
-        section: function(context, json) {
+        section: function(context, json, draw_section_option) {
             var color = json.display_informations;
             switch (json.type) {
             case 'street_network':
@@ -45,17 +59,23 @@ var map = {
                 }
                 break;
             }
+            if (draw_section_option === undefined) {
+                draw_section_option = map.DrawSectionOption.DRAWBOTH;
+            }
             return map._makeString(context, 'section', json, color)
-                .concat(map._makeStopTimesMarker(context, json));
+                .concat(map._makeStopTimesMarker(context, json, color, draw_section_option));
         },
         line: function(context, json) {
             return map._makeString(context, 'line', json, json);
         },
         journey: function(context, json) {
             if (! ('sections' in json)) { return []; }
-            var bind = function(s) {
-                return map.makeFeatures.section(context, s);
-            }
+            var bind = function(s, i, array) {
+                var draw_section_option = map.DrawSectionOption.DRAWNEITHER;
+                if ( i === 0) { draw_section_option |= map.DrawSectionOption.DRAWSTART; }
+                if ( i === (array.length -1) ) { draw_section_option |= map.DrawSectionOption.DRAWEND; }
+                return map.makeFeatures.section(context, s, draw_section_option);
+            };
             return flatMap(json.sections, bind);
         },
         isochrone: function(context, json) {
@@ -92,7 +112,7 @@ var map = {
             }
             var bind = function(s) {
                 return map.makeFeatures[type](context, s);
-            }
+            };
             return flatMap(json[key], bind);
         }
     },
@@ -141,7 +161,7 @@ var map = {
         return div;
     },
 
-    _makeMarker: function(context, type, json) {
+    _makeMarker: function(context, type, json, colorJson, useCustomMarker, label) {
         var lat, lon;
         var obj = json;
         switch (type){
@@ -157,10 +177,24 @@ var map = {
             default:
                 lat = json.coord.lat;
                 lon = json.coord.lon;
-        };
+        }
         var sum = summary.run(context, type, json);
         var t = type === 'place' ? json.embedded_type : type;
-        return [L.marker([lat, lon]).bindPopup(map._makeLink(context, t, obj, sum)[0])];
+        var marker;
+        if (! useCustomMarker) {
+            marker = L.marker([lat, lon]);
+        } else {
+            var color = '#000000';
+            if (colorJson  && colorJson instanceof Object && colorJson.color) {
+                color = '#' + colorJson.color;
+            }
+            marker = L.circleMarker([lat, lon], {color: color, opacity: 1, fillColor: 'white', fillOpacity: 1});
+            marker.setRadius(5);
+        }
+        if (label) {
+            marker.bindLabel(label, {noHide: true, className: 'map-marker-label'});
+        }
+        return [marker.bindPopup(map._makeLink(context, t, obj, sum)[0])];
     },
 
     bikeColor: { color: 'CED480' },
@@ -192,22 +226,38 @@ var map = {
             }).bindPopup(sum)
         ];
     },
-    _makeStopTimesMarker: function(context, json) {
+    _makeStopTimesMarker: function(context, json, color, draw_section_option) {
         var stopTimes = json['stop_date_times'];
-        var markers = []
+        var markers = [];
 
         if (stopTimes) {
             // when section is PT
-            stopTimes.forEach(function(st) {
-                markers = markers.concat(map._makeMarker(context, 'stop_date_time', st));
+            stopTimes.forEach(function(st, i) {
+                var label = null;
+                if (i === 0 &&
+                    map._should_draw_section_start(draw_section_option)) {
+                    label = map.STARTTEXT;
+                }else if (i === (stopTimes.length -1 ) &&
+                          map._should_draw_section_end(draw_section_option)) {
+                    label = map.ENDTEXT;
+                }
+                markers = markers.concat(map._makeMarker(context, 'stop_date_time', st, color, true, label));
             });
         } else {
             // when section is Walking
             var from = json.from;
             var to = json.to;
             if (! from || ! to) { return markers; }
-            markers = markers.concat(map._makeMarker(context, 'place', from))
-                            .concat(map._makeMarker(context, 'place', to));
+            var label_from = null;
+            var label_to = null;
+            if (map._should_draw_section_start(draw_section_option)) {
+                label_from = map.STARTTEXT;
+            }
+            if (map._should_draw_section_end(draw_section_option)) {
+                label_to = map.ENDTEXT;
+            }
+            markers = markers.concat(map._makeMarker(context, 'place', from, color, true, label_from))
+                             .concat(map._makeMarker(context, 'place', to, color, true, label_to));
         }
         return markers;
     },

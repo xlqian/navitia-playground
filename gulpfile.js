@@ -75,6 +75,7 @@ function compile_vendor_js(env){
             '**/leaflet/dist/leaflet-src.js',
             '**/notifyjs/dist/notify.js',
             '**/wkt2geojson/wkt2geojson.js',
+            '**/leaflet.label/leaflet.label.js',
             '!**/*.min.js']))
             .pipe(concat('lib.min.js'))
             .pipe(gulpif(isProd(env),uglify()))
@@ -92,6 +93,7 @@ function compile_vendor_css(env){
             '**/jquery-ui/themes/smoothness/jquery-ui.css',
             '**/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.css',
             '**/leaflet/dist/leaflet.css',
+            '**/leaflet.label/leaflet.label.css',
             '**/notifyjs/dist/styles/metro/notify-metro.css']))
             .pipe(concat('vendor.min.css'))
             .pipe(gulpif(isProd(env),cleanCSS()))
