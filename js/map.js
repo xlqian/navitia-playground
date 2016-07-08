@@ -19,7 +19,6 @@
 // SOFTWARE.
 
 var map = {
-
     DrawSectionOption: {
         DRAWSTART: 2, // 10
         DRAWEND: 1, // 01
@@ -27,10 +26,10 @@ var map = {
         DRAWNEITHER: 0 // 00
     },
     _should_draw_section_start: function(option) {
-        return (option & 2);
+        return option & 2;
     },
     _should_draw_section_end: function(option) {
-        return (option & 1);
+        return option & 1;
     },
     STARTTEXT : 'Start',
     ENDTEXT : 'End',
@@ -185,7 +184,7 @@ var map = {
             marker = L.marker([lat, lon]);
         } else {
             var color = '#000000';
-            if (colorJson  && (colorJson instanceof Object) && colorJson.color) {
+            if (colorJson  && colorJson instanceof Object && colorJson.color) {
                 color = '#' + colorJson.color;
             }
             marker = L.circleMarker([lat, lon], {color: color, opacity: 1, fillColor: 'white', fillOpacity: 1});
@@ -248,8 +247,8 @@ var map = {
             var from = json.from;
             var to = json.to;
             if (! from || ! to) { return markers; }
-            var label_from= null;
-            var label_to= null;
+            var label_from = null;
+            var label_to = null;
             if (map._should_draw_section_start(draw_section_option)) {
                 label_from = map.STARTTEXT;
             }
