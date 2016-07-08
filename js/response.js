@@ -141,7 +141,7 @@ function Context(data) {
     };
 
     this.min_duration_color = {};
-    if ('isochrones' in data) {
+    if (data instanceof Object && 'isochrones' in data && $.isArray(data.isochrones)) {
         var min_duration = data.isochrones.map(function(isochrone) { return isochrone.min_duration; });
         var max_isochrone = data.isochrones.length;
         var scale = max_isochrone > 1 ? max_isochrone - 1 : 1;
@@ -189,7 +189,7 @@ $(document).ready(function() {
         },
         function(xhr, status, error) {
             setStatus(xhr, start_time);
-            $('#data').html(render(new Context(), xhr.responseJSON, 'error', 'response'));
+            $('#data').html(render(new Context(xhr.responseJSON), xhr.responseJSON, 'error', 'response'));
             $('#data input').last().click();
             notifyOnError(xhr, 'Response');
         }
