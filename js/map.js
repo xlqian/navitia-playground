@@ -187,14 +187,8 @@ var map = {
             if (colorJson  && (colorJson instanceof Object) && (colorJson.color)) {
                 color = '#' + colorJson.color;
             }
-            var icon = L.divIcon({
-                iconSize: L.point(8, 8),
-                iconAnchor: L.point(6, 6),
-                popupAnchor: L.point(0, -4),
-                className: null,
-                html: $('<div class="my-div-icon"></div>').css('background-color', 'white').css('border-color', color)[0].outerHTML
-            });
-            marker = L.marker([lat, lon], {icon: icon});
+            marker = L.circleMarker([lat, lon], {color: color, opacity: 1, fillColor: 'white', fillOpacity: 1});
+            marker.setRadius(5);
         }
         if (label) {
             marker.bindLabel(label, {noHide: true, className: 'map-marker-label'});
@@ -246,7 +240,7 @@ var map = {
                           map._should_draw_section_end(draw_section_option)) {
                     label = map.ENDTEXT;
                 }
-                markers = markers.concat(map._makeMarker(context, 'stop_date_time', st, color, false, label));
+                markers = markers.concat(map._makeMarker(context, 'stop_date_time', st, color, true, label));
             });
         } else {
             // when section is Walking
@@ -261,8 +255,8 @@ var map = {
             if (map._should_draw_section_end(draw_section_option)) {
                 label_to = map.ENDTEXT;
             }
-            markers = markers.concat(map._makeMarker(context, 'place', from, color, false, label_from))
-                             .concat(map._makeMarker(context, 'place', to, color, false, label_to));
+            markers = markers.concat(map._makeMarker(context, 'place', from, color, true, label_from))
+                             .concat(map._makeMarker(context, 'place', to, color, true, label_to));
         }
         return markers;
     },
