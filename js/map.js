@@ -60,7 +60,7 @@ var map = {
         },
         isochrone: function(context, json) {
             if (! ('geojson' in json)) { return []; }
-            var color = context.color_min_duration[json.min_duration];
+            var color = context.min_duration_color[json.min_duration];
             return map._makePolygon(context, 'isochrone', json.geojson, json, color);
         },
         address: function(context, json) {

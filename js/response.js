@@ -140,7 +140,7 @@ function Context(data) {
         return $('<a>').attr('href', this.makeHref(href)).html(name);
     };
 
-    this.color_min_duration = {};
+    this.min_duration_color = {};
     if ('isochrones' in data) {
         var min_duration = data.isochrones.map(function(isochrone) { return isochrone.min_duration; });
         var max_isochrone = data.isochrones.length;
@@ -154,8 +154,8 @@ function Context(data) {
             } else {
                 g = Math.ceil(255 * (1 - ratio) * 2);
             }
-                var hex = sprintf("%02x%02x%02x", r, g, 0);
-                this.color_min_duration[min_duration[i]] = { color: hex };
+            var hex = sprintf("%02x%02x%02x", r, g, 0);
+            this.min_duration_color[min_duration[i]] = { color: hex };
         }
     }
 }

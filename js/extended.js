@@ -42,7 +42,7 @@ extended.make.response = function(context, json) {
             result.append(render(context, warning, 'warning', 'warnings', i));
         });
     }
-  return result;
+    return result;
 }
 
 extended.make.journey = function(context, json) {
