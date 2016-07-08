@@ -29,7 +29,7 @@ function setStatus(xhr, start_time) {
 
 function responseCollectionName(json) {
     var key = null;
-    var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes'];
+    var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes', 'warnings'];
     for (var k in json) {
         if ($.isArray(json[k]) &&
             $.inArray(k, notCollectionKeys) === -1) {
@@ -139,6 +139,25 @@ function Context(data) {
         var href = this.links[key].replace(templateRegex, obj.id);
         return $('<a>').attr('href', this.makeHref(href)).html(name);
     };
+
+    this.min_duration_color = {};
+    if ('isochrones' in data) {
+        var min_duration = data.isochrones.map(function(isochrone) { return isochrone.min_duration; });
+        var max_isochrone = data.isochrones.length;
+        var scale = max_isochrone > 1 ? max_isochrone - 1 : 1;
+        for (var i = 0; i < max_isochrone; i ++) {
+            var ratio = i / scale;
+            var r = 255;
+            var g = 255;
+            if (ratio < 1/2) {
+                r = Math.ceil(255 * ratio * 2);
+            } else {
+                g = Math.ceil(255 * (1 - ratio) * 2);
+            }
+            var hex = sprintf("%02x%02x%02x", r, g, 0);
+            this.min_duration_color[min_duration[i]] = { color: hex };
+        }
+    }
 }
 
 function manage_token (token) {
