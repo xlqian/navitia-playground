@@ -19,17 +19,18 @@
 // SOFTWARE.
 
 var map = {
+
     DrawSectionOption: {
         DRAWSTART: 2, // 10
         DRAWEND: 1, // 01
         DRAWBOTH: 3, // 11
         DRAWNEITHER: 0 // 00
     },
-    _should_draw_section_start(option) {
-        return option & 2;
+    _should_draw_section_start: function(option) {
+        return (option & 2);
     },
-    _should_draw_section_end(option) {
-        return option & 1;
+    _should_draw_section_end: function(option) {
+        return (option & 1);
     },
     STARTTEXT : 'Start',
     ENDTEXT : 'End',
@@ -60,7 +61,7 @@ var map = {
                 break;
             }
             if (draw_section_option === undefined) {
-                draw_section_option = map.DrawSectionOption.DRAWBOTH
+                draw_section_option = map.DrawSectionOption.DRAWBOTH;
             }
             return map._makeString(context, 'section', json, color)
                 .concat(map._makeStopTimesMarker(context, json, color, draw_section_option));
@@ -75,7 +76,7 @@ var map = {
                 if ( i === 0) { draw_section_option |= map.DrawSectionOption.DRAWSTART; }
                 if ( i === (array.length -1) ) { draw_section_option |= map.DrawSectionOption.DRAWEND; }
                 return map.makeFeatures.section(context, s, draw_section_option);
-            }
+            };
             return flatMap(json.sections, bind);
         },
         isochrone: function(context, json) {
@@ -111,7 +112,7 @@ var map = {
             }
             var bind = function(s) {
                 return map.makeFeatures[type](context, s);
-            }
+            };
             return flatMap(json[key], bind);
         }
     },
@@ -176,7 +177,7 @@ var map = {
             default:
                 lat = json.coord.lat;
                 lon = json.coord.lon;
-        };
+        }
         var sum = summary.run(context, type, json);
         var t = type === 'place' ? json.embedded_type : type;
         var marker;
@@ -184,7 +185,7 @@ var map = {
             marker = L.marker([lat, lon]);
         } else {
             var color = '#000000';
-            if (colorJson  && (colorJson instanceof Object) && (colorJson.color)) {
+            if (colorJson  && (colorJson instanceof Object) && colorJson.color) {
                 color = '#' + colorJson.color;
             }
             marker = L.circleMarker([lat, lon], {color: color, opacity: 1, fillColor: 'white', fillOpacity: 1});
@@ -227,7 +228,7 @@ var map = {
     },
     _makeStopTimesMarker: function(context, json, color, draw_section_option) {
         var stopTimes = json['stop_date_times'];
-        var markers = []
+        var markers = [];
 
         if (stopTimes) {
             // when section is PT
