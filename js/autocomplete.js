@@ -49,7 +49,7 @@ var autocomplete = {
             coverage: _paramValueEverywhere,
             departures: _depArrParams,
             journeys: ['datetime_represents'].concat(_paramJourneyCommon).sort(),
-            isochrones: [ 'max_duration', 'min_duration', 'duration[]'].concat(_paramJourneyCommon).sort(),
+            isochrones: [ 'max_duration', 'min_duration', 'boundary_duration[]'].concat(_paramJourneyCommon).sort(),
             lines: _paramValueEverywhere,
             places_nearby: _placesParams.sort(),
             places: _placesParams,
