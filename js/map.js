@@ -140,14 +140,11 @@ var map = {
         if ((features = map.getFeatures(context, type, json)).length) {
             div.addClass('leaflet');
             var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
-            mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-            mapquestLink = '<a href="http://www.mapquest.com//">MapQuest</a>';
-            mapquestPic = '<img src="http://developer.mapquest.com/content/osm/mq_logo.png">';
-            L.tileLayer(
-                'http://otile{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
-                    attribution: '&copy; '+mapLink+'. Tiles courtesy of '+mapquestLink+mapquestPic,
-                    maxZoom: 17,
-                    subdomains: '1234',
+            L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
+	        attribution: 'Tiles courtesy of ' +
+                    '<a href="http://openstreetmap.se/">OpenStreetMap Sweden</a>' +
+                    ' &mdash; Map data &copy; ' +
+                    '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(m);
             var overlay = L.featureGroup(features).addTo(m);
             setTimeout(function() {
