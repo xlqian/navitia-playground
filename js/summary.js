@@ -61,6 +61,7 @@ summary.make.journey = function(context, json) {
         json.sections.forEach(function(s) {
             switch (s.type) {
             case 'public_transport':
+            case 'on_demand_transport':
                 if (! first_section_mode) {
                     first_section_mode = last_section_mode;
                 }
@@ -86,7 +87,7 @@ summary.make.journey = function(context, json) {
             add(modes.makeSnPicto(first_section_mode));
         }
         json.sections.forEach(function(s) {
-            if (s.type !== 'public_transport') { return; }
+            if ($.inArray(s.type, ['public_transport', 'on_demand_transport']) === -1) { return; }
             add(summary.makePhysicalModesFromSection(s)
                 .append(summary.makeLineCode(s.display_informations)))
         });
@@ -177,6 +178,8 @@ summary.make.section = function(context, section) {
             res.append(document.createTextNode(section.transfer_type));
         }
         break;
+    case 'on_demand_transport':
+        res.append(section.type + ' ');
     case 'public_transport':
         pt = true;
         res.append(summary.makeRoutePoint(context, section));
