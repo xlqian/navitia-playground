@@ -291,6 +291,18 @@ summary.setColors = function(elt, json) {
     }
 };
 
+summary.make.contributor = function(context, json) {
+    return $('<span/>')
+        .append(document.createTextNode(' ' + json.name + ' (' + json.license +')'));
+};
+
+summary.make.dataset = function(context, json) {
+    return $('<span/>')
+        .append(document.createTextNode(' ' + json.description ))
+        .append(document.createTextNode(' (' + json.realtime_level +' - ' + json.system + ') :'))
+        .append(document.createTextNode(' ' + summary.formatDatetime(json.start_validation_date) +' - ' + summary.formatDatetime(json.end_validation_date)));
+};
+
 summary.defaultSummary = function(context, type, json) {
     if (! (json instanceof Object)) { return 'Invalid object'; }
 
