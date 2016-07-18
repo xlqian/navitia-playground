@@ -291,6 +291,20 @@ summary.setColors = function(elt, json) {
     }
 };
 
+summary.make.contributor = function(context, json) {
+    return $('<span/>').text(sprintf('%s (%s)', json.name, json.license));
+};
+
+summary.make.dataset = function(context, json) {
+    return $('<span/>').text(sprintf('%s (%s - %s): [%s, %s]',
+        json.description,
+        json.realtime_level,
+        json.system,
+        summary.formatDatetime(json.start_validation_date),
+        summary.formatDatetime(json.end_validation_date)
+    ));
+};
+
 summary.defaultSummary = function(context, type, json) {
     if (! (json instanceof Object)) { return 'Invalid object'; }
 
