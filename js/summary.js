@@ -102,7 +102,18 @@ summary.make.journey = function(context, json) {
     }
 
     add(summary.formatTime(json.arrival_date_time));
-    res.append(', duration: ' + durationToString(json.duration));
+    if ('durations' in json) {
+        if (json.durations.total) {
+            res.append(', duration: ' + durationToString(json.durations.total));
+        }
+        if (json.durations.walking) {
+            res.append(', ');
+            res.append(modes.makeSnPicto('walking'));
+            res.append(durationToString(json.durations.walking));
+        }
+    } else {
+        res.append(', duration: ' + durationToString(json.duration));
+    }
     return res;
 };
 
