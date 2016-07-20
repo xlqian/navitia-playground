@@ -11,7 +11,7 @@ after_success: |
   [ $TRAVIS_PULL_REQUEST = false ] &&
   pip install --user ghp-import &&
   export PATH="$PATH:$HOME/.local/bin" &&
-  ghp-import -n dist/prod &&
+  ghp-import -n dist/dev &&
   git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
 env:
   global:
