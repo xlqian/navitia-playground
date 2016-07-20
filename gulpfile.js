@@ -90,7 +90,6 @@ function compile_vendor_css(env){
     return function(){
         return bower()
         .pipe(gulpFilter([
-            '**/jquery-ui/themes/smoothness/jquery-ui.css',
             '**/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.css',
             '**/leaflet/dist/leaflet.css',
             '**/leaflet.label/leaflet.label.css',
