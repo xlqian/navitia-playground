@@ -87,7 +87,7 @@ var autocomplete = {
     },
     valueAutoComplete: function (input, key) {
         if (isDatetimeType(key)) {
-            makeDatetime(input);
+            autocomplete._makeDatetime(input);
         } else if (key in this.autocompleteTree.paramValue){
             autocomplete._customAutocompleteHelper(input, this.autocompleteTree.paramValue[key]);
         } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
@@ -254,6 +254,16 @@ var autocomplete = {
         if (customOptions) { $.extend(true, options, customOptions); }
         $(input).autocomplete(options).focus(function() {
             $(this).autocomplete('search', '');
+        });
+    },
+    _makeDatetime: function(elt) {
+        $(elt).datetimepicker({
+            dateFormat: 'yymmdd',
+            timeFormat: 'HHmmss',
+            timeInput: true,
+            separator: 'T',
+            controlType: 'select',
+            oneLine: true,
         });
     },
 }

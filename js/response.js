@@ -24,7 +24,7 @@ function setStatus(xhr, start_time) {
         var duration = new Date().getTime() - start_time;
         status += sprintf(', duration of the request: %sms', duration);
     }
-    $('#status').html(status);
+    $('#status').text(status);
 }
 
 function responseCollectionName(json) {
@@ -165,14 +165,15 @@ function manage_token (token) {
 }
 
 $(document).ready(function() {
-    var request = parseUrl();
-    if (request === null) {
-        $('#data').html('No request');
-        return;
-    }
-    renderjson.set_show_to_level(3);
+    renderjson.set_show_to_level(1);
     renderjson.set_max_string_length(60);
     renderjson.set_sort_objects(true);
+
+    var request = parseUrl();
+    if (request === null) {
+        $('#status').html('Status: no request');
+        return;
+    }
     var start_time = new Date().getTime();
     $.ajax({
         headers: manage_token(request.token),

@@ -167,17 +167,6 @@ function getCoverage() {
     return coverage;
 }
 
-function makeDatetime(elt) {
-    $(elt).datetimepicker({
-        dateFormat: 'yymmdd',
-        timeFormat: 'HHmmss',
-        timeInput: true,
-        separator: 'T',
-        controlType: 'select',
-        oneLine: true,
-    });
-}
-
 function parseUrl() {
     var search = new URI(window.location).search(true);
     var request = search['request'];
