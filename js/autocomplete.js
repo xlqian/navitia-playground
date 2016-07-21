@@ -142,7 +142,10 @@ var autocomplete = {
                     if (a.label > b.label) { return 1; }
                     return 0;
                 });
-                $(input).autocomplete({source: res,
+                $(input).autocomplete({
+                    close: function() { updateUrl($(input)[0]); },
+                    focus: function() { updateUrl($(input)[0]); },
+                    source: res,
                     minLength: 0,
                     scroll: true,
                     delay: 500
@@ -205,6 +208,8 @@ var autocomplete = {
         }
         $(elt).autocomplete({
             delay: 200,
+            close: function() { updateUrl($(elt)[0]); },
+            focus: function() { updateUrl($(elt)[0]); },
             source: function (request, response) {
                 var token = $('#token input.token').val();
                 var url = $('#api input.api').val();
@@ -246,6 +251,8 @@ var autocomplete = {
     },
     _customAutocompleteHelper: function(input, source, customOptions) {
         var options = {
+            close: function() { updateUrl($(input)[0]); },
+            focus: function() { updateUrl($(input)[0]); },
             source: source,
             minLength: 0,
             scroll: true,
