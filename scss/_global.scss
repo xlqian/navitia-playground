@@ -12,31 +12,6 @@ body {
     margin: auto;
 }
 
-.ui-autocomplete {
-    max-height: 15em;
-    overflow-y: auto;
-    border-style: solid;
-    border-width: 0.1ex;
-    border-color: $gray;
-    margin: 0;
-    padding: 0;
-    background: white;
-    position: absolute;
-}
-.ui-autocomplete .ui-menu-item {
-    margin: 0;
-    padding: 0.2em;
-    line-height: 1.5em;
-}
-.ui-autocomplete .ui-state-focus {
-    border: none;
-    background: $light-blue;
-    margin: 0;
-}
-.ui-helper-hidden-accessible {
-    display: none;
-}
-
 button {
     padding: 0.5em 2em;
     border: none;

@@ -65,18 +65,17 @@ gulp.task('prod:scripts', compile_js('prod'));
 function compile_vendor_js(env){
     return function(){
         return bower()
-        .pipe(gulpFilter([
-            '**/dist/jquery.js',
-            '**/jquery-ui.js',
-            '**/renderjson.js',
+            .pipe(gulpFilter([
+            '**/jquery/dist/jquery.js',
+            '**/jquery-ui/jquery-ui.js',
+            '**/renderjson/renderjson.js',
             '**/urijs/src/URI.js',
             '**/jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.js',
             '**/sprintf/src/sprintf.js',
             '**/leaflet/dist/leaflet-src.js',
             '**/notifyjs/dist/notify.js',
             '**/wkt2geojson/wkt2geojson.js',
-            '**/leaflet.label/leaflet.label.js',
-            '!**/*.min.js']))
+            '**/leaflet.label/leaflet.label.js']))
             .pipe(concat('lib.min.js'))
             .pipe(gulpif(isProd(env),uglify()))
             .pipe(gulp.dest(config[env] + '/lib'));
