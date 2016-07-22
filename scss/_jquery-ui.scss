@@ -57,7 +57,6 @@
 
 table.ui-datepicker-calendar {
     width: 100%;
-    padding: 0.5em;
     border-spacing: 0.5em;
     a {
         color: inherit;
@@ -78,10 +77,17 @@ table.ui-datepicker-calendar {
     padding: 0.5em;
     dl {
         margin: 0;
-        vertical-align: middle;
     }
-    .ui_tpicker_time_label {
-        padding: 0 0.5em 0 0;
+    dt.ui_tpicker_time_label {
+        padding: 0.5em;
+        padding-left: 0;
+    }
+    select {
+        background: $light-gray;
+        border: 0.1em solid $gray;
+        padding: 0.3em;
+        font-family: inherit;
+        font-size: inherit;
     }
 }
 
