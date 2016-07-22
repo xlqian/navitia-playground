@@ -38,8 +38,9 @@ var apiStoragePrefix = 'navitiaPlayground.';
 
 function saveToken(api, token) {
     if (! localStorageAvailable()) { return; }
-    if (! token) { return; }
-    window.localStorage.setItem(apiStoragePrefix + api, token);
+    var key = apiStoragePrefix + api
+    if (! token && window.localStorage.getItem(key)) { return; }
+    window.localStorage.setItem(key, token);
 }
 
 function getTokenFromStorage(api) {
