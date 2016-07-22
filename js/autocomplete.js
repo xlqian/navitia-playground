@@ -87,7 +87,7 @@ var autocomplete = {
     },
     valueAutoComplete: function (input, key) {
         if (isDatetimeType(key)) {
-            makeDatetime(input);
+            autocomplete._makeDatetime(input);
         } else if (key in this.autocompleteTree.paramValue){
             autocomplete._customAutocompleteHelper(input, this.autocompleteTree.paramValue[key]);
         } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
@@ -142,7 +142,10 @@ var autocomplete = {
                     if (a.label > b.label) { return 1; }
                     return 0;
                 });
-                $(input).autocomplete({source: res,
+                $(input).autocomplete({
+                    close: function() { updateUrl($(input)[0]); },
+                    focus: function() { updateUrl($(input)[0]); },
+                    source: res,
                     minLength: 0,
                     scroll: true,
                     delay: 500
@@ -205,6 +208,8 @@ var autocomplete = {
         }
         $(elt).autocomplete({
             delay: 200,
+            close: function() { updateUrl($(elt)[0]); },
+            focus: function() { updateUrl($(elt)[0]); },
             source: function (request, response) {
                 var token = $('#token input.token').val();
                 var url = $('#api input.api').val();
@@ -246,6 +251,8 @@ var autocomplete = {
     },
     _customAutocompleteHelper: function(input, source, customOptions) {
         var options = {
+            close: function() { updateUrl($(input)[0]); },
+            focus: function() { updateUrl($(input)[0]); },
             source: source,
             minLength: 0,
             scroll: true,
@@ -254,6 +261,16 @@ var autocomplete = {
         if (customOptions) { $.extend(true, options, customOptions); }
         $(input).autocomplete(options).focus(function() {
             $(this).autocomplete('search', '');
+        });
+    },
+    _makeDatetime: function(elt) {
+        $(elt).datetimepicker({
+            dateFormat: 'yymmdd',
+            timeFormat: 'HHmmss',
+            timeInput: true,
+            separator: 'T',
+            controlType: 'select',
+            oneLine: true,
         });
     },
 }

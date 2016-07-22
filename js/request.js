@@ -44,17 +44,20 @@ function insertParam() {
 
 function makeTemplatePath(val, input) {
     var templateFilled = false;
+    var isTemplateFilled = function() {
+        var curVal = input.val();
+        if (! templateFilled && curVal !== val && curVal !== '') {
+            input.closest('.inputDiv').removeClass('templateInput');
+            templateFilled = true;
+        }
+        return templateFilled;
+    };
     input.closest('.inputDiv').addClass('templateInput');
-    input.focus(function() { if (!templateFilled) { this.value=''; } })
-        .blur(function() {
-            if (templateFilled) { return; }
-            if ($(this).val() == val || $(this).val() == '') {
-                this.value = val;
-            } else {
-                $(this).closest('.inputDiv').removeClass('templateInput');
-                templateFilled = true;
-            }
-        });
+    input.focus(function() {
+        if (! isTemplateFilled()) { this.value = ''; }
+    }).blur(function() {
+        if (! isTemplateFilled()) { this.value = val; }
+    });
 }
 
 function updateAddPathAC(val){
@@ -165,17 +168,6 @@ function getCoverage() {
         prevIsCoverage = $(this).text() == 'coverage';
     });
     return coverage;
-}
-
-function makeDatetime(elt) {
-    $(elt).datetimepicker({
-        dateFormat: 'yymmdd',
-        timeFormat: 'HHmmss',
-        timeInput: true,
-        separator: 'T',
-        controlType: 'select',
-        oneLine: true,
-    });
 }
 
 function parseUrl() {

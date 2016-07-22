@@ -24,19 +24,25 @@ var extended = {};
 extended.make = {}
 
 extended.make.response = function(context, json) {
-    var key = responseCollectionName(json);
-    var objs = key ? json[key] : [];
-
-    var type = getType(key);
-    if (! type) { return 'Unknown request type'; }
-
     var result = $('<div class="list"/>');
+
+    if ('full_response' in json) {
+        result.append(render(context, json.full_response, 'response', 'full_response'));
+    }
+
     if ('links' in json) {
         result.append(render(context, json.links, 'links', 'links'));
     }
-    objs.forEach(function(obj, i) {
-        result.append(render(context, obj, type, key, i));
-    });
+
+    var key = responseCollectionName(json);
+    var objs = key ? json[key] : [];
+    var type = getType(key);
+    if (type) {
+        objs.forEach(function(obj, i) {
+            result.append(render(context, obj, type, key, i));
+        });
+    }
+
     if ('warnings' in json) {
         json.warnings.forEach(function(warning, i) {
             result.append(render(context, warning, 'warning', 'warnings', i));
@@ -136,6 +142,6 @@ extended.run = function(context, type, json) {
     } catch (e) {
         console.log(sprintf('extended(%s) thows an exception:', type));
         console.log(e);
-        return noExtendedMessage;
+        return extended.noExtendedMessage;
     }
 }

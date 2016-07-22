@@ -28,14 +28,6 @@ function isDatetimeType(str) {
     return $.inArray(str, ['since', 'until']) !== -1 || str.match(/datetime$/);
 }
 
-function isAutoCompleteInput(elt) {
-    return elt.attr('class').indexOf('ui-autocomplete-input') > -1;
-}
-
-function isDatePicker(elt) {
-    return elt.attr('class').indexOf('ui-autocomplete-input') > -1;
-}
-
 function htmlEncode(value) {
     return $('<div/>').text(value).html();
 }
