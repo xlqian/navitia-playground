@@ -199,7 +199,13 @@ function parseUrl() {
     var params = req_uri.search(true);
 
     var token = search['token'];
-    if (token === undefined) { token = getTokenFromStorage(api); }
+
+    if (token === undefined) {
+        if (/^[a-z0-9]{8}-(?:[a-z0-9]{4}-){3}[a-z0-9]{12}/.test(req_uri.username())) {
+            api = new URI(api).username('').toString();
+            token = req_uri.username();
+        } else { token = getTokenFromStorage(api); }
+    }
 
     return {
         token: token,
