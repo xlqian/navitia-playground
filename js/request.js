@@ -201,9 +201,9 @@ function parseUrl() {
     var token = search['token'];
 
     if (token === undefined) {
-        if (/^[a-z0-9]{8}-(?:[a-z0-9]{4}-){3}[a-z0-9]{12}/.test(req_uri.username())) {
-            api = new URI(api).username('').toString();
+        if (req_uri.username()) {
             token = req_uri.username();
+            api = new URI(api).username('').toString();
         } else { token = getTokenFromStorage(api); }
     }
 
