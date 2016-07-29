@@ -80,14 +80,12 @@ var map = {
         },
         isochrone: function(context, json) {
             if (! ('geojson' in json)) { return []; }
-            var draw_section_option = map.DrawSectionOption.DRAWNEITHER;
-            draw_section_option |= map.DrawSectionOption.DRAWSTART;
             var color = context.min_duration_color[json.min_duration];
             var place;
-            if(('from' in json)) {
+            if('from' in json) {
                 place = json.from;
             }
-            if(('to' in json)) {
+            if('to' in json) {
                 place = json.to;
             }
             return map._makePolygon(context, 'isochrone', json.geojson, json, color)
