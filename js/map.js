@@ -81,15 +81,16 @@ var map = {
         isochrone: function(context, json) {
             if (! ('geojson' in json)) { return []; }
             var color = context.min_duration_color[json.min_duration];
-            var place;
+            var draw_section_option = map.DrawSectionOption.DRAWNEITHER;
+            color_marker = '#000000'
             if('from' in json) {
-                place = json.from;
+                draw_section_option |= map.DrawSectionOption.DRAWSTART;
             }
             if('to' in json) {
-                place = json.to;
+                draw_section_option |= map.DrawSectionOption.DRAWEND;
             }
             return map._makePolygon(context, 'isochrone', json.geojson, json, color)
-            .concat(map._makeMarker(context, 'place', place));
+            .concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
         },
         address: function(context, json) {
             return map._makeMarker(context, 'address', json);
@@ -231,10 +232,10 @@ var map = {
             }).bindPopup(sum)
         ];
     },
+
     _makeStopTimesMarker: function(context, json, color, draw_section_option) {
         var stopTimes = json['stop_date_times'];
         var markers = [];
-
         if (stopTimes) {
             // when section is PT
             stopTimes.forEach(function(st, i) {
@@ -252,17 +253,16 @@ var map = {
             // when section is Walking
             var from = json.from;
             var to = json.to;
-            if (! from || ! to) { return markers; }
             var label_from = null;
             var label_to = null;
-            if (map._should_draw_section_start(draw_section_option)) {
+            if (from && map._should_draw_section_start(draw_section_option)) {
                 label_from = map.STARTTEXT;
+                markers = markers.concat(map._makeMarker(context, 'place', from, color, true, label_from));
             }
-            if (map._should_draw_section_end(draw_section_option)) {
+            if (to && map._should_draw_section_end(draw_section_option)) {
                 label_to = map.ENDTEXT;
+                markers = markers.concat(map._makeMarker(context, 'place', to, color, true, label_to));
             }
-            markers = markers.concat(map._makeMarker(context, 'place', from, color, true, label_from))
-                             .concat(map._makeMarker(context, 'place', to, color, true, label_to));
         }
         return markers;
     },
