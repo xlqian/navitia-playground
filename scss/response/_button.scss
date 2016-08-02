@@ -25,7 +25,7 @@ div.object {
     }
 
     label.objectButton input:checked + span {
-        background-color:#56B5DB;
-        color:#fff;
+        background-color: $dark-blue;
+        color: white;
     }
 }

@@ -2,15 +2,11 @@ $gray: #DEDEDE;
 $light-gray: #EFEFEF;
 $dark-gray: #353535;
 
-$blue: #56B5DB;
 $light-blue: #89C6E5;
-$dark-blue: #008ACA;
+$dark-blue: darken($light-blue, 25%);
 
-$red: #E83851;
-$light-red: #F18897;
+$light-purple: #cbb6e4;
 
-$orange: #E07F20;
 $light-orange: #EFBF8F;
 
-$green: #ADB72C;
 $light-green: #CED480;
