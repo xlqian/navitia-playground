@@ -255,7 +255,7 @@ var map = {
             }
             if (to && map._should_draw_section_end(draw_section_option)) {
                 label_to = map.ENDTEXT;
-                 markers.push(map._makeMarker(context, 'place', to, color, true, label_to)[0]);
+                markers.push(map._makeMarker(context, 'place', to, color, true, label_to)[0]);
             }
         }
         return markers;
