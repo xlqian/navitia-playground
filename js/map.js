@@ -82,7 +82,7 @@ var map = {
             if (! ('geojson' in json)) { return []; }
             var color = context.min_duration_color[json.min_duration];
             var draw_section_option = map.DrawSectionOption.DRAWBOTH;
-            color_marker = '#000000';
+            var color_marker = '#000000';
             return map._makePolygon(context, 'isochrone', json.geojson, json, color)
             .concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
         },
