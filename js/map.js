@@ -86,6 +86,36 @@ var map = {
             return map._makePolygon(context, 'isochrone', json.geojson, json, color)
             .concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
         },
+        heat_map: function(context, json) {
+            if (! ('matrix' in json)) { return []; }
+            var scale = 0;
+            json.matrix.body.forEach(function(body) {
+                body.row.forEach(function(row) {
+                    var duration = row.duration;
+                    if (duration !== null) {
+                        scale = Math.max(duration, scale);
+                    }
+                });
+            });
+            var local_map = [];
+            json.matrix.body.forEach(function(body, i) {
+                body.row.forEach(function(row, j) {
+                    var duration = row.duration;
+                    if (duration !== null) {
+                      var ratio = duration / scale;
+                      color = findColor(ratio);
+                      var rectangle = [
+                      [json.matrix.header[j].lat.max_lat, body.lon.max_lon],
+                      [json.matrix.header[j].lat.min_lat, body.lon.min_lon]
+                      ];
+                      local_map = local_map.concat(map._makePixel(context, 'heat_map', rectangle, json, color, duration));
+                    }
+                });
+            });
+            var draw_section_option = map.DrawSectionOption.DRAWBOTH;
+            var color_marker = '#000000';
+            return local_map.concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
+        },
         address: function(context, json) {
             return map._makeMarker(context, 'address', json);
         },
@@ -276,5 +306,17 @@ var map = {
     },
     _makeLink: function(context, type, obj, name) {
         return context.makeLink(type, obj, name);
+    },
+    _makePixel:  function(context, type, PolygonCoords, json, colorJson, duration) {
+        var sum = sprintf('duration: %s', durationToString(duration));
+        return [
+            L.rectangle(PolygonCoords, {
+                color:  '#555555',
+                opacity: 0,
+                weight: 0,
+                fillColor:  '#' + colorJson.color,
+                fillOpacity: 0.25
+            }).bindPopup(sum)
+        ];
     }
 };

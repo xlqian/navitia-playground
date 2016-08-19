@@ -104,3 +104,15 @@ function getTextColor(json) {
     }
     return 'black';
 }
+
+function findColor(ratio) {
+    var r = 255;
+    var g = 255;
+    if (ratio < 1/2) {
+        r = Math.ceil(255 * ratio * 2);
+    } else {
+        g = Math.ceil(255 * (1 - ratio) * 2);
+    }
+    var hex = sprintf("%02x%02x%02x", r, g, 0);
+    return { color: hex };
+}

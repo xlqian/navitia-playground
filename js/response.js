@@ -147,15 +147,7 @@ function Context(data) {
         var scale = max_isochrone > 1 ? max_isochrone - 1 : 1;
         for (var i = 0; i < max_isochrone; i ++) {
             var ratio = i / scale;
-            var r = 255;
-            var g = 255;
-            if (ratio < 1/2) {
-                r = Math.ceil(255 * ratio * 2);
-            } else {
-                g = Math.ceil(255 * (1 - ratio) * 2);
-            }
-            var hex = sprintf("%02x%02x%02x", r, g, 0);
-            this.min_duration_color[min_duration[i]] = { color: hex };
+            this.min_duration_color[min_duration[i]] = findColor(ratio);
         }
     }
 }
