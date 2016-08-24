@@ -87,9 +87,9 @@ var map = {
             .concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
         },
         heat_map: function(context, json) {
-            if (! ('matrix' in json)) { return []; }
+            if (! ('heat_matrix' in json)) { return []; }
             var scale = 0;
-            json.matrix.body.forEach(function(body) {
+            json.heat_matrix.body.forEach(function(body) {
                 body.row.forEach(function(row) {
                     var duration = row.duration;
                     if (duration !== null) {
@@ -98,18 +98,22 @@ var map = {
                 });
             });
             var local_map = [];
-            json.matrix.body.forEach(function(body, i) {
+            json.heat_matrix.body.forEach(function(body, i) {
                 body.row.forEach(function(row, j) {
                     var duration = row.duration;
+                    var color
                     if (duration !== null) {
-                      var ratio = duration / scale;
-                      color = findColor(ratio);
-                      var rectangle = [
-                      [json.matrix.header[j].lat.max_lat, body.lon.max_lon],
-                      [json.matrix.header[j].lat.min_lat, body.lon.min_lon]
-                      ];
-                      local_map = local_map.concat(map._makePixel(context, 'heat_map', rectangle, json, color, duration));
-                    }
+                        var ratio = duration / scale;
+                        color = findColor(ratio);
+                  /*  } else {
+                        color = { color: '000000' }
+                    } */
+                    var rectangle = [
+                    [json.heat_matrix.header[j].cell_lat.max_lat, body.cell_lon.max_lon],
+                    [json.heat_matrix.header[j].cell_lat.min_lat, body.cell_lon.min_lon]
+                    ];
+                    local_map = local_map.concat(map._makePixel(context, 'heat_map', rectangle, json, color, duration));
+                  } //to be removed
                 });
             });
             var draw_section_option = map.DrawSectionOption.DRAWBOTH;
@@ -308,7 +312,11 @@ var map = {
         return context.makeLink(type, obj, name);
     },
     _makePixel:  function(context, type, PolygonCoords, json, colorJson, duration) {
-        var sum = sprintf('duration: %s', durationToString(duration));
+      //  if (duration !== null) {
+            var sum = sprintf('duration: %s', durationToString(duration));
+      /*  } else {
+            var sum = sprintf('not accessible');
+        } */
         return [
             L.rectangle(PolygonCoords, {
                 color:  '#555555',
