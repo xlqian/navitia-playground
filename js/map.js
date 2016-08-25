@@ -89,18 +89,16 @@ var map = {
         heat_map: function(context, json) {
             if (! ('heat_matrix' in json)) { return []; }
             var scale = 0;
-            json.heat_matrix.body.forEach(function(body) {
-                body.row.forEach(function(row) {
-                    var duration = row.duration;
+            json.heat_matrix.lines.forEach(function(lines) {
+                lines.duration.forEach(function(duration) {
                     if (duration !== null) {
                         scale = Math.max(duration, scale);
                     }
                 });
             });
             var local_map = [];
-            json.heat_matrix.body.forEach(function(body, i) {
-                body.row.forEach(function(row, j) {
-                    var duration = row.duration;
+            json.heat_matrix.lines.forEach(function(lines, i) {
+                lines.duration.forEach(function(duration, j) {
                     var color
                     if (duration !== null) {
                         var ratio = duration / scale;
@@ -109,8 +107,8 @@ var map = {
                         color = { color: '000000' }
                     } */
                     var rectangle = [
-                    [json.heat_matrix.header[j].cell_lat.max_lat, body.cell_lon.max_lon],
-                    [json.heat_matrix.header[j].cell_lat.min_lat, body.cell_lon.min_lon]
+                    [json.heat_matrix.line_headers[j].cell_lat.max_lat, lines.cell_lon.max_lon],
+                    [json.heat_matrix.line_headers[j].cell_lat.min_lat, lines.cell_lon.min_lon]
                     ];
                     local_map = local_map.concat(map._makePixel(context, 'heat_map', rectangle, json, color, duration));
                   } //to be removed
