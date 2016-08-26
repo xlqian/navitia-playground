@@ -312,10 +312,9 @@ var map = {
         return context.makeLink(type, obj, name);
     },
     _makePixel:  function(context, type, PolygonCoords, json, colorJson, duration) {
+        var sum = 'not accessible';
         if (duration !== null) {
-            var sum = sprintf('duration: %s', durationToString(duration));
-        } else {
-            var sum = sprintf('not accessible');
+            sum = sprintf('duration: %s', durationToString(duration));
         }
         return [
             L.rectangle(PolygonCoords, {
