@@ -86,6 +86,40 @@ var map = {
             return map._makePolygon(context, 'isochrone', json.geojson, json, color)
             .concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
         },
+        heat_map: function(context, json) {
+            if (! ('heat_matrix' in json)) { return []; }
+            var scale = 0;
+            json.heat_matrix.lines.forEach(function(lines) {
+                lines.duration.forEach(function(duration) {
+                    if (duration !== null) {
+                        scale = Math.max(duration, scale);
+                    }
+                });
+            });
+            var local_map = [];
+            json.heat_matrix.lines.forEach(function(lines, i) {
+                lines.duration.forEach(function(duration, j) {
+                    var color;
+                    if (duration !== null) {
+                        var ratio = duration / scale;
+                        color = findColor(ratio);
+                   } else {
+                        color = { color: '000000' };
+                        // for the moment, we don't want to print the null duration squares because
+                        // it impacts the performances of the navigator.
+                        return;
+                    }
+                    var rectangle = [
+                    [json.heat_matrix.line_headers[j].cell_lat.max_lat, lines.cell_lon.max_lon],
+                    [json.heat_matrix.line_headers[j].cell_lat.min_lat, lines.cell_lon.min_lon]
+                    ];
+                    local_map = local_map.concat(map._makePixel(context, 'heat_map', rectangle, json, color, duration));
+                });
+            });
+            var draw_section_option = map.DrawSectionOption.DRAWBOTH;
+            var color_marker = '#000000';
+            return local_map.concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
+        },
         address: function(context, json) {
             return map._makeMarker(context, 'address', json);
         },
@@ -276,5 +310,20 @@ var map = {
     },
     _makeLink: function(context, type, obj, name) {
         return context.makeLink(type, obj, name);
+    },
+    _makePixel:  function(context, type, PolygonCoords, json, colorJson, duration) {
+        var sum = 'not accessible';
+        if (duration !== null) {
+            sum = sprintf('duration: %s', durationToString(duration));
+        }
+        return [
+            L.rectangle(PolygonCoords, {
+                color:  '#555555',
+                opacity: 0,
+                weight: 0,
+                fillColor:  '#' + colorJson.color,
+                fillOpacity: 0.25
+            }).bindPopup(sum)
+        ];
     }
 };

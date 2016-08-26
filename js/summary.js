@@ -135,6 +135,18 @@ summary.make.isochrone = function(context, json) {
     return res;
 };
 
+summary.make.heat_map = function(context, json) {
+    var res = $('<span>');
+    if ('from' in json) {
+      res.append(sprintf('from %s, ', htmlEncode(json.from.name)));
+    } else if ('to' in json) {
+      res.append(sprintf('to %s, ', htmlEncode(json.to.name)));
+    } else {
+        res.text('no summary');
+    }
+    return res;
+};
+
 summary.make.links = function(context, json) {
     var res = $('<span>');
     function makeData(link) {

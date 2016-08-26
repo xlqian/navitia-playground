@@ -22,7 +22,7 @@ var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter'];
 var _collections = ['addresses', 'commercial_modes', 'companies', 'coord', 'coverage', 'disruptions', 'lines', 'networks', 'places',
                'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicle_journeys'].sort();
 var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
-                            'arrivals', 'isochrones'];
+                            'arrivals', 'isochrones', 'heat_maps'];
 var _paramJourneyCommon = ['from', 'to', 'datetime','traveler_type', 'data_freshness',
             'first_section_mode[]', 'last_section_mode[]'].concat(_paramValueEverywhere).sort();
 
@@ -50,6 +50,7 @@ var autocomplete = {
             departures: _depArrParams,
             journeys: ['datetime_represents'].concat(_paramJourneyCommon).sort(),
             isochrones: [ 'max_duration', 'min_duration', 'boundary_duration[]'].concat(_paramJourneyCommon).sort(),
+            heat_maps: [ 'max_duration', 'resolution'].concat(_paramJourneyCommon).sort(),
             lines: _paramValueEverywhere,
             places_nearby: _placesParams.sort(),
             places: _placesParams,
