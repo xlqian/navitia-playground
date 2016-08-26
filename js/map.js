@@ -99,19 +99,21 @@ var map = {
             var local_map = [];
             json.heat_matrix.lines.forEach(function(lines, i) {
                 lines.duration.forEach(function(duration, j) {
-                    var color
+                    var color;
                     if (duration !== null) {
                         var ratio = duration / scale;
                         color = findColor(ratio);
-                  /*  } else {
-                        color = { color: '000000' }
-                    } */
+                   } else {
+                        color = { color: '000000' };
+                        // for the moment, we don't want to print the null duration squares because
+                        // it impacts the performances of the navigator.
+                        return;
+                    }
                     var rectangle = [
                     [json.heat_matrix.line_headers[j].cell_lat.max_lat, lines.cell_lon.max_lon],
                     [json.heat_matrix.line_headers[j].cell_lat.min_lat, lines.cell_lon.min_lon]
                     ];
                     local_map = local_map.concat(map._makePixel(context, 'heat_map', rectangle, json, color, duration));
-                  } //to be removed
                 });
             });
             var draw_section_option = map.DrawSectionOption.DRAWBOTH;
@@ -310,11 +312,11 @@ var map = {
         return context.makeLink(type, obj, name);
     },
     _makePixel:  function(context, type, PolygonCoords, json, colorJson, duration) {
-      //  if (duration !== null) {
+        if (duration !== null) {
             var sum = sprintf('duration: %s', durationToString(duration));
-      /*  } else {
+        } else {
             var sum = sprintf('not accessible');
-        } */
+        }
         return [
             L.rectangle(PolygonCoords, {
                 color:  '#555555',
