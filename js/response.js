@@ -182,7 +182,7 @@ $(document).ready(function() {
         },
         function(xhr, status, error) {
             setStatus(xhr, start_time);
-            $('#data').html(render(new Context(xhr.responseJSON), xhr.responseJSON, 'error', 'response'));
+            $('#data').html(render(new Context(xhr.responseJSON), xhr.responseJSON, 'response', 'response'));
             $('#data input').last().click();
             notifyOnError(xhr, 'Response');
         }

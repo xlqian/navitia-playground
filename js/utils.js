@@ -64,11 +64,43 @@ function flatMap(array, f) {
     return result;
 }
 
+$.notify.addStyle("navitia", {
+    html: "<div class='ui-widget'><span data-notify-html='text'></span></div>",
+    classes: {
+        error: {
+            "color": "#B94A48",
+            "background-color": "#F2DEDE",
+            "border-color": "#EED3D7",
+        },
+        success: {
+            "color": "#468847",
+            "background-color": "#DFF0D8",
+            "border-color": "#D6E9C6",
+        },
+        info: {
+            "color": "#3A87AD",
+            "background-color": "#D9EDF7",
+            "border-color": "#BCE8F1",
+        },
+        warn: {
+            "color": "#C09853",
+            "background-color": "#FCF8E3",
+            "border-color": "#FBEED5",
+        }
+    }
+});
+
 function notifyOnError(data, typeError) {
     if (data.status === 401) {
         $('#token').addClass('templateInput');
     }
-    $.notify(sprintf("%s error: %s", typeError, data.statusText));
+    var message = summary.run(new Context(data.responseJSON), 'response', data.responseJSON);
+    $.notify({
+        text: $('<span/>').text(sprintf('%s error: ', typeError)).append(message)
+    }, {
+        position: 'right bottom',
+        style: 'navitia',
+    });
 }
 
 function getType(key) {
