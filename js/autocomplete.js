@@ -251,6 +251,15 @@ var autocomplete = {
         };
     },
     _customAutocompleteHelper: function(input, source, customOptions) {
+        if (source.length && source[0] instanceof Object) {
+            source = source.sort(function(a, b) {
+                if (a.value < b.value) { return -1; }
+                if (a.value > b.value) { return 1; }
+                return 0;
+            });
+        } else {
+            source = source.sort();
+        }
         var options = {
             close: function() { updateUrl($(input)[0]); },
             focus: function() { updateUrl($(input)[0]); },
