@@ -1,9 +1,13 @@
-.ui-widget {
+.ui-widget, .notifyjs-navitia-base {
     border-style: solid;
     border-width: 0.1ex;
     border-color: $gray;
     background: white;
     box-shadow: 0 0 0.5em rgba(0,0,0,0.2);
+}
+.notifyjs-navitia-base {
+    font-weight: bold;
+    padding: 0.5em;
 }
 .ui-widget-header {
     border-style: solid;
