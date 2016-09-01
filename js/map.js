@@ -58,6 +58,7 @@ var map = {
                 case 'walking': color = map.walkingColor; break;
                 }
                 break;
+            case 'crow_fly': color = map.crowFlyColor; break;
             }
             if (draw_section_option === undefined) {
                 draw_section_option = map.DrawSectionOption.DRAWBOTH;
@@ -235,31 +236,45 @@ var map = {
     bikeColor: { color: 'CED480' },
     carColor: { color: 'EFBF8F' },
     walkingColor: { color: '89C6E5' },
+    crowFlyColor: { color: 'CBB6E4' },
+
+    _getCoordFromPlace: function(place) {
+        if (place && place[place.embedded_type] && place[place.embedded_type].coord) {
+            return place[place.embedded_type].coord;
+        }
+        return null;
+    },
 
     _makeString: function(context, type, json, colorJson) {
-        if (! ( "geojson" in json) || ! json.geojson.coordinates.length) {
-            return [];
-        }
         if (! (colorJson instanceof Object) || ! (colorJson.color)) {
             colorJson = { color: '000000' };
         }
         var sum = summary.run(context, type, json);
-        return [
-            L.geoJson(json.geojson, {
-                style: {
-                    color: getTextColor(colorJson),
-                    weight: 6,
-                    opacity: 1
-                }
-            }),
-            L.geoJson(json.geojson, {
-                style: {
-                    color: "#" + colorJson.color,
-                    weight: 5,
-                    opacity: 1
-                }
-            }).bindPopup(sum)
-        ];
+        var from = map._getCoordFromPlace(json.from);
+        var to = map._getCoordFromPlace(json.to);
+        var style1 = {
+            color: getTextColor(colorJson),
+            weight: 6,
+            opacity: 1
+        };
+        var style2 = {
+            color: "#" + colorJson.color,
+            weight: 5,
+            opacity: 1
+        };
+        if (json.geojson && json.geojson.coordinates.length) {
+            return [
+                L.geoJson(json.geojson, { style: style1 }),
+                L.geoJson(json.geojson, { style: style2 }).bindPopup(sum)
+            ];
+        } else if (from && to) {
+            return [
+                L.polyline([from, to], style1),
+                L.polyline([from, to], style2).bindPopup(sum)
+            ];
+        } else {
+            return [];
+        }
     },
 
     _makeStopTimesMarker: function(context, json, color, draw_section_option) {
