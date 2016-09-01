@@ -27,10 +27,10 @@ summary.make.response = function(context, json) {
         return 'Error: response is not JSon';
     }
     if ('message' in json) {
-        return sprintf('Message: %s', htmlEncode(json.message));
+        return sprintf('Message: %s', json.message);
     }
     if ('error' in json && json.error && 'message' in json.error) {
-        return sprintf('Error: %s', htmlEncode(json.error.message));
+        return sprintf('Error: %s', json.error.message);
     }
     var result = '';
     var key = responseCollectionName(json);
