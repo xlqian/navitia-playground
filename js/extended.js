@@ -136,6 +136,7 @@ extended.hasExtended = function(context, type, json) {
 
 // main method
 extended.run = function(context, type, json) {
+    if (! (json instanceof Object)) { return extended.noExtendedMessage; }
     try {
         if (type in this.make) { return this.make[type](context, json); }
         return extended.defaultExtended(context, type, json);

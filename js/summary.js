@@ -229,7 +229,23 @@ summary.make.section = function(context, section) {
 };
 
 summary.make.region = function(context, region) {
-    return region.id + (region.name ? sprintf(' (%s)', region.name) : '');
+    function makeDate(d) {
+        var year = + d.slice(0, 4);
+        var month = + d.slice(4, 6) - 1;
+        var day = + d.slice(6, 8);
+        return new Date(year, month, day);
+    }
+    var res = $('<span/>').text(region.id + (region.name ? sprintf(' (%s)', region.name) : ''));
+    var now = new Date();
+    var begin = makeDate(region.start_production_date);
+    var end = makeDate(region.end_production_date);
+    var remaining_days = Math.round((end - now) / 1000 / 60 / 60 / 24);
+    if (now < begin || end < now) {
+        res.append(', <span class="outofdate">out-of-date</span>');
+    } else if (remaining_days <= 21) {
+        res.append(sprintf(', <span class="almost_outofdate">%sd remaining</span>', remaining_days));
+    }
+    return res;
 };
 
 summary.make.line = function(context, line) {

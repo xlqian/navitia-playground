@@ -160,6 +160,7 @@ var map = {
 
     getFeatures: function(context, type, json) {
         if (! (map.makeFeatures[type] instanceof Function)) { return []; }
+        if (! (json instanceof Object)) { return []; }
         try {
             return map.makeFeatures[type](context, json);
         } catch (e) {

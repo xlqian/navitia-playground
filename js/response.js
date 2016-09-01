@@ -28,6 +28,7 @@ function setStatus(xhr, start_time) {
 }
 
 function responseCollectionName(json) {
+    if (! (json instanceof Object)) { return null; }
     var key = null;
     var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes', 'warnings'];
     for (var k in json) {
