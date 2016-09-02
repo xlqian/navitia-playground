@@ -113,19 +113,40 @@ var autocomplete = {
                 select: function(event, ui) { $(input).val(ui.item.value).change(); }
             });
     },
-    staticAutocompleteTypes: ['coverage',
+    staticAutocompleteTypes: [
+        'coverage',
         'physical_modes',
         'poi_types',
     ],
-    staticAutocomplete : function (input, staticType){
-        var api = $('#api input.api').attr('value');
-        var token = $('#token input.token').val();
-        var cov = getCoverage();
-        var request = '';
-        if (staticType === 'coverage') {
-            request =  api +  '/coverage/';
-        } else {
-            request =  api +  '/coverage/' + cov + '/' + staticType;
+    staticAutocomplete: function(input, staticType) {
+        var old_request = '';
+        var old_token = '';
+        var handle = function() {
+            var api = $('#api input.api').val();
+            var token = $('#token input.token').val();
+            var cov = getCoverage();
+            var request = '';
+            if (staticType === 'coverage') {
+                request =  api +  '/coverage/';
+            } else {
+                request =  api +  '/coverage/' + cov + '/' + staticType;
+            }
+            if (request !== old_request || token !== old_token) {
+                old_request = request;
+                old_token = token;
+                autocomplete.updateStaticAutocomplete(input, staticType, request, token);
+            } else if ($(input).is(':focus')) {
+                $(input).autocomplete('search', '');
+            }
+
+        };
+        handle();
+        $(input).focus(handle);
+    },
+    updateStaticAutocomplete: function(input, staticType, request, token) {
+        if ($(input).autocomplete('instance')) {
+            // be shure that out-of-date autocompletion will not be active
+            $(input).autocomplete('destroy');
         }
         $.ajax({
             headers: manage_token(token),
@@ -150,11 +171,10 @@ var autocomplete = {
                     minLength: 0,
                     scroll: true,
                     delay: 500
-                }).focus(function() {
-                    $(input).autocomplete('search', '');
                 }).autocomplete('instance')._renderItem = function(ul, item) {
                     return $('<li>').append(item.desc).appendTo(ul);
                 };
+                $(input).autocomplete('enable');
                 if ($(input).is(':focus')) {
                     $(input).autocomplete('search', '');
                 }
