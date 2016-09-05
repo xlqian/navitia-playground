@@ -114,7 +114,7 @@ var map = {
                     [json.heat_matrix.line_headers[j].cell_lat.max_lat, lines.cell_lon.max_lon],
                     [json.heat_matrix.line_headers[j].cell_lat.min_lat, lines.cell_lon.min_lon]
                     ];
-                    local_map = local_map.concat(map._makePixel(context, 'heat_map', rectangle, json, color, duration));
+                    local_map.push(map._makePixel(context, 'heat_map', rectangle, json, color, duration));
                 });
             });
             var draw_section_option = map.DrawSectionOption.DRAWBOTH;
@@ -332,14 +332,12 @@ var map = {
         if (duration !== null) {
             sum = sprintf('duration: %s', durationToString(duration));
         }
-        return [
-            L.rectangle(PolygonCoords, {
-                color:  '#555555',
-                opacity: 0,
-                weight: 0,
-                fillColor:  '#' + colorJson.color,
-                fillOpacity: 0.25
-            }).bindPopup(sum)
-        ];
+        return L.rectangle(PolygonCoords, {
+            color:  '#555555',
+            opacity: 0,
+            weight: 0,
+            fillColor:  '#' + colorJson.color,
+            fillOpacity: 0.25
+        }).bindPopup(sum);
     }
 };
