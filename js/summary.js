@@ -230,6 +230,7 @@ summary.make.section = function(context, section) {
 
 summary.make.region = function(context, region) {
     function makeDate(d) {
+        if (typeof d !== 'string') { return null; }
         var year = + d.slice(0, 4);
         var month = + d.slice(4, 6) - 1;
         var day = + d.slice(6, 8);
@@ -240,7 +241,12 @@ summary.make.region = function(context, region) {
     var begin = makeDate(region.start_production_date);
     var end = makeDate(region.end_production_date);
     var remaining_days = Math.round((end - now) / 1000 / 60 / 60 / 24);
-    if (now < begin || end < now) {
+    if (region.error && region.error.value) {
+        res.append(sprintf(', <span class="error">error: %s</span>', htmlEncode(region.error.value)));
+    }
+    if (region.status !== 'running') {
+        res.append(sprintf(', <span class="error">status: %s</span>', htmlEncode(region.status)));
+    } else if (now < begin || end < now) {
         res.append(', <span class="outofdate">out-of-date</span>');
     } else if (remaining_days <= 21) {
         res.append(sprintf(', <span class="almost_outofdate">%sd remaining</span>', remaining_days));
