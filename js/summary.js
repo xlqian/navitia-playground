@@ -326,7 +326,18 @@ summary.make.tags = function(context, json) {
     return $('<span/>').text(json.join(', '));
 };
 
-// add your summary view by addind:
+summary.make.feed_publisher = function(context, json) {
+    var res = $('<span/>')
+        .append($('<a/>')
+                .attr('href', (json.url.indexOf('://') === -1 ? 'http://' : '') + json.url)
+                .text(json.name));
+    if (json.license) {
+        res.append(', license: ' + htmlEncode(json.license));
+    }
+    return res;
+};
+
+// add your summary view by adding:
 //   summary.make.{type} = function(context, json) { ... }
 
 summary.setColors = function(elt, json) {

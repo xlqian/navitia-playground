@@ -43,6 +43,12 @@ extended.make.response = function(context, json) {
         });
     }
 
+    if ($.isArray(json.feed_publishers)) {
+        json.feed_publishers.forEach(function(feed_publisher, i) {
+            result.append(render(context, feed_publisher, 'feed_publisher', 'feed_publishers', i));
+        });
+    }
+
     if ('warnings' in json) {
         json.warnings.forEach(function(warning, i) {
             result.append(render(context, warning, 'warning', 'warnings', i));
