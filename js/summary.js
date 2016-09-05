@@ -243,8 +243,7 @@ summary.make.region = function(context, region) {
     var remaining_days = Math.round((end - now) / 1000 / 60 / 60 / 24);
     if (region.error && region.error.value) {
         res.append(sprintf(', <span class="error">error: %s</span>', htmlEncode(region.error.value)));
-    }
-    if (region.status !== 'running') {
+    } else if (region.status !== 'running') {
         res.append(sprintf(', <span class="error">status: %s</span>', htmlEncode(region.status)));
     } else if (now < begin || end < now) {
         res.append(', <span class="outofdate">out-of-date</span>');
