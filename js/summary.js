@@ -325,29 +325,19 @@ summary.make.tags = function(context, json) {
     return $('<span/>').text(json.join(', '));
 };
 
-summary.make.feed_publisher = function(context, json) {
-    var res = $('<span/>')
-        .append($('<a/>')
-                .attr('href', (json.url.indexOf('://') === -1 ? 'http://' : '') + json.url)
-                .text(json.name));
+summary.make.contributor = function(context, json) {
+    var res = $('<span/>');
+    var url = json.url ? json.url : json.website;
+    if (url && typeof url === 'string') {
+        if (url.indexOf('://') === -1) { url = 'http://' + url; }
+        res.append($('<a/>').attr('href', url).text(json.name));
+    } else {
+        res.text(json.name);
+    }
     if (json.license) {
         res.append(', license: ' + htmlEncode(json.license));
     }
     return res;
-};
-
-// add your summary view by adding:
-//   summary.make.{type} = function(context, json) { ... }
-
-summary.setColors = function(elt, json) {
-    if ('color' in json) {
-        elt.css('background-color', '#' + json.color);
-        elt.css('color', getTextColor(json));
-    }
-};
-
-summary.make.contributor = function(context, json) {
-    return $('<span/>').text(sprintf('%s (%s)', json.name, json.license));
 };
 
 summary.make.dataset = function(context, json) {
@@ -358,6 +348,16 @@ summary.make.dataset = function(context, json) {
         summary.formatDatetime(json.start_validation_date),
         summary.formatDatetime(json.end_validation_date)
     ));
+};
+
+// add your summary view by adding:
+//   summary.make.{type} = function(context, json) { ... }
+
+summary.setColors = function(elt, json) {
+    if ('color' in json) {
+        elt.css('background-color', '#' + json.color);
+        elt.css('color', getTextColor(json));
+    }
 };
 
 summary.defaultSummary = function(context, type, json) {

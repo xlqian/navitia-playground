@@ -45,7 +45,7 @@ extended.make.response = function(context, json) {
 
     if ($.isArray(json.feed_publishers)) {
         json.feed_publishers.forEach(function(feed_publisher, i) {
-            result.append(render(context, feed_publisher, 'feed_publisher', 'feed_publishers', i));
+            result.append(render(context, feed_publisher, 'contributor', 'feed_publishers', i));
         });
     }
 
