@@ -173,10 +173,14 @@ summary.make.warning = function(context, json) {
 }
 
 summary.make.pt_object = summary.make.place = function(context, json) {
-    return $('<span>')
+    var res = $('<span>')
         .text(json.embedded_type)
         .append(': ')
         .append(summary.run(context, json.embedded_type, json[json.embedded_type]));
+    if ('distance' in json) {
+        res.append(sprintf(' at %dm', json.distance));
+    }
+    return res;
 };
 
 summary.make.section = function(context, section) {
