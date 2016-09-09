@@ -19,8 +19,10 @@
 // SOFTWARE.
 
 var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter'];
-var _collections = ['addresses', 'commercial_modes', 'companies', 'coord', 'coverage', 'disruptions', 'lines', 'networks', 'places',
-               'poi_types', 'pois', 'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicle_journeys'].sort();
+var _collections = [
+    'addresses', 'commercial_modes', 'companies', 'contributors', 'coord', 'coverage',
+    'datasets', 'disruptions', 'lines', 'networks', 'places', 'poi_types', 'pois',
+    'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicle_journeys'].sort();
 var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
                             'arrivals', 'isochrones', 'heat_maps'];
 var _paramJourneyCommon = ['from', 'to', 'datetime','traveler_type', 'data_freshness',
