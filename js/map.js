@@ -136,6 +136,9 @@ var map = {
         place: function(context, json) {
             return map._makeMarker(context, 'place', json);
         },
+        pt_object: function(context, json) {
+            return map.getFeatures(context, json.embedded_type, json[json.embedded_type]);
+        },
         poi: function(context, json) {
             return map._makeMarker(context, 'poi', json);
         },
