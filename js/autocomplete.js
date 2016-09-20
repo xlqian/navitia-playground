@@ -35,6 +35,7 @@ var _placesParams = ['q', 'type[]', 'admin_uri[]'].concat(_paramValueEverywhere)
 
 // ParamValue
 var _fallbackMode = ['walking', 'car', 'bike', 'bss'].sort();
+var _booleanValues = ['true', 'false'];
 
 var autocomplete = {
     autocompleteTree: {
@@ -66,8 +67,12 @@ var autocomplete = {
             empty: _paramValueEverywhere,
         },
         paramValue : {
-            traveler_type : ['luggage', 'standard', 'fast_walker', 'slow_walker'].sort(),
-            datetime_represents : ['arrival', 'departure'].sort(),
+            traveler_type : ['luggage', 'standard', 'fast_walker', 'slow_walker'],
+            datetime_represents : ['arrival', 'departure'],
+            data_freshness: ['base_schedule', 'adapted_schedule', 'realtime'],
+            debug: _booleanValues,
+            wheelchair: _booleanValues,
+            disable_geojson: _booleanValues,
             'first_section_mode[]': _fallbackMode,
             'last_section_mode[]': _fallbackMode,
         }
