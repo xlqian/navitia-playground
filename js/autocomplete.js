@@ -132,12 +132,11 @@ var autocomplete = {
             var api = $('#api input.api').val();
             var token = $('#token input.token').val();
             var cov = getCoverage();
-            var request = '';
-            if (staticType === 'coverage') {
-                request =  api +  '/coverage/';
-            } else {
-                request =  api +  '/coverage/' + cov + '/' + staticType;
+            var request = api +  '/coverage/';
+            if (staticType !== 'coverage') {
+                request +=  cov + '/' + staticType;
             }
+            request += '?disable_geojson=true'
             if (request !== old_request || token !== old_token) {
                 old_request = request;
                 old_token = token;
@@ -242,10 +241,10 @@ var autocomplete = {
                 var token = $('#token input.token').val();
                 var url = $('#api input.api').val();
                 var cov = getCoverage();
-                // cov can be null in case where coverage is not specifeid
+                // cov can be null in case where coverage is not specified
                 cov = cov ? ('coverage/' + cov) : '';
                 $.ajax({
-                    url: sprintf('%s/%s/%s%s', url, cov, httpReq, encodeURIComponent(request.term)),
+                    url: sprintf('%s/%s/%s%s&display_geojson=false', url, cov, httpReq, encodeURIComponent(request.term)),
                     headers: manage_token(token),
                     success: function (data) {
                         var res = [];
