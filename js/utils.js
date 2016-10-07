@@ -94,7 +94,7 @@ function notifyOnError(data, typeError) {
     if (data.status === 401) {
         $('#token').addClass('templateInput');
     }
-    var message = summary.run(new response.Context(data.responseJSON), 'response', data.responseJSON);
+    var message = summary.run(new Context(data.responseJSON), 'response', data.responseJSON);
     $.notify({
         text: $('<span/>').text(sprintf('%s error: ', typeError)).append(message)
     }, {
