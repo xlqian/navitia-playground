@@ -175,18 +175,23 @@ response.manageFile = function() {
     function readSingleFile(e) {
         e.preventDefault();
         e.stopPropagation();
-        var file = e.target.files || e.originalEvent.dataTransfer.files;
-        if (!file || !file[0]) {
-            return;
-        }
+        var files = e.target.files || e.originalEvent.dataTransfer.files;
+        if (!files || !files[0]) { return; }
+        var file = files[0];
         var reader = new FileReader();
         reader.onload = function(e) {
-            var data = JSON.parse(e.target.result);
-            $('#status').text(sprintf('Status: file "%s" loaded', file[0].name));
-            $('#data').html(response.render(new Context(data), data, 'response', 'response'));
-            $('#data input').first().click();
+            try {
+                var data = JSON.parse(e.target.result);
+                $('#status').text(sprintf('Status: file "%s" loaded', file.name));
+                $('#data').html(response.render(new Context(data), data, 'response', 'response'));
+                $('#data input').first().click();
+            } catch (e) {
+                $('#status').text(
+                    sprintf('Status: error while loading file "%s": %s', file.name, e)
+                );
+            }
         };
-        reader.readAsText(file[0]);
+        reader.readAsText(file);
     }
 
     $('#file-input').change(readSingleFile);
