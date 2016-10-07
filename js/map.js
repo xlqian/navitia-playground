@@ -143,7 +143,7 @@ var map = {
             return map._makeMarker(context, 'poi', json);
         },
         response: function(context, json) {
-            var key = responseCollectionName(json);
+            var key = response.responseCollectionName(json);
             if (key === null) {
                 return [];
             }

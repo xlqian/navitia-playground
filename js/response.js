@@ -18,7 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-function setStatus(xhr, start_time) {
+var response = {};
+
+response.setStatus = function(xhr, start_time) {
     var status = sprintf('Status: %s (%s)', xhr.statusText, xhr.status);
     if (typeof start_time === 'number') {
         var duration = new Date().getTime() - start_time;
@@ -27,7 +29,7 @@ function setStatus(xhr, start_time) {
     $('#status').text(status);
 }
 
-function responseCollectionName(json) {
+response.responseCollectionName = function(json) {
     if (! (json instanceof Object)) { return null; }
     var key = null;
     var notCollectionKeys = ['disruptions', 'links', 'feed_publishers', 'exceptions', 'notes', 'warnings'];
@@ -44,7 +46,7 @@ function responseCollectionName(json) {
     return key;
 }
 
-function makeObjectButton(name, handle) {
+response.makeObjectButton = function(name, handle) {
     // TODO call handle on toggle
     return $('<label>')
         .addClass('objectButton')
@@ -52,7 +54,7 @@ function makeObjectButton(name, handle) {
         .append($('<span>').html(name));
 }
 
-function makeObjectButtonHandle(selector, renderHandle) {
+response.makeObjectButtonHandle = function(selector, renderHandle) {
     return function() {
         var div = $(this).closest('div.object').children('div.data').children(selector);
         if ($(this).is(':checked')) {
@@ -69,7 +71,7 @@ function makeObjectButtonHandle(selector, renderHandle) {
     };
 }
 
-function render(context, json, type, key, idx) {
+response.render = function(context, json, type, key, idx) {
     var name = key;
     if (typeof idx === 'number') { name += sprintf('[%s]', idx); }
     name = context.makeLink(key, json, name);
@@ -79,18 +81,33 @@ function render(context, json, type, key, idx) {
     head.append($('<div class="summary">').html(summary.run(context, type, json)));
     var button = $('<div class="button">');
     if (extended.hasExtended(context, type, json)) {
-        button.append(makeObjectButton('Ext', makeObjectButtonHandle('div.extended', function() {
+        button.append(
+            response.makeObjectButton(
+                'Ext',
+                response.makeObjectButtonHandle('div.extended', function() {
                     return extended.run(context, type, json);
-                })))
+                })
+            )
+        );
     }
     if (map.hasMap(context, type, json)) {
-        button.append(makeObjectButton('Map', makeObjectButtonHandle('div.map', function() {
+        button.append(
+            response.makeObjectButton(
+                'Map',
+                response.makeObjectButtonHandle('div.map', function() {
                     return map.run(context, type, json);
-                })))
+                })
+            )
+        );
     }
-    button.append(makeObjectButton('{ }', makeObjectButtonHandle('div.code', function() {
-        return renderjson(json);
-    })));
+    button.append(
+        response.makeObjectButton(
+            '{ }',
+            response.makeObjectButtonHandle('div.code', function() {
+                return renderjson(json);
+            })
+        )
+    );
     head.append(button);
 
     var data = $('<div class="data">')
@@ -104,6 +121,7 @@ function render(context, json, type, key, idx) {
     return result;
 }
 
+// TODO: make namespacing working
 function Context(data) {
     // the token, used to create links
     var token = URI(window.location).search(true).token;
@@ -153,15 +171,32 @@ function Context(data) {
     }
 }
 
-function manage_token (token) {
-  return token ? { Authorization: 'Basic ' + btoa(token) } : {};
+response.manageFile = function() {
+    function readSingleFile(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var file = e.target.files || e.originalEvent.dataTransfer.files;
+        if (!file || !file[0]) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var data = JSON.parse(e.target.result);
+            $('#status').text(sprintf('Status: file "%s" loaded', file[0].name));
+            $('#data').html(response.render(new Context(data), data, 'response', 'response'));
+            $('#data input').first().click();
+        };
+        reader.readAsText(file[0]);
+    }
+
+    $('#file-input').change(readSingleFile);
+    $(document)
+        .on('dragover', false)
+        .on('dragleave', false)
+        .on('drop', readSingleFile);
 }
 
-$(document).ready(function() {
-    renderjson.set_show_to_level(1);
-    renderjson.set_max_string_length(60);
-    renderjson.set_sort_objects(true);
-
+response.manageUrl = function() {
     var request = parseUrl();
     if (request === null) {
         $('#status').html('Status: no request');
@@ -169,23 +204,30 @@ $(document).ready(function() {
     }
     var start_time = new Date().getTime();
     $.ajax({
-        headers: manage_token(request.token),
+        headers: manageToken(request.token),
         url: request.request,
         dataType: 'json',
     }).then(
         function(data, status, xhr) {
-            setStatus(xhr, start_time);
-            $('#data').html(render(new Context(data), data, 'response', 'response'));
+            response.setStatus(xhr, start_time);
+            $('#data').html(response.render(new Context(data), data, 'response', 'response'));
             $('#data input').first().click();
             saveToken(request.api, request.token);
             // update the drop list of autocompletion for API
             autocomplete.apiAutocomplete();
         },
         function(xhr, status, error) {
-            setStatus(xhr, start_time);
-            $('#data').html(render(new Context(xhr.responseJSON), xhr.responseJSON, 'response', 'response'));
+            response.setStatus(xhr, start_time);
+            $('#data').html(response.render(new Context(xhr.responseJSON), xhr.responseJSON, 'response', 'response'));
             $('#data input').last().click();
             notifyOnError(xhr, 'Response');
         }
     );
+}
+
+// renderjson config
+$(document).ready(function() {
+    renderjson.set_show_to_level(1);
+    renderjson.set_max_string_length(60);
+    renderjson.set_sort_objects(true);
 });

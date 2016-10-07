@@ -27,31 +27,31 @@ extended.make.response = function(context, json) {
     var result = $('<div class="list"/>');
 
     if ('full_response' in json) {
-        result.append(render(context, json.full_response, 'response', 'full_response'));
+        result.append(response.render(context, json.full_response, 'response', 'full_response'));
     }
 
     if ('links' in json) {
-        result.append(render(context, json.links, 'links', 'links'));
+        result.append(response.render(context, json.links, 'links', 'links'));
     }
 
-    var key = responseCollectionName(json);
+    var key = response.responseCollectionName(json);
     var objs = key ? json[key] : [];
     var type = getType(key);
     if (type) {
         objs.forEach(function(obj, i) {
-            result.append(render(context, obj, type, key, i));
+            result.append(response.render(context, obj, type, key, i));
         });
     }
 
     if ($.isArray(json.feed_publishers)) {
         json.feed_publishers.forEach(function(feed_publisher, i) {
-            result.append(render(context, feed_publisher, 'contributor', 'feed_publishers', i));
+            result.append(response.render(context, feed_publisher, 'contributor', 'feed_publishers', i));
         });
     }
 
     if ('warnings' in json) {
         json.warnings.forEach(function(warning, i) {
-            result.append(render(context, warning, 'warning', 'warnings', i));
+            result.append(response.render(context, warning, 'warning', 'warnings', i));
         });
     }
     return result;
@@ -61,10 +61,10 @@ extended.make.journey = function(context, json) {
     if (! ('sections' in json)) { return extended.noExtendedMessage; }
     var result = $('<div class="list"/>');
     if ('tags' in json && json.tags.length > 0) {
-        result.append(render(context, json.tags, 'tags', 'tags'));
+        result.append(response.render(context, json.tags, 'tags', 'tags'));
     }
     json.sections.forEach(function(section, i) {
-        result.append(render(context, section, 'section', 'sections', i));
+        result.append(response.render(context, section, 'section', 'sections', i));
     });
     return result;
 }
@@ -73,7 +73,7 @@ extended.make.section = function(context, json) {
     if (! ('stop_date_times' in json)) { return extended.noExtendedMessage; }
     var result = $('<div class="list"/>');
     json.stop_date_times.forEach(function(stop_date_time, i) {
-        result.append(render(context, stop_date_time, 'stop_date_time', 'stop_date_times', i));
+        result.append(response.render(context, stop_date_time, 'stop_date_time', 'stop_date_times', i));
     });
     return result;
 }
@@ -81,7 +81,7 @@ extended.make.section = function(context, json) {
 extended.make.stop_schedule = function(context, json) {
     var result = $('<div class="list"/>');
     json.date_times.forEach(function(date_time, i) {
-        result.append(render(context, date_time, 'date_time', 'date_times', i));
+        result.append(response.render(context, date_time, 'date_time', 'date_times', i));
     });
     return result;
 }
@@ -121,10 +121,10 @@ extended.defaultExtended = function(context, type, json) {
         empty = false;
         if ($.isArray(json[key])) {
             json[key].forEach(function(obj, i) {
-                result.append(render(context, obj, getType(key), key, i));
+                result.append(response.render(context, obj, getType(key), key, i));
             });
         } else {
-            result.append(render(context, json[key], getType(key), key));
+            result.append(response.render(context, json[key], getType(key), key));
         }
     }
     if (empty) {

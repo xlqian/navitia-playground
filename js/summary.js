@@ -33,7 +33,7 @@ summary.make.response = function(context, json) {
         return sprintf('Error: %s', json.error.message);
     }
     var result = '';
-    var key = responseCollectionName(json);
+    var key = response.responseCollectionName(json);
     if (key) {
         result = result + sprintf(' %s %s ', json[key].length, key);
     }
