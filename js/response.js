@@ -121,8 +121,7 @@ response.render = function(context, json, type, key, idx) {
     return result;
 }
 
-// TODO: make namespacing working
-function Context(data) {
+response.Context = function(data) {
     // the token, used to create links
     var token = URI(window.location).search(true).token;
 
@@ -183,7 +182,7 @@ response.manageFile = function() {
             try {
                 var data = JSON.parse(e.target.result);
                 $('#status').text(sprintf('Status: file "%s" loaded', file.name));
-                $('#data').html(response.render(new Context(data), data, 'response', 'response'));
+                $('#data').html(response.render(new response.Context(data), data, 'response', 'response'));
                 $('#data input').first().click();
             } catch (e) {
                 $('#status').text(
@@ -215,7 +214,7 @@ response.manageUrl = function() {
     }).then(
         function(data, status, xhr) {
             response.setStatus(xhr, start_time);
-            $('#data').html(response.render(new Context(data), data, 'response', 'response'));
+            $('#data').html(response.render(new response.Context(data), data, 'response', 'response'));
             $('#data input').first().click();
             saveToken(request.api, request.token);
             // update the drop list of autocompletion for API
@@ -223,7 +222,7 @@ response.manageUrl = function() {
         },
         function(xhr, status, error) {
             response.setStatus(xhr, start_time);
-            $('#data').html(response.render(new Context(xhr.responseJSON), xhr.responseJSON, 'response', 'response'));
+            $('#data').html(response.render(new response.Context(xhr.responseJSON), xhr.responseJSON, 'response', 'response'));
             $('#data input').last().click();
             notifyOnError(xhr, 'Response');
         }
