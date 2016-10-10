@@ -7,7 +7,7 @@
     display: flex;
     flex-flow: row;
     justify-content: space-between;
-    border-bottom: solid 0.15em #F5F5F5;
+    border-bottom: solid 0.15em $light-gray;
 }
 
 #back{
@@ -21,25 +21,23 @@
 }
 
 #picto{
-    float: left;
+    vertical-align: middle;
     height: 3ex;
     width: 3ex;
-    margin: 0;
-    padding-top: 2.4em;
 }
 
 #doc{
     float: left;
     padding: 2.1em 1.6em 0 1em;
-    border-top: solid 0.4em #ffffff;
+    border-top: solid 0.4em transparent;
     text-transform: uppercase;
     text-decoration: none;
-    color: #353535; 
+    color: $dark-gray;
 }
 
 #doc:hover{
-    border-top: solid 0.4em #56B5DB;
-    color: #353535; 
+    border-top: solid 0.4em $dark-blue;
+    color: $dark-gray;
 }
 
 li{
@@ -75,11 +73,11 @@ li{
     #doc{
         padding: 0em 1em 0.5em 1em;
         margin: 0 auto; 
-        border-bottom: solid 0.2em #ffffff;
+        border-bottom: solid 0.2em transparent;
         border-top: none;
     }
     #doc:hover{
-        border-bottom: solid 0.2em #56B5DB;
+        border-bottom: solid 0.2em $dark-blue;
         border-top: none;
     }
 }

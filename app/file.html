@@ -16,8 +16,8 @@
         </a>
       </li>
       <li>
-        <img id="picto" src="img/picto_doc.svg" alt="picto documentation">
         <a id="doc" href="http://doc.navitia.io" title="Go to Navitia documentation">
+          <img id="picto" src="img/picto_doc.svg" alt="picto documentation">
           doc
         </a>
       </li>
@@ -34,17 +34,26 @@
 
     <div id="content">
 
-      <div id="request">
-        <h2>Give your Json</h2>
-        <input type="file" id="file-input" >
-        <label for="file-input">Search your Json</label> or drag it on
-        the page.
+      <div id="give">
+        <div class="hContainer">
+          <h2>Give your Json</h2>
+          <p class="center">
+            <input type="file" id="file-input" >
+            <label for="file-input">Search your Json</label>
+          </p>
+
+          <p class="center">or drag it on the page.</p>
+        </div><!-- hContainer -->
       </div><!-- request-->
 
+      <hr/>
+
       <div id="response"><!-- response -->
-        <h2>Explore the response</h2>
-        <div id="status">Waiting for your Json...</div>
-        <div id="data"></div>
+        <div class="hContainer">
+          <h2>Explore the response</h2>
+          <div id="status">Waiting for your Json...</div>
+          <div id="data"></div>
+        </div><!-- hContainer -->
       </div><!-- response -->
     </div><!-- content -->
 
