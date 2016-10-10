@@ -94,7 +94,7 @@ function notifyOnError(data, typeError) {
     if (data.status === 401) {
         $('#token').addClass('templateInput');
     }
-    var message = summary.run(new Context(data.responseJSON), 'response', data.responseJSON);
+    var message = summary.run(new response.Context(data.responseJSON), 'response', data.responseJSON);
     $.notify({
         text: $('<span/>').text(sprintf('%s error: ', typeError)).append(message)
     }, {
@@ -124,10 +124,10 @@ function getType(key) {
 function getTextColor(json) {
     function _toNum(c, i) { return +('0x' + c.slice(i, i + 2)); }
 
-    if ('text_color' in json) {
+    if (json.text_color) {
         return '#' + json.text_color;
     }
-    if ('color' in json) {
+    if (json.color) {
         var c = json.color;
         var grey = 0.21 * _toNum(c, 0) + 0.72 * _toNum(c, 2) + 0.07 * _toNum(c, 4);
         if (grey < 128) {
@@ -147,4 +147,8 @@ function findColor(ratio) {
     }
     var hex = sprintf("%02x%02x%02x", r, g, 0);
     return { color: hex };
+}
+
+function manageToken (token) {
+  return token ? { Authorization: 'Basic ' + btoa(token) } : {};
 }

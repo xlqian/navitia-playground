@@ -141,7 +141,7 @@ var autocomplete = {
                 old_request = request;
                 old_token = token;
                 autocomplete.updateStaticAutocomplete(input, staticType, request, token);
-            } else if ($(input).is(':focus')) {
+            } else if ($(input).is(':focus') && $(input).autocomplete('instance')) {
                 $(input).autocomplete('search', '');
             }
 
@@ -155,14 +155,14 @@ var autocomplete = {
             $(input).autocomplete('destroy');
         }
         $.ajax({
-            headers: manage_token(token),
+            headers: manageToken(token),
             dataType: 'json',
             url: request,
             success: function(data) {
                 var res = [];
                 staticType = (staticType==='coverage') ? 'regions' :  staticType;
                 data[staticType].forEach(function(elt) {
-                    var s = summary.run(new Context(), getType(staticType), elt);
+                    var s = summary.run(new response.Context(data), getType(staticType), elt);
                     res.push({ value: elt.id, label: s.textContent, desc: s });
                 });
                 res = res.sort(function(a, b) {
@@ -181,7 +181,7 @@ var autocomplete = {
                     return $('<li>').append(item.desc).appendTo(ul);
                 };
                 $(input).autocomplete('enable');
-                if ($(input).is(':focus')) {
+                if ($(input).is(':focus') && $(input).autocomplete('instance')) {
                     $(input).autocomplete('search', '');
                 }
             },
@@ -237,7 +237,7 @@ var autocomplete = {
             delay: 200,
             close: function() { updateUrl($(elt)[0]); },
             focus: function() { updateUrl($(elt)[0]); },
-            source: function (request, response) {
+            source: function (request, res) {
                 var token = $('#token input.token').val();
                 var url = $('#api input.api').val();
                 var cov = getCoverage();
@@ -245,9 +245,9 @@ var autocomplete = {
                 cov = cov ? ('coverage/' + cov) : '';
                 $.ajax({
                     url: sprintf('%s/%s/%s%s&display_geojson=false', url, cov, httpReq, encodeURIComponent(request.term)),
-                    headers: manage_token(token),
+                    headers: manageToken(token),
                     success: function (data) {
-                        var res = [];
+                        var result = [];
                         // TODO: use summary
                         var search = null;
                         var type = null;
@@ -260,14 +260,14 @@ var autocomplete = {
                         }
                         if (search) {
                             search.forEach(function(s) {
-                                var sum = summary.run(new Context(), type, s);
-                                res.push({ value: s.id, label: sum });
+                                var sum = summary.run(new response.Context(data), type, s);
+                                result.push({ value: s.id, label: sum });
                             });
                         }
-                        response(res);
+                        res(result);
                     },
                     error: function(data, status, xhr) {
-                        response([]);
+                        res([]);
                         notifyOnError(data, 'Autocomplete');
                     }
                 });
