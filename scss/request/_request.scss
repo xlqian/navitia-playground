@@ -46,6 +46,9 @@
     #requestUrl{
         margin: 0.5em;
         overflow-x: auto;
+        a {
+            color: inherit;
+        }
 
         @mixin url-colors($color) {
             background-color: $color;
