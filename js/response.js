@@ -191,6 +191,7 @@ response.manageFile = function() {
             }
         };
         reader.readAsText(file);
+        this.value = null;// be sure to have next change
     }
 
     $('#file-input').change(readSingleFile);
