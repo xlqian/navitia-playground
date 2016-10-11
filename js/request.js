@@ -154,8 +154,9 @@ function submit() {
 }
 
 function updateUrl(focusedElem) {
-    var f = finalUrl(focusedElem);
-    $('#requestUrl').html(f);
+    var link = finalUrl();
+    var text = finalUrl(focusedElem);
+    $('#requestUrl').html($('<a/>').attr('href', link).html(text));
 }
 
 function getCoverage() {
