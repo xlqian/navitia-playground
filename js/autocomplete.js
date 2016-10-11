@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter'];
+var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter', 'bss_stands'];
 var _collections = [
     'addresses', 'commercial_modes', 'companies', 'contributors', 'coord', 'coverage',
     'datasets', 'disruptions', 'lines', 'networks', 'places', 'poi_types', 'pois',
@@ -73,6 +73,7 @@ var autocomplete = {
             debug: _booleanValues,
             wheelchair: _booleanValues,
             disable_geojson: _booleanValues,
+            bss_stands: _booleanValues,
             'first_section_mode[]': _fallbackMode,
             'last_section_mode[]': _fallbackMode,
         }

@@ -70,11 +70,21 @@ extended.make.journey = function(context, json) {
 }
 
 extended.make.section = function(context, json) {
-    if (! ('stop_date_times' in json)) { return extended.noExtendedMessage; }
+    if (! json.from && ! json.to && ! json.stop_date_times) {
+        return extended.noExtendedMessage;
+    }
     var result = $('<div class="list"/>');
-    json.stop_date_times.forEach(function(stop_date_time, i) {
-        result.append(response.render(context, stop_date_time, 'stop_date_time', 'stop_date_times', i));
-    });
+    if (json.from) {
+        result.append(response.render(context, json.from, 'place', 'from'));
+    }
+    if (json.to) {
+        result.append(response.render(context, json.to, 'place', 'to'));
+    }
+    if (json.stop_date_times) {
+        json.stop_date_times.forEach(function(stop_date_time, i) {
+            result.append(response.render(context, stop_date_time, 'stop_date_time', 'stop_date_times', i));
+        });
+    }
     return result;
 }
 
@@ -103,6 +113,17 @@ extended.make.route_schedule = function(context, json) {
         table.append(row);
     });
     result.append(table);
+    return result;
+}
+
+extended.make.poi = function(context, json) {
+    var result = extended.defaultExtended(context, 'poi', json);
+    if (result === extended.noExtendedMessage) {
+        return result;
+    }
+    if (json.stands) {
+        result.append(response.render(context, json.stands, 'stands', 'stands'));
+    }
     return result;
 }
 

@@ -354,6 +354,15 @@ summary.make.dataset = function(context, json) {
     ));
 };
 
+summary.make.stands = function(context, json) {
+    return  $('<span/>').text(sprintf(
+        'bikes: %d, places: %d, total: %d',
+        json.available_bikes,
+        json.available_places,
+        json.total_stands
+    ));
+};
+
 // add your summary view by adding:
 //   summary.make.{type} = function(context, json) { ... }
 
