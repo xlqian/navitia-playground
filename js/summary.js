@@ -86,10 +86,19 @@ summary.make.journey = function(context, json) {
         if (first_section_mode) {
             add(modes.makeSnPicto(first_section_mode));
         }
+        var stayIn = false;
         json.sections.forEach(function(s) {
+            if (s.type === 'transfer' && s.transfer_type === 'stay_in') {
+                stayIn = true;
+            }
             if ($.inArray(s.type, ['public_transport', 'on_demand_transport']) === -1) { return; }
-            add(summary.makePhysicalModesFromSection(s)
-                .append(summary.makeLineCode(s.display_informations)))
+            if (stayIn) {
+                res.append('&thinsp;').append(summary.makeLineCode(s.display_informations));
+                stayIn = false;
+            } else {
+                add(summary.makePhysicalModesFromSection(s)
+                    .append(summary.makeLineCode(s.display_informations)))
+            }
         });
         if (last_section_mode) {
             add(modes.makeSnPicto(last_section_mode));
