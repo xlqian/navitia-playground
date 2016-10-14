@@ -217,6 +217,7 @@ response.manageUrl = function() {
             response.setStatus(xhr, start_time);
             $('#data').html(response.render(new response.Context(data), data, 'response', 'response'));
             $('#data input').first().click();
+            $('html, body').animate({ scrollTop: $('#response').offset().top }, 600);
             saveToken(request.api, request.token);
             // update the drop list of autocompletion for API
             autocomplete.apiAutocomplete();
