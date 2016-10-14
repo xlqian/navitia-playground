@@ -2,10 +2,10 @@ body {
     color: $dark-gray;
     background-color: $light-gray;
     margin: 0;
-    padding-bottom: 4em;
+    padding-bottom: 3.2em;
     font-family: 'OpenSans', sans-serif;
     font-size: 100%;
-    min-height: calc(100vh - 4em);
+    min-height: calc(100vh - 3.2em);
     position: relative;
 }
 
@@ -16,6 +16,7 @@ footer {
     width: 100%;
     text-align: center;
     padding: 1em 0;
+    line-height: 1.2em;
     background-color: $dark-gray;
     color: $light-gray;
 
