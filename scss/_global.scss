@@ -1,6 +1,6 @@
 body {
     color: $dark-gray;
-    background-color: white;
+    background-color: $light-gray;
     margin: 0;
     padding-bottom: 4em;
     font-family: 'OpenSans', sans-serif;
@@ -26,7 +26,7 @@ footer {
 
 h2 {
     text-align: center;
-    margin: 2em 0 1.5em 0;
+    margin: 1.5em 0 1em 0;
     font-size: 1.5em;
 }
 
@@ -46,7 +46,7 @@ p.center {
 }
 
 #give {
-    background: $light-gray;
+    background: white;
 
     #file-input {
         display: none;
@@ -65,22 +65,13 @@ p.center {
 }
 
 hr {
-    height: 0;
-    width: 100%;
-    margin: 0 0 2em 0;
-    border-style: solid;
-    border-width: 0.15em 0 0 0;
-    border-color: $light-gray;
-}
-hr:after {
     display: block;
-    content: '';
     height: 0;
     width: 0;
-    margin: auto;
+    margin: 0 auto -1em auto;
     border-style: solid;
     border-width: 2em 2em 0 2em;
-    border-color: $light-gray transparent transparent transparent;
+    border-color: white transparent transparent transparent;
 }
 
 button {

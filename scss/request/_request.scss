@@ -1,4 +1,5 @@
 #request {
+    background-color: white;
 
     #credentials, #path, #parameters {
         display: flex;
@@ -24,6 +25,7 @@
     @mixin request-parts($color) {
         .inputDiv {
             border-color: $color;
+            border-radius: 0.25em 0.25em 0 0;
         }
         .templateInput {
             box-shadow: 0 0 0.5em darken($color, 25%);
