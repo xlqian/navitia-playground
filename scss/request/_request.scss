@@ -1,10 +1,11 @@
 #request {
     background-color: white;
+    overflow-x: hidden;
 
     #credentials, #path, #parameters {
         display: flex;
         flex-flow: row wrap;
-        width: 100%;
+        width: calc(100% + 1em);
         height: auto;
     }
 
