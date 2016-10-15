@@ -1,15 +1,29 @@
+@function set-lightness($color, $lightness) {
+    @return hsl(hue($color), saturation($color), $lightness)
+}
+@function light($color) {
+    @return set-lightness($color, 80%)
+}
+@function dark($color) {
+    @return set-lightness($color, 45%)
+}
+
 $gray: #DEDEDE;
 $light-gray: #EFEFEF;
 $dark-gray: #353535;
 
-$light-blue: #89C6E5;
-$dark-blue: darken($light-blue, 25%);
+$blue: #89C6E5;
+$light-blue: light($blue);
+$dark-blue: dark($blue);
 
-$light-purple: #CBB6E4;
-$dark-purple: darken($light-purple, 25%);
+$purple: #CBB6E4;
+$light-purple: light($purple);
+$dark-purple: dark($purple);
 
-$light-orange: #EFBF8F;
-$dark-orange: darken($light-orange, 25%);
+$orange: #EFBF8F;
+$light-orange: light($orange);
+$dark-orange: dark($orange);
 
-$light-green: #CED480;
-$dark-green: darken($light-green, 25%);
+$green: #CED480;
+$light-green: light($green);
+$dark-green: dark($green);
