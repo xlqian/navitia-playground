@@ -1,9 +1,11 @@
 #request {
+    background-color: white;
+    overflow-x: hidden;
 
     #credentials, #path, #parameters {
         display: flex;
         flex-flow: row wrap;
-        width: 100%;
+        width: calc(100% + 1em);
         height: auto;
     }
 
@@ -18,26 +20,27 @@
 
     img.deleteButton {
         vertical-align: text-top;
-        height: 1.1em;
+        height: 1.2em;
     }
 
     @mixin request-parts($color) {
         .inputDiv {
-            border-color: $color;
+            border-color: light($color);
+            border-radius: 0.25em 0.25em 0 0;
         }
         .templateInput {
-            box-shadow: 0 0 0.5em darken($color, 25%);
+            box-shadow: 0 0 0.5em dark($color);
         }
         .inputDiv button {
-            color: darken($color, 25%);
+            color: dark($color);
         }
         .inputDiv button:disabled {
             color: $gray;
         }
     }
-    #credentials { @include request-parts($light-orange); }
-    #path { @include request-parts($light-green); }
-    #parameters { @include request-parts($light-blue); }
+    #credentials { @include request-parts($orange); }
+    #path { @include request-parts($green); }
+    #parameters { @include request-parts($blue); }
     #feature.inputDiv { border-color: $light-purple; }
 
     #urlDiv {
@@ -51,18 +54,18 @@
         }
 
         @mixin url-colors($color) {
-            background-color: $color;
+            background-color: light($color);
 
             .focusedParam {
-                background-color: darken($color, 25%);
+                background-color: dark($color);
                 color: white;
             }
         }
 
-        .api { @include url-colors($light-orange); }
-        .path { @include url-colors($light-green); }
-        .feature { @include url-colors($light-purple); }
-        .parameters { @include url-colors($light-blue); }
+        .api { @include url-colors($orange); }
+        .path { @include url-colors($green); }
+        .feature { @include url-colors($purple); }
+        .parameters { @include url-colors($blue); }
     }
     #submitDiv {
         text-align: center;

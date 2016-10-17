@@ -20,54 +20,42 @@ img.mode {
     height: 2em;
 }
 
-
 div.object {
-    margin: 1ex 0 1ex 2ex;
+    margin: 0.5em 0 0.5em 1em;
     padding: 0;
     border-style: solid;
-    border-width: 0.1ex 0 0.1ex 0.1ex;
-    border-color: $gray;
-    background-color: $light-gray;
+    border-width: 0 0 0 0.2em;
+    border-color: $dark-blue;
 
     div.head {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
-        align-items: center;
-        margin: 0;
-        border-style: none;
+        align-items: stretch;
         background-color: white;
-    }
-    @media screen and (max-width:35em) {
-        div.head{
-            flex-wrap: wrap;
-        }
-        div.summary {
-            order: 3;
-            min-width: 80%;
-        }
+        border-radius: 0 0.25em 0.25em 0;
     }
     div.name, div.button, div.summary {
-        border-style: none;
-        margin: 1ex;
+        display: flex;
+        align-items: center;
+        padding: 0.5em;
     }
     div.name {
         font-weight: bold;
+        padding: 0.5em 1em;
     }
     div.summary {
         flex: 1;
+        padding: 0.5em 1em;
     }
     div.data {
         border-style: none;
         margin: 0;
         padding: 0;
     }
-    div.data > div {
-        border-style: solid;
-        border-width: 0.1ex 0 0 0;
-        border-color: $gray;
-        margin: 0;
-        padding: 0;
+    div.leaflet, .renderjson {
+        margin: 0.5em 0;
+        border-radius: 0 0.25em 0.25em 0;
     }
     div.not_filled {
         display: none;
@@ -79,7 +67,7 @@ div.object {
     
     div.table {
         overflow-x: auto;
-        padding: 1ex 0 1ex 2ex;
+        margin: 0.5em 0 0.5em 0.5em;
             
         table {
             background-color: white;
@@ -111,7 +99,46 @@ div.object {
     }
 }
 
+@mixin object-color($color) {
+    border-color: dark($color);
+    div.name {
+        background-color: set-lightness($color, 95%);
+        a {
+            color: dark($color);
+        }
+    }
+}
+
+div.object,
+div.object div.object div.object div.object div.object {
+    @include object-color($orange);
+}
+div.object div.object,
+div.object div.object div.object div.object div.object div.object {
+    @include object-color($green);
+}
+div.object div.object div.object,
+div.object div.object div.object div.object div.object div.object div.object {
+    @include object-color($purple);
+}
+div.object div.object div.object div.object,
+div.object div.object div.object div.object div.object div.object div.object div.object {
+    @include object-color($blue);
+}
+
+@media screen and (max-width:35em) {
+    div.object {
+        margin-left: 1em;
+        div.head {
+            flex-wrap: wrap;
+        }
+        div.summary {
+            order: 3;
+            min-width: 80%;
+        }
+    }
+}
+
 #data > div {
     margin: 0;
-    border-width: 0.1ex;
 }
