@@ -43,6 +43,9 @@ div.object {
     div.name {
         font-weight: bold;
         padding: 0.5em 1em;
+        a {
+            color: inherit;
+        }
     }
     div.summary {
         flex: 1;
@@ -103,28 +106,34 @@ div.object {
     border-color: dark($color);
     div.name {
         background-color: set-lightness($color, 95%);
-        a {
-            color: dark($color);
-        }
     }
 }
 
-div.object,
-div.object div.object div.object div.object div.object {
-    @include object-color($orange);
+// Will generate something like ($a n + $b as in nth-child):
+//   div.object{$a n + $b} { @include object-color($color); }
+// with a limit of depth 10, i.e. for $a = 3 and $b = 2:
+//   div.object div.object,
+//   div.object div.object div.object div.object div.object,
+//   div.object div.object div.object div.object div.object div.object div.object div.object {
+//       @include object-color($color);
+//   }
+@mixin deep-object($a, $b, $color) {
+    $res: '';
+    $selector: '';
+    @for $i from 1 through 10 {
+        $selector: $selector + ' div.object';
+        @if $i % $a == $b {
+            @if $res != '' { $res: $res + ', ' }
+            $res: $res + $selector;
+        }
+    }
+    @if $res != '' {
+        #{$res} { @include object-color($color); }
+    }
 }
-div.object div.object,
-div.object div.object div.object div.object div.object div.object {
-    @include object-color($green);
-}
-div.object div.object div.object,
-div.object div.object div.object div.object div.object div.object div.object {
-    @include object-color($purple);
-}
-div.object div.object div.object div.object,
-div.object div.object div.object div.object div.object div.object div.object div.object {
-    @include object-color($blue);
-}
+
+@include deep-object(2, 1, $blue);
+@include deep-object(2, 0, $yellow);
 
 @media screen and (max-width:35em) {
     div.object {
