@@ -377,6 +377,41 @@ summary.make.stands = function(context, json) {
     ));
 };
 
+summary.make.disruption = function(context, json) {
+    var res = $('<span/>');
+    res.append($('<span/>').css('color', json.severity.color).text(json.severity.name));
+    if (json.status) { res.append(', status: ' + htmlEncode(json.status)); }
+    if (json.cause) { res.append(', cause: ' + htmlEncode(json.cause)); }
+    if (json.contributor) { res.append(', contributor: ' + htmlEncode(json.contributor)); }
+    return res;
+};
+
+summary.make.application_periods = function(context, json) {
+    var res = $('<span/>');
+    var text = json.map(function(period) {
+        return sprintf('[%s, %s]',
+                       summary.formatDatetime(period.begin),
+                       summary.formatDatetime(period.end));
+    }).join(' ∪ ');
+    res.text(text);
+    return res;
+};
+
+summary.make.impacted_object = function(context, json) {
+    return summary.run(context, 'pt_object', json.pt_object);
+};
+
+summary.make.impacted_stop = function(context, json) {
+    var res = $('<span>');
+    res.append(summary.run(context, 'stop_point', json.stop_point));
+    res.append(': ');
+    res.append(summary.makeImpactedTime(json.amended_arrival_time, json.base_arrival_time));
+    res.append(' > ');
+    res.append(summary.makeImpactedTime(json.amended_departure_time, json.base_departure_time));
+    if (json.cause) { res.append(htmlEncode(', cause: ' + json.cause)); }
+    return res;
+};
+
 // add your summary view by adding:
 //   summary.make.{type} = function(context, json) { ... }
 
@@ -419,6 +454,14 @@ summary.formatDatetime = function(datetime) {
 };
 
 summary.formatTime = function(datetime) {
+    if (datetime.length === 6) {
+        var formated = datetime.replace(/(\d{2})(\d{2})(\d{2})/, '$1:$2:$3');
+        if (formated.slice(-2) === '00') {
+            return formated.slice(0, -3);
+        } else {
+            return formated;
+        }
+    }
     return summary.formatDatetime(datetime).split(' ')[1];
 };
 
@@ -431,6 +474,16 @@ summary.makeSectionTime = function(dt, baseDt) {
     res.append(sprintf(' %s', summary.formatTime(dt)));
     return res;
 }
+
+summary.makeImpactedTime = function(amended, base) {
+    var res = $('<span/>');
+    if (base !== amended) {
+        res.append($('<span/>').addClass('old-datetime').text(summary.formatTime(base)));
+        res.append(' ');
+    }
+    res.append(htmlEncode(summary.formatTime(amended)));
+    return res;
+};
 
 summary.makePhysicalModesFromSection = function(section) {
     if ('links' in section) {

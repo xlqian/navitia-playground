@@ -43,6 +43,12 @@ extended.make.response = function(context, json) {
         });
     }
 
+    if (type !== 'disruption' && $.isArray(json.disruptions)) {
+        json.disruptions.forEach(function(disruption, i) {
+            result.append(response.render(context, disruption, 'disruption', 'disruptions', i));
+        });
+    }
+
     if ($.isArray(json.feed_publishers)) {
         json.feed_publishers.forEach(function(feed_publisher, i) {
             result.append(response.render(context, feed_publisher, 'contributor', 'feed_publishers', i));
@@ -125,6 +131,31 @@ extended.make.poi = function(context, json) {
         result.append(response.render(context, json.stands, 'stands', 'stands'));
     }
     return result;
+}
+
+extended.make.disruption = function(context, json) {
+    var res = $('<div class="list"/>');
+    if (json.application_periods) {
+        res.append(response.render(context,
+                                   json.application_periods,
+                                   'application_periods',
+                                   'application_periods'));
+    }
+    json.impacted_objects.forEach(function(obj, i) {
+        res.append(response.render(context, obj, 'impacted_object', 'impacted_objects', i));
+    });
+    return res;
+}
+
+extended.make.impacted_object = function(context, json) {
+    var res = $('<div class="list"/>');
+    res.append(response.render(context, json.pt_object, 'pt_object', 'pt_object'));
+    if ($.isArray(json.impacted_stops)) {
+        json.impacted_stops.forEach(function(obj, i) {
+            res.append(response.render(context, obj, 'impacted_stop', 'impacted_stops', i));
+        });
+    }
+    return res;
 }
 
 // add your extended view by addind:
