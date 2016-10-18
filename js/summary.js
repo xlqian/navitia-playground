@@ -123,6 +123,9 @@ summary.make.journey = function(context, json) {
     } else {
         res.append(', duration: ' + durationToString(json.duration));
     }
+
+    if (json.status) { res.append(', status: ' + htmlEncode(json.status)); }
+
     return res;
 };
 
@@ -227,13 +230,15 @@ summary.make.section = function(context, section) {
         res.append(sprintf(' from %s', htmlEncode(section.from.name)));
     }
     if (pt) {
-        res.append(sprintf(' at %s', summary.formatTime(section.departure_date_time)));
+        res.append(summary.makeSectionTime(section.departure_date_time,
+                                           section.base_departure_date_time));
     }
     if ('to' in section) {
         res.append(sprintf(' to %s', htmlEncode(section.to.name)));
     }
     if (pt) {
-        res.append(sprintf(' at %s', summary.formatTime(section.arrival_date_time)));
+        res.append(summary.makeSectionTime(section.arrival_date_time,
+                                           section.base_arrival_date_time));
     }
     if ('duration' in section) {
         res.append(sprintf(' during %s', durationToString(section.duration)));
@@ -416,6 +421,16 @@ summary.formatDatetime = function(datetime) {
 summary.formatTime = function(datetime) {
     return summary.formatDatetime(datetime).split(' ')[1];
 };
+
+summary.makeSectionTime = function(dt, baseDt) {
+    var res = $('<span/>');
+    res.append(' at ');
+    if (baseDt && baseDt !== dt) {
+        res.append($('<span/>').addClass('old-datetime').text(summary.formatTime(baseDt)));
+    }
+    res.append(sprintf(' %s', summary.formatTime(dt)));
+    return res;
+}
 
 summary.makePhysicalModesFromSection = function(section) {
     if ('links' in section) {
