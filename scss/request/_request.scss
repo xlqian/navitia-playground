@@ -18,9 +18,12 @@
         padding: 0;
     }
 
-    img.deleteButton {
+    button img {
         vertical-align: text-top;
         height: 1.2em;
+    }
+    button:disabled img {
+        opacity: 0.2;
     }
 
     @mixin request-parts($color) {

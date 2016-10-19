@@ -83,16 +83,17 @@ var autocomplete = {
         var apis = [];
         for (var elt in window.localStorage) {
             if (elt.indexOf(apiStoragePrefix) === 0 ) {
-                apis.push({value: elt.slice(apiStoragePrefix.length), desc: elt} );
+                apis.push({value: elt.slice(apiStoragePrefix.length)} );
             }
         }
-        autocomplete._customAutocompleteHelper(input, apis,
-            {
-                select: function (event, ui) {
-                    $(input).val(ui.item.value);
-                    $("#token input.token").val(window.localStorage.getItem(ui.item.desc));
-                }
-            });
+        autocomplete._customAutocompleteHelper(input, apis, {
+            close: setSaveTokenButtonStatus,
+            focus: setSaveTokenButtonStatus,
+            select: function (event, ui) {
+                $(input).val(ui.item.value);
+                $("#token input.token").val(getTokenFromStorage(ui.item.value));
+            }
+        });
     },
     valueAutoComplete: function (input, key) {
         if (isDatetimeType(key)) {
