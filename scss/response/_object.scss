@@ -8,6 +8,10 @@
     padding: 0.4em;
 }
 
+.old-datetime {
+    text-decoration: line-through;
+}
+
 .outofdate, .error {
     color: darken(red, 10%);
 }
