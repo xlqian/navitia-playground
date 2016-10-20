@@ -225,6 +225,8 @@ function setAutocomplete(){
 }
 
 $(document).ready(function() {
+    setSaveTokenButtonStatus();
+    $('input.token').change(setSaveTokenButtonStatus).on('input', setSaveTokenButtonStatus);
     // Manage add input/button
     $('button.add').prop('disabled', true);
     $('.addInput').on('input change', function() {
@@ -252,6 +254,7 @@ $(document).ready(function() {
     if (request.token === undefined) { request.token = ''; }
     $("#token input.token").attr('value', request.token);
     $("#api input.api").attr('value', request.api);
+    setSaveTokenButtonStatus();
 
     var prevPathElt = null;
     request.path.forEach(function(r) {

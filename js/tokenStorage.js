@@ -36,11 +36,23 @@ function localStorageAvailable() {
 
 var apiStoragePrefix = 'navitiaPlayground.';
 
+function setSaveTokenButtonStatus() {
+    var api = $('#api input.api').val();
+    var token = $('#token input.token').val();
+    $('button.save').prop('disabled', getTokenFromStorage(api) === token);
+}
+
+function saveTokenFromRequest() {
+    var api = $('input.api').val();
+    var token = $('input.token').val();
+    saveToken(api, token);
+}
+
 function saveToken(api, token) {
     if (! localStorageAvailable()) { return; }
     var key = apiStoragePrefix + api
-    if (! token && window.localStorage.getItem(key)) { return; }
     window.localStorage.setItem(key, token);
+    setSaveTokenButtonStatus();
 }
 
 function getTokenFromStorage(api) {
