@@ -64,7 +64,6 @@ extended.make.response = function(context, json) {
 }
 
 extended.make.journey = function(context, json) {
-    if (! ('sections' in json)) { return extended.noExtendedMessage; }
     var result = $('<div class="list"/>');
     if ('tags' in json && json.tags.length > 0) {
         result.append(response.render(context, json.tags, 'tags', 'tags'));
@@ -76,9 +75,6 @@ extended.make.journey = function(context, json) {
 }
 
 extended.make.section = function(context, json) {
-    if (! json.from && ! json.to && ! json.stop_date_times) {
-        return extended.noExtendedMessage;
-    }
     var result = $('<div class="list"/>');
     if (json.from) {
         result.append(response.render(context, json.from, 'place', 'from'));
@@ -124,9 +120,6 @@ extended.make.route_schedule = function(context, json) {
 
 extended.make.poi = function(context, json) {
     var result = extended.defaultExtended(context, 'poi', json);
-    if (result === extended.noExtendedMessage) {
-        return result;
-    }
     if (json.stands) {
         result.append(response.render(context, json.stands, 'stands', 'stands'));
     }
@@ -162,15 +155,9 @@ extended.make.impacted_object = function(context, json) {
 //   extended.make.{type} = function(context, json) { ... }
 
 extended.defaultExtended = function(context, type, json) {
-    var noExt = extended.noExtendedMessage;
-    if (! (json instanceof Object)) {
-        return noExt;
-    }
-    var empty = true;
     var result = $('<div class="list"/>');
     for (var key in json) {
         if (! (getType(key) in context.links)) { continue; }
-        empty = false;
         if ($.isArray(json[key])) {
             json[key].forEach(function(obj, i) {
                 result.append(response.render(context, obj, getType(key), key, i));
@@ -179,28 +166,51 @@ extended.defaultExtended = function(context, type, json) {
             result.append(response.render(context, json[key], getType(key), key));
         }
     }
-    if (empty) {
-        return noExt;
-    } else {
-        return result;
-    }
+    return result;
 }
 
-extended.noExtendedMessage = 'No extended view yet!';
+extended.has = {}
+extended.has.journey = function(context, type, json) {
+    return Boolean(json.sections);
+}
+extended.has.section = function(context, type, json) {
+    return Boolean(json.from) || Boolean(json.to) || Boolean(json.stop_date_times);
+}
+extended.has.poi = function(context, type, json) {
+    return extended.hasDefaultExtended(context, type, json);
+}
+extended.hasDefaultExtended = function(context, type, json) {
+    if (! (json instanceof Object)) { return false; }
+    for (var key in json) {
+        if (getType(key) in context.links) { return true; }
+    }
+    return false;
+}
 
 extended.hasExtended = function(context, type, json) {
-    return extended.run(context, type, json) !== extended.noExtendedMessage;
+    try {
+        if (type in extended.make) {
+            if (type in extended.has) {
+                return extended.has[type](context, type, json);
+            }
+            return true;
+        }
+        return extended.hasDefaultExtended(context, type, json);
+    } catch (e) {
+        console.log(sprintf('hasExtended(%s) thows an exception:', type));
+        console.log(e);
+    }
+    return false;
 }
 
 // main method
 extended.run = function(context, type, json) {
-    if (! (json instanceof Object)) { return extended.noExtendedMessage; }
     try {
         if (type in this.make) { return this.make[type](context, json); }
         return extended.defaultExtended(context, type, json);
     } catch (e) {
         console.log(sprintf('extended(%s) thows an exception:', type));
         console.log(e);
-        return extended.noExtendedMessage;
+        return 'Error in extended view construction';
     }
 }
