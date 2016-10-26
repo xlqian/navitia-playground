@@ -18,44 +18,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/* exported localStorageAvailable apiStoragePrefix saveToken getTokenFromStorage*/
-/* TODO: Complete the jshint*/
+var storage = {};
 
-function localStorageAvailable() {
+storage._localStorageAvailable = function() {
     try {
-	var storage = window.localStorage,
-	    x = '__storage_test__';
-	storage.setItem(x, x);
-	storage.removeItem(x);
+	var x = '__storage_test__';
+	window.localStorage.setItem(x, x);
+	window.localStorage.removeItem(x);
 	return true;
     }
     catch(e) {
 	return false;
     }
-}
+};
 
-var apiStoragePrefix = 'navitiaPlayground.';
+storage._apiStoragePrefix = 'navitiaPlayground.';
 
-function setSaveTokenButtonStatus() {
-    var api = $('#api input.api').val();
-    var token = $('#token input.token').val();
-    $('button.save').prop('disabled', getTokenFromStorage(api) === token);
-}
+storage.getApis = function() {
+    if (! storage._localStorageAvailable()) { return []; }
+    var apis = [];
+    for (var elt in window.localStorage) {
+        if (elt.indexOf(storage._apiStoragePrefix) === 0 ) {
+            apis.push(elt.slice(storage._apiStoragePrefix.length));
+        }
+    }
+    return apis;
+};
 
-function saveTokenFromRequest() {
+storage.saveTokenFromRequest = function() {
     var api = $('input.api').val();
     var token = $('input.token').val();
-    saveToken(api, token);
-}
+    storage.saveToken(api, token);
+};
 
-function saveToken(api, token) {
-    if (! localStorageAvailable()) { return; }
-    var key = apiStoragePrefix + api
+storage.saveToken = function(api, token) {
+    if (! storage._localStorageAvailable()) { return; }
+    var key = storage._apiStoragePrefix + api
     window.localStorage.setItem(key, token);
     setSaveTokenButtonStatus();
-}
+};
 
-function getTokenFromStorage(api) {
-    if (! localStorageAvailable()) { return; }
-    return window.localStorage.getItem(apiStoragePrefix + api);
-}
+storage.getToken = function(api) {
+    if (! storage._localStorageAvailable()) { return; }
+    return window.localStorage.getItem(storage._apiStoragePrefix + api);
+};

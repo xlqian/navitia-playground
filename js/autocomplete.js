@@ -80,18 +80,13 @@ var autocomplete = {
     },
     apiAutocomplete: function() {
         var input = $("#api input.api");
-        var apis = [];
-        for (var elt in window.localStorage) {
-            if (elt.indexOf(apiStoragePrefix) === 0 ) {
-                apis.push({value: elt.slice(apiStoragePrefix.length)} );
-            }
-        }
+        var apis = storage.getApis();
         autocomplete._customAutocompleteHelper(input, apis, {
             close: setSaveTokenButtonStatus,
             focus: setSaveTokenButtonStatus,
             select: function (event, ui) {
                 $(input).val(ui.item.value);
-                $("#token input.token").val(getTokenFromStorage(ui.item.value));
+                $("#token input.token").val(storage.getToken(ui.item.value));
             }
         });
     },

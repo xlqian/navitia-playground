@@ -20,6 +20,12 @@
 
 /* TODO: Complete the jshint*/
 
+function setSaveTokenButtonStatus() {
+    var api = $('#api input.api').val();
+    var token = $('#token input.token').val();
+    $('button.save').prop('disabled', storage.getToken(api) === token);
+}
+
 function makeDeleteButton() {
     return $('<button/>')
         .addClass('delete')
@@ -205,7 +211,7 @@ function parseUrl() {
         if (req_uri.username()) {
             token = req_uri.username();
             api = new URI(api).username('').toString();
-        } else { token = getTokenFromStorage(api); }
+        } else { token = storage.getToken(api); }
     }
 
     return {
