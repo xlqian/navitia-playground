@@ -25,6 +25,7 @@ storage._localStorageAvailable = function() {
 	var x = '__storage_test__';
 	window.localStorage.setItem(x, x);
 	window.localStorage.removeItem(x);
+        storage._upgrade();
 	return true;
     }
     catch(e) {
@@ -32,7 +33,20 @@ storage._localStorageAvailable = function() {
     }
 };
 
-storage._apiStoragePrefix = 'navitiaPlayground.';
+storage._oldApiStoragePrefix = 'navitiaPlayground.';
+storage._apiStoragePrefix = 'navitia-playground.api.';
+
+// TODO: remove this upgrade in 2017
+storage._upgrade = function() {
+    for (var elt in window.localStorage) {
+        if (elt.indexOf(storage._oldApiStoragePrefix) === 0 ) {
+            window.localStorage.setItem(
+                storage._apiStoragePrefix + elt.slice(storage._oldApiStoragePrefix.length),
+                window.localStorage[elt]);
+            window.localStorage.removeItem(elt);
+        }
+    }
+};
 
 storage.getApis = function() {
     if (! storage._localStorageAvailable()) { return []; }
