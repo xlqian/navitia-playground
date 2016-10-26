@@ -7,3 +7,9 @@
 	border-color: rgb(53, 53, 53);
 	color: white;
 }
+.leaflet-control-layers-toggle {
+    background-image: url(../lib/img/leaflet/dist/images/layers.png);
+}
+.leaflet-retina .leaflet-control-layers-toggle {
+    background-image: url(../lib/img/leaflet/dist/images/layers-2x.png);
+}

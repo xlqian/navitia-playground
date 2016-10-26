@@ -175,6 +175,45 @@ map.getFeatures = function(context, type, json) {
     }
 };
 
+map._makeTileLayers = function() {
+    var copyOSM = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+    var courtesy = function(name) {
+        return sprintf('Tiles courtesy of %s &mdash; Map data %s', name, copyOSM);
+    };
+    var makeStamenTileLayer = function(name) {
+        return L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/' + name + '/{z}/{x}/{y}.png', {
+            subdomains: 'abcd',
+            attribution: courtesy('<a href="http://maps.stamen.com">Stamen Design</a>'),
+            detectRetina: true
+        });
+    };
+    return {
+        'HOT': L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: courtesy('<a href="http://hot.openstreetmap.org/">Humanitarian OpenStreetMap Team</a>'),
+            detectRetina: true
+        }),
+        'Hydda': L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
+            attribution: courtesy('<a href="http://openstreetmap.se/">OpenStreetMap Sweden</a>'),
+            detectRetina: true
+        }),
+        'Mapnik': L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: copyOSM,
+            detectRetina: true
+        }),
+        'Terrain': makeStamenTileLayer('terrain'),
+        'Toner': makeStamenTileLayer('toner-lite'),
+        'Watercolor': makeStamenTileLayer('watercolor'),
+    };
+};
+
+map._getDefaultLayerName = function() {
+    var saved = storage.getLayer();
+    if (saved) { return saved; }
+    return 'Hydda';
+};
+
 map.run = function(context, type, json) {
     var div = $('<div/>');
     // setting for default path of images used by leaflet
@@ -183,12 +222,10 @@ map.run = function(context, type, json) {
     if ((features = map.getFeatures(context, type, json)).length) {
         div.addClass('leaflet');
         var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
-            attribution: 'Tiles courtesy of ' +
-                '<a href="http://openstreetmap.se/">OpenStreetMap Sweden</a>' +
-                ' &mdash; Map data &copy; ' +
-                '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(m);
+        var tileLayers = map._makeTileLayers();
+        tileLayers[map._getDefaultLayerName()].addTo(m);
+        L.control.layers(tileLayers).addTo(m);
+        m.on('baselayerchange', storage.saveLayer);
         var overlay = L.featureGroup(features).addTo(m);
         setTimeout(function() {
             m.invalidateSize();

@@ -20,6 +20,10 @@
 
 var storage = {};
 
+storage._storagePrefix = 'navitia-playground.'
+storage._apiStoragePrefix = storage._storagePrefix + 'api.';
+storage._layerStorageKey = storage._storagePrefix + 'layer';
+
 storage._localStorageAvailable = function() {
     try {
 	var x = '__storage_test__';
@@ -33,10 +37,8 @@ storage._localStorageAvailable = function() {
     }
 };
 
-storage._oldApiStoragePrefix = 'navitiaPlayground.';
-storage._apiStoragePrefix = 'navitia-playground.api.';
-
 // TODO: remove this upgrade in 2017
+storage._oldApiStoragePrefix = 'navitiaPlayground.';
 storage._upgrade = function() {
     for (var elt in window.localStorage) {
         if (elt.indexOf(storage._oldApiStoragePrefix) === 0 ) {
@@ -75,4 +77,14 @@ storage.saveToken = function(api, token) {
 storage.getToken = function(api) {
     if (! storage._localStorageAvailable()) { return; }
     return window.localStorage.getItem(storage._apiStoragePrefix + api);
+};
+
+storage.saveLayer = function(data) {
+    if (! storage._localStorageAvailable()) { return; }
+    window.localStorage.setItem(storage._layerStorageKey, data.name);
+};
+
+storage.getLayer = function() {
+    if (! storage._localStorageAvailable()) { return null; }
+    return window.localStorage.getItem(storage._layerStorageKey);
 };
