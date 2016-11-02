@@ -193,7 +193,7 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
                 source: res,
                 minLength: 0,
                 scroll: true,
-                delay: 500
+                delay: 0
             }).focus(function() {
                 this.select();
             }).autocomplete('instance')._renderItem = function(ul, item) {
@@ -314,7 +314,7 @@ autocomplete._customAutocompleteHelper = function(input, source, customOptions) 
         source: source,
         minLength: 0,
         scroll: true,
-        delay: 500
+        delay: 0
     };
     if (customOptions) { $.extend(true, options, customOptions); }
     $(input).autocomplete(options).focus(function() {
