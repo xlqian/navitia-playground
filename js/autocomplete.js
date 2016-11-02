@@ -194,6 +194,8 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
                 minLength: 0,
                 scroll: true,
                 delay: 500
+            }).focus(function() {
+                this.select();
             }).autocomplete('instance')._renderItem = function(ul, item) {
                 return $('<li>').append(item.desc).appendTo(ul);
             };
@@ -290,6 +292,8 @@ autocomplete.dynamicAutocomplete = function (elt, dynamicType) {
                 }
             });
         }
+    }).focus(function() {
+        this.select();
     }).autocomplete('instance')._renderItem = function(ul, item) {
         return $('<li>').append(item.label).appendTo(ul);
     };
@@ -314,6 +318,7 @@ autocomplete._customAutocompleteHelper = function(input, source, customOptions) 
     };
     if (customOptions) { $.extend(true, options, customOptions); }
     $(input).autocomplete(options).focus(function() {
+        this.select();
         $(this).autocomplete('search', '');
     });
 };
