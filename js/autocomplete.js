@@ -116,7 +116,7 @@ autocomplete.valueAutoComplete = function (input, key) {
         autocomplete._customAutocompleteHelper(input, this.autocompleteTree.paramValue[key]);
     } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
         this.staticAutocomplete(input, key);
-    } else if (this.dynamicAutocompleteTypes.indexOf(key) > -1) {
+    } else if (key in this.dynamicAutocompleteTypes) {
         this.dynamicAutocomplete(input, key);
     }
 };
@@ -210,90 +210,108 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
     });
 };
 
-autocomplete.dynamicAutocompleteTypes = [
-    'addresses',
-    'administrative_regions',
-    'commercial_modes',
-    'coord',
-    'forbidden_uris[]',
-    'lines',
-    'networks',
-    'places',
-    'pois',
-    'routes',
-    'stop_areas',
-    'stop_points',
-    'from',
-    'to',
-];
+autocomplete.AbstractObject = function(types) {
+    this.types = types || [];
+};
+autocomplete.AbstractObject.prototype.autocompleteUrl = function(term) {
+    var url = $('#api input.api').val() + '/';
+    var cov = getCoverage();
+    url += cov ? ('coverage/' + cov) : '';
+    url += '/' + this.api + '?display_geojson=false&q=' + encodeURIComponent(term);
+    this.types.forEach(function(type) {
+        url += '&type[]=' + type;
+    });
+    return url;
+};
+autocomplete.AbstractObject.prototype.objectUrl = function(term) {
+    var url = $('#api input.api').val() + '/';
+    var cov = getCoverage();
+    url += cov ? ('coverage/' + cov) : '';
+    url += '/' + this.api + '/' + encodeURIComponent(term) + '?display_geojson=false';
+    return url;
+};
+autocomplete.AbstractObject.prototype.source = function(urlMethod) {
+    if (urlMethod === undefined) { urlMethod = 'autocompleteUrl'; }
+    var self = this;
+    return function(request, res) {
+        var token = $('#token input.token').val();
+        var url = self[urlMethod](request.term);
+        if (! url) { return res([]); }
+        $.ajax({
+            url: url,
+            headers: manageToken(token),
+            success: function (data) {
+                var result = [];
+                var search = null;
+                var type = null;
+                if ('places' in data) {
+                    search = data.places;
+                    type = 'place';
+                } else if ('pt_objects' in data) {
+                    search = data.pt_objects;
+                    type = 'pt_object';
+                }
+                if (search) {
+                    search.forEach(function(s) {
+                        var sum = summary.run(new response.Context(data), type, s);
+                        result.push({ value: s.id, label: sum });
+                    });
+                }
+                res(result);
+            },
+            error: function(data, status, xhr) {
+                res([]);
+                notifyOnError(data, 'Autocomplete');
+            }
+        });
+    };
+};
+
+autocomplete.PtObject = function(types) {
+    autocomplete.AbstractObject.call(this, types);
+}
+autocomplete.PtObject.prototype = Object.create(autocomplete.AbstractObject.prototype);
+autocomplete.PtObject.prototype.api = 'pt_objects';
+autocomplete.PtObject.prototype.objectUrl = function(term) {
+    // /pt_objects/{pt_object.id} is not supported yet by navitia
+    return null;
+};
+
+autocomplete.Place = function(types) {
+    autocomplete.AbstractObject.call(this, types);
+}
+autocomplete.Place.prototype = Object.create(autocomplete.AbstractObject.prototype);
+autocomplete.Place.prototype.api = 'places';
+
+autocomplete.dynamicAutocompleteTypes = {
+    'addresses': new autocomplete.Place(['address']),
+    'administrative_regions': new autocomplete.Place(['administrative_region']),
+    'commercial_modes': new autocomplete.PtObject(['commercial_mode']),
+    'coord': new autocomplete.Place(['address']),
+    'forbidden_uris[]': new autocomplete.PtObject,
+    'lines': new autocomplete.PtObject(['line']),
+    'networks': new autocomplete.PtObject(['network']),
+    'places': new autocomplete.Place,
+    'pois': new autocomplete.Place(['poi']),
+    'routes': new autocomplete.PtObject(['route']),
+    'stop_areas': new autocomplete.Place(['stop_area']),
+    'stop_points': new autocomplete.Place(['stop_point']),
+    'from': new autocomplete.Place,
+    'to': new autocomplete.Place,
+};
 
 autocomplete.dynamicAutocomplete = function (elt, dynamicType) {
-    var formatPtReq = function (v){
-        return sprintf('pt_objects/?type[]=%s&q=', v);
-    };
-    var formatPlacesReq = function (v){
-        return sprintf('places/?type[]=%s&q=', v);
-    };
-    var dynamicTypeRequest = {
-        addresses: formatPlacesReq('address'),
-        administrative_regions: formatPlacesReq('administrative_region'),
-        commercial_modes: formatPtReq('commercial_mode'),
-        coord: formatPlacesReq('address'),
-        'forbidden_uris[]': 'pt_objects/?q=',
-        lines: formatPtReq('line'),
-        networks: formatPtReq('network'),
-        places: 'places/?&q=',
-        pois: formatPlacesReq('poi'),
-        routes: formatPtReq('route'),
-        stop_areas: formatPtReq('stop_area'),
-        stop_points: formatPlacesReq('stop_point'),
-        from: 'places/?&q=',
-        to: 'places/?&q=',
-    };
-    var httpReq = dynamicTypeRequest[dynamicType];
-    if (! httpReq) {
-        return;
-    }
+    var object = autocomplete.dynamicAutocompleteTypes[dynamicType];
     $(elt).autocomplete({
         delay: 200,
         close: function() { updateUrl($(elt)[0]); },
-        source: function (request, res) {
-            var token = $('#token input.token').val();
-            var url = $('#api input.api').val();
-            var cov = getCoverage();
-            // cov can be null in case where coverage is not specified
-            cov = cov ? ('coverage/' + cov) : '';
-            $.ajax({
-                url: sprintf('%s/%s/%s%s&display_geojson=false', url, cov, httpReq, encodeURIComponent(request.term)),
-                headers: manageToken(token),
-                success: function (data) {
-                    var result = [];
-                    // TODO: use summary
-                    var search = null;
-                    var type = null;
-                    if ('places' in data) {
-                        search = data.places;
-                        type = 'place';
-                    } else if ('pt_objects' in data) {
-                        search = data.pt_objects;
-                        type = 'pt_object';
-                    }
-                    if (search) {
-                        search.forEach(function(s) {
-                            var sum = summary.run(new response.Context(data), type, s);
-                            result.push({ value: s.id, label: sum });
-                        });
-                    }
-                    res(result);
-                },
-                error: function(data, status, xhr) {
-                    res([]);
-                    notifyOnError(data, 'Autocomplete');
-                }
-            });
-        }
+        source: object.source()
     }).focus(function() {
         this.select();
+        // get the summary of the current id
+        $(this).autocomplete('option', 'source', object.source('objectUrl'));
+        $(this).autocomplete('search');
+        $(this).autocomplete('option', 'source', object.source());
     }).autocomplete('instance')._renderItem = function(ul, item) {
         return $('<li>').append(item.label).appendTo(ul);
     };
