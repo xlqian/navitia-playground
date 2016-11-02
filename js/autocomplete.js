@@ -102,7 +102,6 @@ autocomplete.apiAutocomplete = function() {
     var apis = storage.getApis();
     autocomplete._customAutocompleteHelper(input, apis, {
         close: setSaveTokenButtonStatus,
-        focus: setSaveTokenButtonStatus,
         select: function (event, ui) {
             $(input).val(ui.item.value);
             $("#token input.token").val(storage.getToken(ui.item.value));
@@ -191,7 +190,6 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
             });
             $(input).autocomplete({
                 close: function() { updateUrl($(input)[0]); },
-                focus: function() { updateUrl($(input)[0]); },
                 source: res,
                 minLength: 0,
                 scroll: true,
@@ -257,7 +255,6 @@ autocomplete.dynamicAutocomplete = function (elt, dynamicType) {
     $(elt).autocomplete({
         delay: 200,
         close: function() { updateUrl($(elt)[0]); },
-        focus: function() { updateUrl($(elt)[0]); },
         source: function (request, res) {
             var token = $('#token input.token').val();
             var url = $('#api input.api').val();
@@ -310,7 +307,6 @@ autocomplete._customAutocompleteHelper = function(input, source, customOptions) 
     }
     var options = {
         close: function() { updateUrl($(input)[0]); },
-        focus: function() { updateUrl($(input)[0]); },
         source: source,
         minLength: 0,
         scroll: true,
