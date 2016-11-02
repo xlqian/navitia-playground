@@ -18,65 +18,82 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-var _paramValueEverywhere = ['depth', 'count', 'forbidden_uris[]', 'filter', 'bss_stands'];
-var _collections = [
+var autocomplete = {};
+
+autocomplete._paramValueEverywhere = [
+    'depth', 'count', 'forbidden_uris[]', 'filter', 'bss_stands'
+];
+
+autocomplete._collections = [
     'addresses', 'commercial_modes', 'companies', 'contributors', 'coord', 'coverage',
     'datasets', 'disruptions', 'lines', 'networks', 'places', 'poi_types', 'pois',
-    'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicle_journeys'].sort();
-var _additionalFeatures = ['departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules', 'stop_schedules',
-                            'arrivals', 'isochrones', 'heat_maps'];
-var _paramJourneyCommon = ['from', 'to', 'datetime','traveler_type', 'data_freshness',
-            'first_section_mode[]', 'last_section_mode[]'].concat(_paramValueEverywhere).sort();
+    'physical_modes', 'routes', 'stop_areas', 'stop_points', 'vehicle_journeys'
+];
 
-// ParamKey
-var _depArrParams = ['from_datetime', 'duration', 'data_freshness'].concat(_paramValueEverywhere).sort();
-var _schedulesParams = ['from_datetime', 'duration', 'items_per_schedule', 'data_freshness'].concat(_paramValueEverywhere).sort();
-var _placesParams = ['q', 'type[]', 'admin_uri[]'].concat(_paramValueEverywhere).sort();
+autocomplete._additionalFeatures = [
+    'departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules',
+    'stop_schedules', 'arrivals', 'isochrones', 'heat_maps'
+];
 
-// ParamValue
-var _fallbackMode = ['walking', 'car', 'bike', 'bss'].sort();
-var _booleanValues = ['true', 'false'];
+autocomplete._paramJourneyCommon = [
+    'from', 'to', 'datetime','traveler_type', 'data_freshness',
+    'first_section_mode[]', 'last_section_mode[]'
+].concat(autocomplete._paramValueEverywhere);
 
-var autocomplete = {};
+autocomplete._depArrParams = [
+    'from_datetime', 'duration', 'data_freshness'
+].concat(autocomplete._paramValueEverywhere);
+
+autocomplete._schedulesParams = [
+    'from_datetime', 'duration', 'items_per_schedule', 'data_freshness'
+].concat(autocomplete._paramValueEverywhere);
+
+autocomplete._placesParams = [
+    'q', 'type[]', 'admin_uri[]'
+].concat(autocomplete._paramValueEverywhere);
+
+autocomplete._fallbackMode = ['walking', 'car', 'bike', 'bss'];
+
+autocomplete._booleanValues = ['true', 'false'];
 
 autocomplete.autocompleteTree = {
     pathKey: {
         empty : ['coverage', 'places', 'coord'],
-        all : _collections,
+        all : autocomplete._collections,
     },
     features: {
-        all: _collections.concat(_additionalFeatures).sort(),
+        all: autocomplete._collections.concat(autocomplete._additionalFeatures),
     },
     paramKey: {
-        arrivals: _depArrParams,
-        coord: _paramValueEverywhere,
-        coverage: _paramValueEverywhere,
-        departures: _depArrParams,
-        journeys: ['datetime_represents'].concat(_paramJourneyCommon).sort(),
-        isochrones: [ 'max_duration', 'min_duration', 'boundary_duration[]'].concat(_paramJourneyCommon).sort(),
-        heat_maps: [ 'max_duration', 'resolution'].concat(_paramJourneyCommon).sort(),
-        lines: _paramValueEverywhere,
-        places_nearby: _placesParams.sort(),
-        places: _placesParams,
-        pois: ['distance'].concat(_paramValueEverywhere).sort(),
-        pt_objects: ['q', 'type[]'].concat(_paramValueEverywhere),
-        stop_areas: _paramValueEverywhere,
-        stop_points: _paramValueEverywhere,
-        routes: _paramValueEverywhere,
-        route_schedules: _schedulesParams,
-        stop_schedules: _schedulesParams,
-        empty: _paramValueEverywhere,
+        arrivals: autocomplete._depArrParams,
+        coord: autocomplete._paramValueEverywhere,
+        coverage: autocomplete._paramValueEverywhere,
+        departures: autocomplete._depArrParams,
+        journeys: ['datetime_represents'].concat(autocomplete._paramJourneyCommon),
+        isochrones: ['max_duration', 'min_duration', 'boundary_duration[]'].concat(autocomplete._paramJourneyCommon),
+        heat_maps: ['max_duration', 'resolution'].concat(autocomplete._paramJourneyCommon),
+        lines: autocomplete._paramValueEverywhere,
+        places_nearby: autocomplete._placesParams,
+        places: autocomplete._placesParams,
+        pois: ['distance'].concat(autocomplete._paramValueEverywhere),
+        pt_objects: ['q', 'type[]'].concat(autocomplete._paramValueEverywhere),
+        stop_areas: autocomplete._paramValueEverywhere,
+        stop_points: autocomplete._paramValueEverywhere,
+        routes: autocomplete._paramValueEverywhere,
+        route_schedules: autocomplete._schedulesParams,
+        stop_schedules: autocomplete._schedulesParams,
+        empty: autocomplete._paramValueEverywhere,
     },
     paramValue : {
         traveler_type : ['luggage', 'standard', 'fast_walker', 'slow_walker'],
         datetime_represents : ['arrival', 'departure'],
         data_freshness: ['base_schedule', 'adapted_schedule', 'realtime'],
-        debug: _booleanValues,
-        wheelchair: _booleanValues,
-        disable_geojson: _booleanValues,
-        bss_stands: _booleanValues,
-        'first_section_mode[]': _fallbackMode,
-        'last_section_mode[]': _fallbackMode,
+        debug: autocomplete._booleanValues,
+        wheelchair: autocomplete._booleanValues,
+        disable_geojson: autocomplete._booleanValues,
+        bss_stands: autocomplete._booleanValues,
+        'first_section_mode[]': autocomplete._fallbackMode,
+        'last_section_mode[]': autocomplete._fallbackMode,
     }
 };
 
