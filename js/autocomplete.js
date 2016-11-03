@@ -266,6 +266,11 @@ autocomplete.AbstractObject.prototype.source = function(urlMethod) {
         });
     };
 };
+autocomplete.AbstractObject.prototype.describe = function(elt) {
+    $(elt).autocomplete('option', 'source', this.source('objectUrl'));
+    $(elt).autocomplete('search');
+    $(elt).autocomplete('option', 'source', this.source());
+};
 
 autocomplete.PtObject = function(types) {
     autocomplete.AbstractObject.call(this, types);
@@ -308,10 +313,11 @@ autocomplete.dynamicAutocomplete = function (elt, dynamicType) {
         source: object.source()
     }).focus(function() {
         this.select();
-        // get the summary of the current id
-        $(this).autocomplete('option', 'source', object.source('objectUrl'));
-        $(this).autocomplete('search');
-        $(this).autocomplete('option', 'source', object.source());
+        object.describe(this);
+    }).hover(function() {
+        if (! $(this).is(':focus')) { object.describe(this); }
+    }, function() {
+        if (! $(this).is(':focus')) { $(this).autocomplete('close'); }
     }).autocomplete('instance')._renderItem = function(ul, item) {
         return $('<li>').append(item.label).appendTo(ul);
     };
