@@ -18,6 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// fake includes
+var request;
+
 var storage = {};
 
 storage._storagePrefix = 'navitia-playground.';
@@ -71,7 +74,7 @@ storage.saveToken = function(api, token) {
     if (! storage._localStorageAvailable()) { return; }
     var key = storage._apiStoragePrefix + api;
     window.localStorage.setItem(key, token);
-    setSaveTokenButtonStatus();
+    request.setSaveTokenButtonStatus();
 };
 
 storage.getToken = function(api) {

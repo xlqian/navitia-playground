@@ -44,8 +44,8 @@
                 <input placeholder="API"
                        type="text"
                        class="api"
-                       onfocus="updateUrl(this)"
-                       oninput="updateUrl(this)">
+                       onfocus="request.updateUrl(this)"
+                       oninput="request.updateUrl(this)">
               </div>
               <div id="token" class="inputDiv">
                 <span class="key">Token</span>
@@ -64,13 +64,13 @@
                        class="addInput"
                        type="text"
                        placeholder="type a key to add a path element">
-                <button class="add" onclick="insertPathElt()">Add</button>
+                <button class="add" onclick="request.insertPathElt()">Add</button>
               </div>
               <div id="feature" class="inputDiv">
                 <input id="featureInput"
                        type="text"
-                       onfocus="updateUrl(this)"
-                       oninput="updateUrl(this)"
+                       onfocus="request.updateUrl(this)"
+                       oninput="request.updateUrl(this)"
                        placeholder="empty feature">
               </div>
             </div>
@@ -83,7 +83,7 @@
                        class="addInput"
                        type="text"
                        placeholder="type a key to add a parameter">
-                <button class="add" onclick="insertParam()">Add</button>
+                <button class="add" onclick="request.insertParam()">Add</button>
               </div>
             </div>
           </div><!-- parameterFrame -->
@@ -94,7 +94,7 @@
               <div id="requestUrl"></div>
             </div>
             <div id="submitDiv">
-              <button class="Submit" onclick="submit()">Submit</button>
+              <button class="Submit" onclick="request.submit()">Submit</button>
             </div>
           </div><!-- createdRequestFrame -->
         </div><!-- hContainer -->
@@ -120,7 +120,10 @@
     <script src="lib/lib.min.js"></script>
     <script src="js/app.min.js"></script>
     <script>
-      $(document).ready(function() { response.manageUrl(); })
+      $(document).ready(function() {
+          request.manage();
+          response.manageUrl();
+      });
     </script>
   </body>
 </html>

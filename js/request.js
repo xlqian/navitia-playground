@@ -23,13 +23,15 @@ var storage;
 var autocomplete;
 var utils;
 
-function setSaveTokenButtonStatus() {
+var request = {};
+
+request.setSaveTokenButtonStatus = function() {
     var api = $('#api input.api').val();
     var token = $('#token input.token').val();
     $('button.save').prop('disabled', storage.getToken(api) === token);
-}
+};
 
-function updateAddPathAC(val){
+request.updateAddPathAC = function(val){
     var input = $(val).prev();
     if (! input.hasClass('path')) {
         return;
@@ -38,9 +40,9 @@ function updateAddPathAC(val){
         // No more path inputs, we should update autocomplete of add
         autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
     }
-}
+};
 
-function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
+request.getFocusedElemValue = function(elemToTest, focusedElem, noEncoding) {
     var value = $(elemToTest).is('input') ? elemToTest.value : $(elemToTest).text();
     if (! noEncoding) { value = encodeURIComponent(value); }
     if (focusedElem === elemToTest) {
@@ -48,21 +50,21 @@ function getFocusedElemValue(elemToTest, focusedElem, noEncoding) {
     } else {
         return value;
     }
-}
+};
 
-function finalUrl(focusedElem) {
-    var api = getFocusedElemValue($('#api input.api')[0], focusedElem, true);
+request.finalUrl = function(focusedElem) {
+    var api = request.getFocusedElemValue($('#api input.api')[0], focusedElem, true);
     if (api.slice(-1) === '/') { api = api.slice(0, -1); }
 
     var path = '';
     $('#path .key, #path input.value').each(function(){
-        path += '/' + getFocusedElemValue(this, focusedElem);
+        path += '/' + request.getFocusedElemValue(this, focusedElem);
     });
-    var feature = getFocusedElemValue($('#featureInput')[0], focusedElem);
+    var feature = request.getFocusedElemValue($('#featureInput')[0], focusedElem);
 
     var parameters = '?';
     $('#parameters .key, #parameters input.value').each(function(){
-        parameters += getFocusedElemValue(this, focusedElem);
+        parameters += request.getFocusedElemValue(this, focusedElem);
         if ($(this).hasClass('key')) {
             parameters += '=';
         }
@@ -82,23 +84,26 @@ function finalUrl(focusedElem) {
                        '<span class="parameters">%s</span>',
                        api, path, feature, parameters);
     }
-    return finalUrl;
-}
+};
 
-function updateUrl(focusedElem) {
-    var link = finalUrl();
-    var text = finalUrl(focusedElem);
+request.updateUrl = function(focusedElem) {
+    var link = request.finalUrl();
+    var text = request.finalUrl(focusedElem);
     $('#requestUrl').html($('<a/>').attr('href', link).html(text));
-}
+};
 
-function makeDeleteButton() {
+request.makeDeleteButton = function() {
     return $('<button/>')
         .addClass('delete')
-        .click(function() { $(this).closest('.toDelete').remove(); updateAddPathAC(this); updateUrl(this); })
+        .click(function() {
+            $(this).closest('.toDelete').remove();
+            request.updateAddPathAC(this);
+            request.updateUrl(this);
+        })
         .html('<img src="img/delete.svg" class="deleteButton" alt="delete">');
-}
+};
 
-function makeTemplatePath(val, input) {
+request.makeTemplatePath = function(val, input) {
     var templateFilled = false;
     var isTemplateFilled = function() {
         var curVal = input.val();
@@ -114,9 +119,9 @@ function makeTemplatePath(val, input) {
     }).blur(function() {
         if (! isTemplateFilled()) { this.value = val; }
     });
-}
+};
 
-function makeKeyValue(key, val, cls) {
+request.makeKeyValue = function(key, val, cls) {
     var res = $('<div/>')
         .addClass('inputDiv')
         .addClass('toDelete')
@@ -133,43 +138,43 @@ function makeKeyValue(key, val, cls) {
 
     autocomplete.valueAutoComplete(valueElt, key);
 
-    valueElt.on('input', function() { updateUrl(this); });
-    valueElt.focus(function() { updateUrl(this); });
+    valueElt.on('input', function() { request.updateUrl(this); });
+    valueElt.focus(function() { request.updateUrl(this); });
     res.append(valueElt);
-    res.append(makeDeleteButton());
+    res.append(request.makeDeleteButton());
 
     // valueElt must be attached to res to call this
-    if (utils.isTemplate(val)) { makeTemplatePath(val, valueElt); }
+    if (utils.isTemplate(val)) { request.makeTemplatePath(val, valueElt); }
 
     return res;
-}
+};
 
-function insertPathElt() {
+request.insertPathElt = function() {
     var key = $('#addPathInput').val();
-    $('#addPathElt').before(makeKeyValue(key, '', 'path'));
+    $('#addPathElt').before(request.makeKeyValue(key, '', 'path'));
     autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
     $('#addPathInput').val('').change();
     $('#addPathElt').prev().find('input').first().focus();
-}
+};
 
-function insertParam() {
+request.insertParam = function() {
     var key = $('#addParamInput').val();
-    $('#addParam').before(makeKeyValue(key, '', 'parameters'));
+    $('#addParam').before(request.makeKeyValue(key, '', 'parameters'));
     $('#addParamInput').val('').change();
     $('#addParam').prev().find('input').first().focus();
-}
+};
 
-function updateAddParamAC() {
+request.updateAddParamAC = function() {
     autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
-}
+};
 
-function submit() {
+request.submit = function() {
     var token = $('#token input.token').val();
-    var f = finalUrl(); // finalUrl can be called without any args
+    var f = request.finalUrl();
     window.location = sprintf('?request=%s&token=%s', encodeURIComponent(f), encodeURIComponent(token));
-}
+};
 
-function getCoverage() {
+request.getCoverage = function() {
     var prevIsCoverage = false;
     var coverage = null;
     $('#path .key, #path input.value').each(function() {
@@ -179,14 +184,14 @@ function getCoverage() {
         prevIsCoverage = $(this).text() === 'coverage';
     });
     return coverage;
-}
+};
 
-function parseUrl() {
+request.parseUrl = function() {
     var search = new URI(window.location).search(true);
-    var request = search.request;
-    if (request === undefined) { return null; }
+    var req = search.request;
+    if (req === undefined) { return null; }
 
-    var req_uri = new URI(request);
+    var req_uri = new URI(req);
     var api = req_uri.origin();
     var paths = req_uri.path().split('/');
     paths = paths.length === 1 ? [] : paths.slice(1);
@@ -220,23 +225,25 @@ function parseUrl() {
 
     return {
         token: token,
-        request: request,
+        request: req,
         api: api,
         path: api_path,
         query: params === undefined ? {} : params
     };
-}
+};
 
-function setAutocomplete(){
+request.setAutocomplete = function(){
     autocomplete.addKeyAutocomplete($('#featureInput'), 'features');
     autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
     autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
     autocomplete.apiAutocomplete();
-}
+};
 
-$(document).ready(function() {
-    setSaveTokenButtonStatus();
-    $('input.token').change(setSaveTokenButtonStatus).on('input', setSaveTokenButtonStatus);
+request.manage = function() {
+    request.setSaveTokenButtonStatus();
+    $('input.token')
+        .change(request.setSaveTokenButtonStatus)
+        .on('input', request.setSaveTokenButtonStatus);
     // Manage add input/button
     $('button.add').prop('disabled', true);
     $('.addInput').on('input change', function() {
@@ -247,31 +254,26 @@ $(document).ready(function() {
             $(this).parent().find('button.add').click();
         }
     });
-    $('#featureInput').focusout(updateAddParamAC);
+    $('#featureInput').focusout(request.updateAddParamAC);
 
-    var request = parseUrl();
+    var req = request.parseUrl();
 
-    autocomplete.addKeyAutocomplete($('#featureInput'), 'features');
-    autocomplete.addKeyAutocomplete($('#addPathInput'), 'pathKey');
-    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
-    autocomplete.apiAutocomplete();
-
-    if (request === null) {
-        setAutocomplete();
+    if (req === null) {
+        request.setAutocomplete();
         return;
     }
 
-    if (request.token === undefined) { request.token = ''; }
-    $('#token input.token').attr('value', request.token);
-    $('#api input.api').attr('value', request.api);
-    setSaveTokenButtonStatus();
+    if (req.token === undefined) { req.token = ''; }
+    $('#token input.token').attr('value', req.token);
+    $('#api input.api').attr('value', req.api);
+    request.setSaveTokenButtonStatus();
 
     var prevPathElt = null;
-    request.path.forEach(function(r) {
+    req.path.forEach(function(r) {
         if (prevPathElt === null) {
             prevPathElt = r;
         } else {
-            $('#addPathElt').before(makeKeyValue(prevPathElt, r, 'path'));
+            $('#addPathElt').before(request.makeKeyValue(prevPathElt, r, 'path'));
             prevPathElt = null;
         }
     });
@@ -280,18 +282,18 @@ $(document).ready(function() {
     }
 
     var addParam = $('#addParam');
-    for (var key in request.query) {
-        if (! request.query.hasOwnProperty(key)) { continue; }
-        var value = request.query[key];
+    for (var key in req.query) {
+        if (! req.query.hasOwnProperty(key)) { continue; }
+        var value = req.query[key];
         // a list of params, ex.: forbidded_uris[]
         if (Array.isArray(value)) {
             value.forEach(function(v){
-                addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(v), 'parameters'));
+                addParam.before(request.makeKeyValue(decodeURIComponent(key), decodeURIComponent(v), 'parameters'));
             });
         } else {
-            addParam.before(makeKeyValue(decodeURIComponent(key), decodeURIComponent(value), 'parameters'));
+            addParam.before(request.makeKeyValue(decodeURIComponent(key), decodeURIComponent(value), 'parameters'));
         }
     }
-    setAutocomplete();
-    updateUrl(null);
-});
+    request.setAutocomplete();
+    request.updateUrl(null);
+};

@@ -25,6 +25,7 @@ var map;
 var storage;
 var autocomplete;
 var utils;
+var request;
 
 var response = {};
 
@@ -210,15 +211,15 @@ response.manageFile = function() {
 };
 
 response.manageUrl = function() {
-    var request = parseUrl();
-    if (request === null) {
+    var req = request.parseUrl();
+    if (req === null) {
         $('#status').html('Status: no request');
         return;
     }
     var start_time = new Date().getTime();
     $.ajax({
-        headers: utils.manageToken(request.token),
-        url: request.request,
+        headers: utils.manageToken(req.token),
+        url: req.request,
         dataType: 'json',
     }).then(
         function(data, status, xhr) {
@@ -226,8 +227,8 @@ response.manageUrl = function() {
             $('#data').html(response.render(new response.Context(data), data, 'response', 'response'));
             $('#data input').first().click();
             $('html, body').animate({ scrollTop: $('#response').offset().top }, 600);
-            if (! storage.getToken(request.api)) {
-                storage.saveToken(request.api, request.token);
+            if (! storage.getToken(req.api)) {
+                storage.saveToken(req.api, req.token);
             }
             // update the drop list of autocompletion for API
             autocomplete.apiAutocomplete();
