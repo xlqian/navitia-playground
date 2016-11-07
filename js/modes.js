@@ -88,4 +88,4 @@ modes.makeSnPicto = function(mode) {
         img = 'Car';
     }
     return modes.makeImg(img, mode);
-}
+};

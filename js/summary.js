@@ -18,6 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// fake includes
+var response;
+var modes;
+
 var summary = {};
 
 summary.make = {};
@@ -97,7 +101,7 @@ summary.make.journey = function(context, json) {
                 stayIn = false;
             } else {
                 add(summary.makePhysicalModesFromSection(s)
-                    .append(summary.makeLineCode(s.display_informations)))
+                    .append(summary.makeLineCode(s.display_informations)));
             }
         });
         if (last_section_mode) {
@@ -182,7 +186,7 @@ summary.make.links = function(context, json) {
 
 summary.make.warning = function(context, json) {
     return $('<span>').text(json.message);
-}
+};
 
 summary.make.pt_object = summary.make.place = function(context, json) {
     var res = $('<span>')
@@ -219,6 +223,9 @@ summary.make.section = function(context, section) {
         break;
     case 'on_demand_transport':
         res.append(section.type + ' ');
+        pt = true;
+        res.append(summary.makeRoutePoint(context, section));
+        break;
     case 'public_transport':
         pt = true;
         res.append(summary.makeRoutePoint(context, section));
@@ -287,7 +294,7 @@ summary.make.line = function(context, line) {
 };
 
 summary.make.stop_date_time = function(context, stop_time) {
-    var sum = summary.run(context, 'stop_point', stop_time.stop_point)
+    var sum = summary.run(context, 'stop_point', stop_time.stop_point);
     var res = $('<span>').append(summary.formatTime(stop_time.arrival_date_time))
                          .append(' > ')
                          .append(summary.formatTime(stop_time.departure_date_time))
@@ -337,7 +344,7 @@ summary.make.connection = function(context, json) {
                                      json.destination.id,
                                      durationToString(json.duration),
                                      durationToString(json.display_duration)));
-}
+};
 
 summary.make.tags = function(context, json) {
     return $('<span/>').text(json.join(', '));
@@ -473,7 +480,7 @@ summary.makeSectionTime = function(dt, baseDt) {
     }
     res.append(sprintf(' %s', summary.formatTime(dt)));
     return res;
-}
+};
 
 summary.makeImpactedTime = function(amended, base) {
     var res = $('<span/>');
@@ -489,7 +496,7 @@ summary.makePhysicalModesFromSection = function(section) {
     if ('links' in section) {
         var pms = section.links
             .map(function(o) {
-                if (o.type == 'physical_mode') {
+                if (o.type === 'physical_mode') {
                     return { id: o.id, name: section.display_informations.physical_mode };
                 } else {
                     return null;
@@ -523,7 +530,7 @@ summary.makeRoutePoint = function(context, json) {
         res.append(summary.run(context, 'stop_point', json.stop_point));
     }
     return res;
-}
+};
 
 summary.run = function(context, type, json) {
     var res;
@@ -534,8 +541,8 @@ summary.run = function(context, type, json) {
             res = summary.defaultSummary(context, type, json);
         }
     } catch (e) {
-        console.log(sprintf('summary(%s) thows an exception:', type));
-        console.log(e);
+        console.log(sprintf('summary(%s) thows an exception:', type));// jshint ignore:line
+        console.log(e);// jshint ignore:line
         res = 'summary error';
     }
     if (res instanceof jQuery) {

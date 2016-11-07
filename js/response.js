@@ -18,6 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// fake includes
+var summary;
+var extended;
+var map;
+var storage;
+var autocomplete;
+
 var response = {};
 
 response.setStatus = function(xhr, start_time) {
@@ -27,7 +34,7 @@ response.setStatus = function(xhr, start_time) {
         status += sprintf(', duration of the request: %sms', duration);
     }
     $('#status').text(status);
-}
+};
 
 response.responseCollectionName = function(json) {
     if (! (json instanceof Object)) { return null; }
@@ -44,7 +51,7 @@ response.responseCollectionName = function(json) {
         key = 'disruptions';
     }
     return key;
-}
+};
 
 response.makeObjectButton = function(name, handle) {
     // TODO call handle on toggle
@@ -52,7 +59,7 @@ response.makeObjectButton = function(name, handle) {
         .addClass('objectButton')
         .append($('<input type="checkbox">').change(handle))
         .append($('<span>').html(name));
-}
+};
 
 response.makeObjectButtonHandle = function(selector, renderHandle) {
     return function() {
@@ -69,7 +76,7 @@ response.makeObjectButtonHandle = function(selector, renderHandle) {
             });
         }
     };
-}
+};
 
 response.render = function(context, json, type, key, idx) {
     var name = key;
@@ -119,7 +126,7 @@ response.render = function(context, json, type, key, idx) {
     result.append(head);
     result.append(data);
     return result;
-}
+};
 
 response.Context = function(data) {
     // the token, used to create links
@@ -168,19 +175,19 @@ response.Context = function(data) {
             this.min_duration_color[min_duration[i]] = findColor(ratio);
         }
     }
-}
+};
 
 response.manageFile = function() {
-    function readSingleFile(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var files = e.target.files || e.originalEvent.dataTransfer.files;
+    function readSingleFile(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var files = event.target.files || event.originalEvent.dataTransfer.files;
         if (!files || !files[0]) { return; }
         var file = files[0];
         var reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function(event) {
             try {
-                var data = JSON.parse(e.target.result);
+                var data = JSON.parse(event.target.result);
                 $('#status').text(sprintf('Status: file "%s" loaded', file.name));
                 $('#data').html(response.render(new response.Context(data), data, 'response', 'response'));
                 $('#data input').first().click();
@@ -199,7 +206,7 @@ response.manageFile = function() {
         .on('dragover', false)
         .on('dragleave', false)
         .on('drop', readSingleFile);
-}
+};
 
 response.manageUrl = function() {
     var request = parseUrl();
@@ -231,7 +238,7 @@ response.manageUrl = function() {
             notifyOnError(xhr, 'Response');
         }
     );
-}
+};
 
 // renderjson config
 $(document).ready(function() {

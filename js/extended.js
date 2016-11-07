@@ -18,10 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// fake includes
+var response;
+var summary;
+
 var extended = {};
 
 // the object that contains the function to make the extended views
-extended.make = {}
+extended.make = {};
 
 extended.make.response = function(context, json) {
     var result = $('<div class="list"/>');
@@ -61,7 +65,7 @@ extended.make.response = function(context, json) {
         });
     }
     return result;
-}
+};
 
 extended.make.journey = function(context, json) {
     var result = $('<div class="list"/>');
@@ -72,7 +76,7 @@ extended.make.journey = function(context, json) {
         result.append(response.render(context, section, 'section', 'sections', i));
     });
     return result;
-}
+};
 
 extended.make.section = function(context, json) {
     var result = $('<div class="list"/>');
@@ -88,7 +92,7 @@ extended.make.section = function(context, json) {
         });
     }
     return result;
-}
+};
 
 extended.make.stop_schedule = function(context, json) {
     var result = $('<div class="list"/>');
@@ -96,18 +100,18 @@ extended.make.stop_schedule = function(context, json) {
         result.append(response.render(context, date_time, 'date_time', 'date_times', i));
     });
     return result;
-}
+};
 
 extended.make.route_schedule = function(context, json) {
     var result = $('<div class="table"/>');
     var table = $('<table/>');
     // Add the data rows
-    json.table.rows.forEach(function(route_schedule, i) {
+    json.table.rows.forEach(function(route_schedule) {
         var row = $('<tr/>');
         var cellName = $('<td />').addClass('stop-point');
         cellName.html(summary.run(context, 'stop_point', route_schedule.stop_point));
         row.append(cellName);
-        route_schedule.date_times.forEach(function(route_schedule, i) {
+        route_schedule.date_times.forEach(function(route_schedule) {
             var cellValue = $('<td />').addClass('time');
             cellValue.html(summary.formatTime(route_schedule.date_time));
             row.append(cellValue);
@@ -116,7 +120,7 @@ extended.make.route_schedule = function(context, json) {
     });
     result.append(table);
     return result;
-}
+};
 
 extended.make.poi = function(context, json) {
     var result = extended.defaultExtended(context, 'poi', json);
@@ -124,7 +128,7 @@ extended.make.poi = function(context, json) {
         result.append(response.render(context, json.stands, 'stands', 'stands'));
     }
     return result;
-}
+};
 
 extended.make.disruption = function(context, json) {
     var res = $('<div class="list"/>');
@@ -138,7 +142,7 @@ extended.make.disruption = function(context, json) {
         res.append(response.render(context, obj, 'impacted_object', 'impacted_objects', i));
     });
     return res;
-}
+};
 
 extended.make.impacted_object = function(context, json) {
     var res = $('<div class="list"/>');
@@ -149,7 +153,7 @@ extended.make.impacted_object = function(context, json) {
         });
     }
     return res;
-}
+};
 
 // add your extended view by addind:
 //   extended.make.{type} = function(context, json) { ... }
@@ -167,25 +171,25 @@ extended.defaultExtended = function(context, type, json) {
         }
     }
     return result;
-}
+};
 
-extended.has = {}
+extended.has = {};
 extended.has.journey = function(context, type, json) {
     return Boolean(json.sections);
-}
+};
 extended.has.section = function(context, type, json) {
     return Boolean(json.from) || Boolean(json.to) || Boolean(json.stop_date_times);
-}
+};
 extended.has.poi = function(context, type, json) {
     return extended.hasDefaultExtended(context, type, json);
-}
+};
 extended.hasDefaultExtended = function(context, type, json) {
     if (! (json instanceof Object)) { return false; }
     for (var key in json) {
         if (getType(key) in context.links) { return true; }
     }
     return false;
-}
+};
 
 extended.hasExtended = function(context, type, json) {
     try {
@@ -197,11 +201,11 @@ extended.hasExtended = function(context, type, json) {
         }
         return extended.hasDefaultExtended(context, type, json);
     } catch (e) {
-        console.log(sprintf('hasExtended(%s) thows an exception:', type));
-        console.log(e);
+        console.log(sprintf('hasExtended(%s) thows an exception:', type));// jshint ignore:line
+        console.log(e);// jshint ignore:line
     }
     return false;
-}
+};
 
 // main method
 extended.run = function(context, type, json) {
@@ -209,8 +213,8 @@ extended.run = function(context, type, json) {
         if (type in this.make) { return this.make[type](context, json); }
         return extended.defaultExtended(context, type, json);
     } catch (e) {
-        console.log(sprintf('extended(%s) thows an exception:', type));
-        console.log(e);
+        console.log(sprintf('extended(%s) thows an exception:', type));// jshint ignore:line
+        console.log(e);// jshint ignore:line
         return 'Error in extended view construction';
     }
-}
+};

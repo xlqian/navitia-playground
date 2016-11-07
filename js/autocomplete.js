@@ -18,6 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+// fake includes
+var storage;
+var summary;
+var response;
+
 var autocomplete = {};
 
 autocomplete._paramValueEverywhere = [
@@ -98,13 +103,13 @@ autocomplete.autocompleteTree = {
 };
 
 autocomplete.apiAutocomplete = function() {
-    var input = $("#api input.api");
+    var input = $('#api input.api');
     var apis = storage.getApis();
     autocomplete._customAutocompleteHelper(input, apis, {
         close: setSaveTokenButtonStatus,
         select: function (event, ui) {
             $(input).val(ui.item.value);
-            $("#token input.token").val(storage.getToken(ui.item.value));
+            $('#token input.token').val(storage.getToken(ui.item.value));
         }
     });
 };
@@ -154,7 +159,7 @@ autocomplete.staticAutocomplete = function(input, staticType) {
         if (staticType !== 'coverage') {
             request +=  cov + '/' + staticType;
         }
-        request += '?disable_geojson=true'
+        request += '?disable_geojson=true';
         if (request !== old_request || token !== old_token) {
             old_request = request;
             old_token = token;
@@ -204,7 +209,7 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
                 $(input).autocomplete('search', '');
             }
         },
-        error: function(data, status, xhr) {
+        error: function(data, status, error) {
             notifyOnError(data, 'Autocomplete');
         }
     });
@@ -259,7 +264,7 @@ autocomplete.AbstractObject.prototype.source = function(urlMethod) {
                 }
                 res(result);
             },
-            error: function(data, status, xhr) {
+            error: function(data, status, error) {
                 res([]);
                 notifyOnError(data, 'Autocomplete');
             }
@@ -274,17 +279,17 @@ autocomplete.AbstractObject.prototype.describe = function(elt) {
 
 autocomplete.PtObject = function(types) {
     autocomplete.AbstractObject.call(this, types);
-}
+};
 autocomplete.PtObject.prototype = Object.create(autocomplete.AbstractObject.prototype);
 autocomplete.PtObject.prototype.api = 'pt_objects';
-autocomplete.PtObject.prototype.objectUrl = function(term) {
+autocomplete.PtObject.prototype.objectUrl = function() {
     // /pt_objects/{pt_object.id} is not supported yet by navitia
     return null;
 };
 
 autocomplete.Place = function(types) {
     autocomplete.AbstractObject.call(this, types);
-}
+};
 autocomplete.Place.prototype = Object.create(autocomplete.AbstractObject.prototype);
 autocomplete.Place.prototype.api = 'places';
 
@@ -293,16 +298,16 @@ autocomplete.dynamicAutocompleteTypes = {
     'administrative_regions': new autocomplete.Place(['administrative_region']),
     'commercial_modes': new autocomplete.PtObject(['commercial_mode']),
     'coord': new autocomplete.Place(['address']),
-    'forbidden_uris[]': new autocomplete.PtObject,
+    'forbidden_uris[]': new autocomplete.PtObject(),
     'lines': new autocomplete.PtObject(['line']),
     'networks': new autocomplete.PtObject(['network']),
-    'places': new autocomplete.Place,
+    'places': new autocomplete.Place(),
     'pois': new autocomplete.Place(['poi']),
     'routes': new autocomplete.PtObject(['route']),
     'stop_areas': new autocomplete.Place(['stop_area']),
     'stop_points': new autocomplete.Place(['stop_point']),
-    'from': new autocomplete.Place,
-    'to': new autocomplete.Place,
+    'from': new autocomplete.Place(),
+    'to': new autocomplete.Place(),
 };
 
 autocomplete.dynamicAutocomplete = function (elt, dynamicType) {

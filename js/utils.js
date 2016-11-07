@@ -18,7 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/* TODO: Complete the jshint*/
+// fake includes
+var summary;
+var response;
 
 function isPlaceType(key) {
     return $.inArray(key, ['from', 'to']) !== -1;
@@ -64,28 +66,28 @@ function flatMap(array, f) {
     return result;
 }
 
-$.notify.addStyle("navitia", {
-    html: "<div class='ui-widget'><span data-notify-html='text'></span></div>",
+$.notify.addStyle('navitia', {
+    html: '<div class="ui-widget"><span data-notify-html="text"></span></div>',
     classes: {
         error: {
-            "color": "#B94A48",
-            "background-color": "#F2DEDE",
-            "border-color": "#EED3D7",
+            'color': '#B94A48',
+            'background-color': '#F2DEDE',
+            'border-color': '#EED3D7',
         },
         success: {
-            "color": "#468847",
-            "background-color": "#DFF0D8",
-            "border-color": "#D6E9C6",
+            'color': '#468847',
+            'background-color': '#DFF0D8',
+            'border-color': '#D6E9C6',
         },
         info: {
-            "color": "#3A87AD",
-            "background-color": "#D9EDF7",
-            "border-color": "#BCE8F1",
+            'color': '#3A87AD',
+            'background-color': '#D9EDF7',
+            'border-color': '#BCE8F1',
         },
         warn: {
-            "color": "#C09853",
-            "background-color": "#FCF8E3",
-            "border-color": "#FBEED5",
+            'color': '#C09853',
+            'background-color': '#FCF8E3',
+            'border-color': '#FBEED5',
         }
     }
 });
@@ -145,7 +147,7 @@ function findColor(ratio) {
     } else {
         g = Math.ceil(255 * (1 - ratio) * 2);
     }
-    var hex = sprintf("%02x%02x%02x", r, g, 0);
+    var hex = sprintf('%02x%02x%02x', r, g, 0);
     return { color: hex };
 }
 

@@ -6,7 +6,7 @@
 
     // Enforcing
     "bitwise"       : true,     // true: Prohibit bitwise operators (&, |, ^, etc.)
-    "camelcase"     : true,    // true: Identifiers must be in camelCase
+    "camelcase"     : false,    // true: Identifiers must be in camelCase
     "curly"         : true,     // true: Require {} for every new block or scope
     "eqeqeq"        : true,     // true: Require triple equals (===) for comparison
     "forin"         : true,     // true: Require filtering for..in loops with obj.hasOwnProperty()
@@ -25,7 +25,7 @@
                                 //   "single" : require single quotes
                                 //   "double" : require double quotes
     "undef"         : true,     // true: Require all non-global variables to be declared (prevents global leaks)
-    "unused"        : "strict",     // Unused variables:
+    "unused"        : true,     // Unused variables:
                                 //   true     : all variables, last function parameter
                                 //   "vars"   : all variables only
                                 //   "strict" : all variables, all function parameters
@@ -53,7 +53,7 @@
     "lastsemic"     : false,     // true: Tolerate omitting a semicolon for the last statement of a 1-line block
     "laxbreak"      : false,     // true: Tolerate possibly unsafe line breakings
     "laxcomma"      : false,     // true: Tolerate comma-first style coding
-    "loopfunc"      : false,     // true: Tolerate functions being defined in loops
+    "loopfunc"      : true,      // true: Tolerate functions being defined in loops
     "multistr"      : false,     // true: Tolerate multi-line strings
     "noyield"       : false,     // true: Tolerate generator functions with no yield statement in them.
     "notypeof"      : false,     // true: Tolerate invalid typeof operator values
@@ -65,26 +65,32 @@
     "validthis"     : false,     // true: Tolerate using this in a non-constructor function
 
     // Environments
-    "browser"       : true,     // Web Browser (window, document, etc)
-    "browserify"    : false,    // Browserify (node.js code in the browser)
-    "couch"         : false,    // CouchDB
+    "browser"       : true,      // Web Browser (window, document, etc)
+    "browserify"    : false,     // Browserify (node.js code in the browser)
+    "couch"         : false,     // CouchDB
     "devel"         : false,     // Development/debugging (alert, confirm, etc)
-    "dojo"          : false,    // Dojo Toolkit
-    "jasmine"       : false,    // Jasmine
-    "jquery"        : true,    // jQuery
+    "dojo"          : false,     // Dojo Toolkit
+    "jasmine"       : false,     // Jasmine
+    "jquery"        : true,      // jQuery
     "mocha"         : false,     // Mocha
-    "mootools"      : false,    // MooTools
-    "node"          : false,    // Node.js
-    "nonstandard"   : false,    // Widely adopted globals (escape, unescape, etc)
-    "phantom"       : false,    // PhantomJS
+    "mootools"      : false,     // MooTools
+    "node"          : false,     // Node.js
+    "nonstandard"   : false,     // Widely adopted globals (escape, unescape, etc)
+    "phantom"       : false,     // PhantomJS
     "prototypejs"   : false,     // Prototype and Scriptaculous
-    "qunit"         : false,    // QUnit
-    "rhino"         : false,    // Rhino
-    "shelljs"       : false,    // ShellJS
-    "typed"         : false,    // Globals for typed array constructions
-    "worker"        : false,    // Web Workers
-    "wsh"           : false,    // Windows Scripting Host
-    "yui"           : false,    // Yahoo User Interface
+    "qunit"         : false,     // QUnit
+    "rhino"         : false,     // Rhino
+    "shelljs"       : false,     // ShellJS
+    "typed"         : false,     // Globals for typed array constructions
+    "worker"        : false,     // Web Workers
+    "wsh"           : false,     // Windows Scripting Host
+    "yui"           : false,     // Yahoo User Interface
     // Custom Globals
-    "globals"       : {"sprintf": true}    // additional predefined global variables
+    "globals"       : {          // additional predefined global variables
+        "sprintf": false,
+        "L": false,
+        "wkt2geojson": false,
+        "URI": false,
+        "renderjson": false
+    }
 }
