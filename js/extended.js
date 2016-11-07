@@ -21,6 +21,7 @@
 // fake includes
 var response;
 var summary;
+var utils;
 
 var extended = {};
 
@@ -40,7 +41,7 @@ extended.make.response = function(context, json) {
 
     var key = response.responseCollectionName(json);
     var objs = key ? json[key] : [];
-    var type = getType(key);
+    var type = utils.getType(key);
     if (type) {
         objs.forEach(function(obj, i) {
             result.append(response.render(context, obj, type, key, i));
@@ -161,13 +162,13 @@ extended.make.impacted_object = function(context, json) {
 extended.defaultExtended = function(context, type, json) {
     var result = $('<div class="list"/>');
     for (var key in json) {
-        if (! (getType(key) in context.links)) { continue; }
+        if (! (utils.getType(key) in context.links)) { continue; }
         if ($.isArray(json[key])) {
             json[key].forEach(function(obj, i) {
-                result.append(response.render(context, obj, getType(key), key, i));
+                result.append(response.render(context, obj, utils.getType(key), key, i));
             });
         } else {
-            result.append(response.render(context, json[key], getType(key), key));
+            result.append(response.render(context, json[key], utils.getType(key), key));
         }
     }
     return result;
@@ -186,7 +187,7 @@ extended.has.poi = function(context, type, json) {
 extended.hasDefaultExtended = function(context, type, json) {
     if (! (json instanceof Object)) { return false; }
     for (var key in json) {
-        if (getType(key) in context.links) { return true; }
+        if (utils.getType(key) in context.links) { return true; }
     }
     return false;
 };

@@ -22,6 +22,7 @@
 var storage;
 var summary;
 var response;
+var utils;
 
 var autocomplete = {};
 
@@ -115,7 +116,7 @@ autocomplete.apiAutocomplete = function() {
 };
 
 autocomplete.valueAutoComplete = function (input, key) {
-    if (isDatetimeType(key)) {
+    if (utils.isDatetimeType(key)) {
         autocomplete._makeDatetime(input);
     } else if (key in this.autocompleteTree.paramValue){
         autocomplete._customAutocompleteHelper(input, this.autocompleteTree.paramValue[key]);
@@ -178,14 +179,14 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
         $(input).autocomplete('destroy');
     }
     $.ajax({
-        headers: manageToken(token),
+        headers: utils.manageToken(token),
         dataType: 'json',
         url: request,
         success: function(data) {
             var res = [];
             staticType = (staticType==='coverage') ? 'regions' :  staticType;
             data[staticType].forEach(function(elt) {
-                var s = summary.run(new response.Context(data), getType(staticType), elt);
+                var s = summary.run(new response.Context(data), utils.getType(staticType), elt);
                 res.push({ value: elt.id, label: s.textContent, desc: s });
             });
             res = res.sort(function(a, b) {
@@ -210,7 +211,7 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
             }
         },
         error: function(data, status, error) {
-            notifyOnError(data, 'Autocomplete');
+            utils.notifyOnError(data, 'Autocomplete');
         }
     });
 };
@@ -244,7 +245,7 @@ autocomplete.AbstractObject.prototype.source = function(urlMethod) {
         if (! url) { return res([]); }
         $.ajax({
             url: url,
-            headers: manageToken(token),
+            headers: utils.manageToken(token),
             success: function (data) {
                 var result = [];
                 var search = null;
@@ -266,7 +267,7 @@ autocomplete.AbstractObject.prototype.source = function(urlMethod) {
             },
             error: function(data, status, error) {
                 res([]);
-                notifyOnError(data, 'Autocomplete');
+                utils.notifyOnError(data, 'Autocomplete');
             }
         });
     };

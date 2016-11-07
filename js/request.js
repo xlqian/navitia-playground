@@ -21,6 +21,7 @@
 // fake includes
 var storage;
 var autocomplete;
+var utils;
 
 function setSaveTokenButtonStatus() {
     var api = $('#api input.api').val();
@@ -138,7 +139,7 @@ function makeKeyValue(key, val, cls) {
     res.append(makeDeleteButton());
 
     // valueElt must be attached to res to call this
-    if (isTemplate(val)) { makeTemplatePath(val, valueElt); }
+    if (utils.isTemplate(val)) { makeTemplatePath(val, valueElt); }
 
     return res;
 }

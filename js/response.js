@@ -24,6 +24,7 @@ var extended;
 var map;
 var storage;
 var autocomplete;
+var utils;
 
 var response = {};
 
@@ -144,7 +145,7 @@ response.Context = function(data) {
             if (! link.templated) { return; }
             if (link.type === 'related') { return; }
             if (! link.href.match(templateRegex)) { return; }
-            self.links[getType(link.type)] = link.href;
+            self.links[utils.getType(link.type)] = link.href;
         });
     }
 
@@ -157,7 +158,7 @@ response.Context = function(data) {
     };
 
     this.makeLink = function(k, obj, name) {
-        var key = getType(k);
+        var key = utils.getType(k);
         if (! (key in this.links) || ! ('id' in obj)) {
             return $('<span/>').html(name);
         }
@@ -172,7 +173,7 @@ response.Context = function(data) {
         var scale = max_isochrone > 1 ? max_isochrone - 1 : 1;
         for (var i = 0; i < max_isochrone; i ++) {
             var ratio = i / scale;
-            this.min_duration_color[min_duration[i]] = findColor(ratio);
+            this.min_duration_color[min_duration[i]] = utils.findColor(ratio);
         }
     }
 };
@@ -216,7 +217,7 @@ response.manageUrl = function() {
     }
     var start_time = new Date().getTime();
     $.ajax({
-        headers: manageToken(request.token),
+        headers: utils.manageToken(request.token),
         url: request.request,
         dataType: 'json',
     }).then(
@@ -235,7 +236,7 @@ response.manageUrl = function() {
             response.setStatus(xhr, start_time);
             $('#data').html(response.render(new response.Context(xhr.responseJSON), xhr.responseJSON, 'response', 'response'));
             $('#data input').last().click();
-            notifyOnError(xhr, 'Response');
+            utils.notifyOnError(xhr, 'Response');
         }
     );
 };

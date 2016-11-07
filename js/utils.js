@@ -22,19 +22,17 @@
 var summary;
 var response;
 
-function isPlaceType(key) {
-    return $.inArray(key, ['from', 'to']) !== -1;
-}
+var utils = {};
 
-function isDatetimeType(str) {
+utils.isDatetimeType = function(str) {
     return $.inArray(str, ['since', 'until']) !== -1 || str.match(/datetime$/);
-}
+};
 
-function htmlEncode(value) {
+utils.htmlEncode = function(value) {
     return $('<div/>').text(value).html();
-}
+};
 
-function durationToString(duration) {
+utils.durationToString = function(duration) {
     var res = '';
     var seconds = duration % 60;
     var minutes = Math.floor(duration / 60) % 60;
@@ -51,20 +49,20 @@ function durationToString(duration) {
     } else {
         return res;
     }
-}
+};
 
-function isTemplate(str) {
+utils.isTemplate = function(str) {
     return str.slice(0, 1) === '{' && str.slice(-1) === '}';
-}
+};
 
-function flatMap(array, f) {
+utils.flatMap = function(array, f) {
     var result = [];
 
     array.forEach(function(obj, i, array) {
         result = result.concat(f(obj, i, array));
     });
     return result;
-}
+};
 
 $.notify.addStyle('navitia', {
     html: '<div class="ui-widget"><span data-notify-html="text"></span></div>',
@@ -92,7 +90,7 @@ $.notify.addStyle('navitia', {
     }
 });
 
-function notifyOnError(data, typeError) {
+utils.notifyOnError = function(data, typeError) {
     if (data.status === 401) {
         $('#token').addClass('templateInput');
     }
@@ -103,9 +101,9 @@ function notifyOnError(data, typeError) {
         position: 'right bottom',
         style: 'navitia',
     });
-}
+};
 
-function getType(key) {
+utils.getType = function(key) {
     if (!key || typeof key !== 'string') {
         return null;
     }
@@ -121,9 +119,9 @@ function getType(key) {
 
     // just the key
     return key;
-}
+};
 
-function getTextColor(json) {
+utils.getTextColor = function(json) {
     function _toNum(c, i) { return +('0x' + c.slice(i, i + 2)); }
 
     if (json.text_color) {
@@ -137,9 +135,9 @@ function getTextColor(json) {
         }
     }
     return 'black';
-}
+};
 
-function findColor(ratio) {
+utils.findColor = function(ratio) {
     var r = 255;
     var g = 255;
     if (ratio < 1/2) {
@@ -149,8 +147,8 @@ function findColor(ratio) {
     }
     var hex = sprintf('%02x%02x%02x', r, g, 0);
     return { color: hex };
-}
+};
 
-function manageToken (token) {
+utils.manageToken = function(token) {
   return token ? { Authorization: 'Basic ' + btoa(token) } : {};
-}
+};
