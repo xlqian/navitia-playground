@@ -44,6 +44,9 @@ modes.makePtPicto = function(json) {
     case 'physical_mode:Taxi': img = 'Taxi'; break;
     case 'physical_mode:Tramway': img = 'Tramway'; break;
     case 'physical_mode:Walking': img = 'Walking'; break;
+    case 'physical_mode:CheckIn': img = 'CheckIn'; break;
+    case 'physical_mode:CheckOut': img = 'CheckOut'; break;
+    case 'physical_mode:Shuttle': img = 'Shuttle'; break;
 
     case 'physical_mode:Bus':
     case 'physical_mode:BusRapidTransit':
@@ -60,7 +63,6 @@ modes.makePtPicto = function(json) {
     case 'physical_mode:Ferry':
         img = 'Boat'; break;
 
-    case 'physical_mode:Shuttle': // What is? Boat? Bus?
     default:
         break;
     }
