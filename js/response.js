@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+'use strict';
+
 // fake includes
 var summary;
 var extended;
@@ -200,7 +202,7 @@ response.manageFile = function() {
             }
         };
         reader.readAsText(file);
-        this.value = null;// be sure to have next change
+        $('#file-input').val(null);// be sure to have next change
     }
 
     $('#file-input').change(readSingleFile);
