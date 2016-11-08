@@ -27,10 +27,9 @@ function isProd(env) {
 function lint(env) {
     return function() {
         return gulp.src('js/**/*.js')
-        .pipe(jshint())
-        // TODO: Active this when all errors are fixed
-        // .pipe(jshint.reporter('fail'))
-        .pipe(jshint.reporter('jshint-stylish'));
+            .pipe(jshint())
+            .pipe(jshint.reporter('unix'))
+            .pipe(jshint.reporter('fail'));
     }
 }
 gulp.task('dev:lint', lint('dev'));
