@@ -212,7 +212,7 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, req, token) 
             }
         },
         error: function(data, status, error) {
-            utils.notifyOnError(data, 'Autocomplete');
+            utils.notifyOnError('Autocomplete', data, status, error);
         }
     });
 };
@@ -268,7 +268,7 @@ autocomplete.AbstractObject.prototype.source = function(urlMethod) {
             },
             error: function(data, status, error) {
                 res([]);
-                utils.notifyOnError(data, 'Autocomplete');
+                utils.notifyOnError('Autocomplete', data, status, error);
             }
         });
     };

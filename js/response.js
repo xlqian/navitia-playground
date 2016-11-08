@@ -237,7 +237,7 @@ response.manageUrl = function() {
             response.setStatus(xhr, start_time);
             $('#data').html(response.render(new response.Context(xhr.responseJSON), xhr.responseJSON, 'response', 'response'));
             $('#data input').last().click();
-            utils.notifyOnError(xhr, 'Response');
+            utils.notifyOnError('Response', xhr, status, error);
         }
     );
 };

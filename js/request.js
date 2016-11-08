@@ -209,7 +209,7 @@ request.parseUrl = function() {
     if (! vxxFound) {
         api = req_uri.origin();
         api_path = paths.map(decodeURIComponent);
-        $.notify('Version not found in the URL. Maybe you forgot "/v1" at the end of the API?');
+        utils.notifyWarn('Version not found in the URL. Maybe you forgot "/v1" at the end of the API?');
     }
 
     var params = req_uri.search(true);

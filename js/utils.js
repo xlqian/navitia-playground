@@ -90,15 +90,35 @@ $.notify.addStyle('navitia', {
     }
 });
 
-utils.notifyOnError = function(data, typeError) {
-    if (data.status === 401) {
+utils.notifyOnError = function(typeError, xhr, status, error) {
+    if (xhr.status === 401) {
         $('#token').addClass('templateInput');
     }
-    var message = summary.run(new response.Context(data.responseJSON), 'response', data.responseJSON);
+    var message;
+    if (xhr.readyState === 0) {
+        message = $('<span>').text('network error');
+    } else if (xhr.responseJSON) {
+        message = $(summary.run(new response.Context(xhr.responseJSON), 'response', xhr.responseJSON));
+    } else {
+        message = $('<span>').text(status);
+    }
+    if (error) {
+        message.append('<br>Error: ').append(error);
+    }
     $.notify({
         text: $('<span/>').text(sprintf('%s error: ', typeError)).append(message)
     }, {
         position: 'right bottom',
+        style: 'navitia',
+    });
+};
+
+utils.notifyWarn = function(message) {
+    $.notify({
+        text: message
+    }, {
+        position: 'right bottom',
+        className: 'warn',
         style: 'navitia',
     });
 };
