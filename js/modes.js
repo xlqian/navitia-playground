@@ -60,7 +60,6 @@ modes.makePtPicto = function(json) {
     case 'physical_mode:Ferry':
         img = 'Boat'; break;
 
-    case 'physical_mode:Shuttle': // What is? Boat? Bus?
     default:
         break;
     }
