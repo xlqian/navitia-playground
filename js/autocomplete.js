@@ -18,6 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+'use strict';
+
+// fake includes
+var storage;
+var summary;
+var response;
+var request;
+var utils;
+
 var autocomplete = {};
 
 autocomplete._paramValueEverywhere = [
@@ -98,19 +107,19 @@ autocomplete.autocompleteTree = {
 };
 
 autocomplete.apiAutocomplete = function() {
-    var input = $("#api input.api");
+    var input = $('#api input.api');
     var apis = storage.getApis();
     autocomplete._customAutocompleteHelper(input, apis, {
-        close: setSaveTokenButtonStatus,
+        close: request.setSaveTokenButtonStatus,
         select: function (event, ui) {
             $(input).val(ui.item.value);
-            $("#token input.token").val(storage.getToken(ui.item.value));
+            $('#token input.token').val(storage.getToken(ui.item.value));
         }
     });
 };
 
 autocomplete.valueAutoComplete = function (input, key) {
-    if (isDatetimeType(key)) {
+    if (utils.isDatetimeType(key)) {
         autocomplete._makeDatetime(input);
     } else if (key in this.autocompleteTree.paramValue){
         autocomplete._customAutocompleteHelper(input, this.autocompleteTree.paramValue[key]);
@@ -144,21 +153,21 @@ autocomplete.staticAutocompleteTypes = [
 ];
 
 autocomplete.staticAutocomplete = function(input, staticType) {
-    var old_request = '';
+    var old_req = '';
     var old_token = '';
     var handle = function() {
         var api = $('#api input.api').val();
         var token = $('#token input.token').val();
-        var cov = getCoverage();
-        var request = api +  '/coverage/';
+        var cov = request.getCoverage();
+        var req = api +  '/coverage/';
         if (staticType !== 'coverage') {
-            request +=  cov + '/' + staticType;
+            req +=  cov + '/' + staticType;
         }
-        request += '?disable_geojson=true'
-        if (request !== old_request || token !== old_token) {
-            old_request = request;
+        req += '?disable_geojson=true';
+        if (req !== old_req || token !== old_token) {
+            old_req = req;
             old_token = token;
-            autocomplete.updateStaticAutocomplete(input, staticType, request, token);
+            autocomplete.updateStaticAutocomplete(input, staticType, req, token);
         } else if ($(input).is(':focus') && $(input).autocomplete('instance')) {
             $(input).autocomplete('search', '');
         }
@@ -167,20 +176,20 @@ autocomplete.staticAutocomplete = function(input, staticType) {
     $(input).focus(handle);
 };
 
-autocomplete.updateStaticAutocomplete = function(input, staticType, request, token) {
+autocomplete.updateStaticAutocomplete = function(input, staticType, req, token) {
     if ($(input).autocomplete('instance')) {
         // be shure that out-of-date autocompletion will not be active
         $(input).autocomplete('destroy');
     }
     $.ajax({
-        headers: manageToken(token),
+        headers: utils.manageToken(token),
         dataType: 'json',
-        url: request,
+        url: req,
         success: function(data) {
             var res = [];
             staticType = (staticType==='coverage') ? 'regions' :  staticType;
             data[staticType].forEach(function(elt) {
-                var s = summary.run(new response.Context(data), getType(staticType), elt);
+                var s = summary.run(new response.Context(data), utils.getType(staticType), elt);
                 res.push({ value: elt.id, label: s.textContent, desc: s });
             });
             res = res.sort(function(a, b) {
@@ -189,7 +198,7 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
                 return 0;
             });
             $(input).autocomplete({
-                close: function() { updateUrl($(input)[0]); },
+                close: function() { request.updateUrl($(input)[0]); },
                 source: res,
                 minLength: 0,
                 scroll: true,
@@ -204,8 +213,8 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, request, tok
                 $(input).autocomplete('search', '');
             }
         },
-        error: function(data, status, xhr) {
-            notifyOnError(data, 'Autocomplete');
+        error: function(data, status, error) {
+            utils.notifyOnError('Autocomplete', data, status, error);
         }
     });
 };
@@ -215,7 +224,7 @@ autocomplete.AbstractObject = function(types) {
 };
 autocomplete.AbstractObject.prototype.autocompleteUrl = function(term) {
     var url = $('#api input.api').val() + '/';
-    var cov = getCoverage();
+    var cov = request.getCoverage();
     url += cov ? ('coverage/' + cov) : '';
     url += '/' + this.api + '?display_geojson=false&q=' + encodeURIComponent(term);
     this.types.forEach(function(type) {
@@ -225,7 +234,7 @@ autocomplete.AbstractObject.prototype.autocompleteUrl = function(term) {
 };
 autocomplete.AbstractObject.prototype.objectUrl = function(term) {
     var url = $('#api input.api').val() + '/';
-    var cov = getCoverage();
+    var cov = request.getCoverage();
     url += cov ? ('coverage/' + cov) : '';
     url += '/' + this.api + '/' + encodeURIComponent(term) + '?display_geojson=false';
     return url;
@@ -233,13 +242,13 @@ autocomplete.AbstractObject.prototype.objectUrl = function(term) {
 autocomplete.AbstractObject.prototype.source = function(urlMethod) {
     if (urlMethod === undefined) { urlMethod = 'autocompleteUrl'; }
     var self = this;
-    return function(request, res) {
+    return function(req, res) {
         var token = $('#token input.token').val();
-        var url = self[urlMethod](request.term);
+        var url = self[urlMethod](req.term);
         if (! url) { return res([]); }
         $.ajax({
             url: url,
-            headers: manageToken(token),
+            headers: utils.manageToken(token),
             success: function (data) {
                 var result = [];
                 var search = null;
@@ -259,9 +268,9 @@ autocomplete.AbstractObject.prototype.source = function(urlMethod) {
                 }
                 res(result);
             },
-            error: function(data, status, xhr) {
+            error: function(data, status, error) {
                 res([]);
-                notifyOnError(data, 'Autocomplete');
+                utils.notifyOnError('Autocomplete', data, status, error);
             }
         });
     };
@@ -274,17 +283,17 @@ autocomplete.AbstractObject.prototype.describe = function(elt) {
 
 autocomplete.PtObject = function(types) {
     autocomplete.AbstractObject.call(this, types);
-}
+};
 autocomplete.PtObject.prototype = Object.create(autocomplete.AbstractObject.prototype);
 autocomplete.PtObject.prototype.api = 'pt_objects';
-autocomplete.PtObject.prototype.objectUrl = function(term) {
+autocomplete.PtObject.prototype.objectUrl = function() {
     // /pt_objects/{pt_object.id} is not supported yet by navitia
     return null;
 };
 
 autocomplete.Place = function(types) {
     autocomplete.AbstractObject.call(this, types);
-}
+};
 autocomplete.Place.prototype = Object.create(autocomplete.AbstractObject.prototype);
 autocomplete.Place.prototype.api = 'places';
 
@@ -293,23 +302,23 @@ autocomplete.dynamicAutocompleteTypes = {
     'administrative_regions': new autocomplete.Place(['administrative_region']),
     'commercial_modes': new autocomplete.PtObject(['commercial_mode']),
     'coord': new autocomplete.Place(['address']),
-    'forbidden_uris[]': new autocomplete.PtObject,
+    'forbidden_uris[]': new autocomplete.PtObject(),
     'lines': new autocomplete.PtObject(['line']),
     'networks': new autocomplete.PtObject(['network']),
-    'places': new autocomplete.Place,
+    'places': new autocomplete.Place(),
     'pois': new autocomplete.Place(['poi']),
     'routes': new autocomplete.PtObject(['route']),
     'stop_areas': new autocomplete.Place(['stop_area']),
     'stop_points': new autocomplete.Place(['stop_point']),
-    'from': new autocomplete.Place,
-    'to': new autocomplete.Place,
+    'from': new autocomplete.Place(),
+    'to': new autocomplete.Place(),
 };
 
 autocomplete.dynamicAutocomplete = function (elt, dynamicType) {
     var object = autocomplete.dynamicAutocompleteTypes[dynamicType];
     $(elt).autocomplete({
         delay: 200,
-        close: function() { updateUrl($(elt)[0]); },
+        close: function() { request.updateUrl($(elt)[0]); },
         source: object.source()
     }).focus(function() {
         this.select();
@@ -334,7 +343,7 @@ autocomplete._customAutocompleteHelper = function(input, source, customOptions) 
         source = source.sort();
     }
     var options = {
-        close: function() { updateUrl($(input)[0]); },
+        close: function() { request.updateUrl($(input)[0]); },
         source: source,
         minLength: 0,
         scroll: true,

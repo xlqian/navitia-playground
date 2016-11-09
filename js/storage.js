@@ -18,9 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+'use strict';
+
+// fake includes
+var request;
+
 var storage = {};
 
-storage._storagePrefix = 'navitia-playground.'
+storage._storagePrefix = 'navitia-playground.';
 storage._apiStoragePrefix = storage._storagePrefix + 'api.';
 storage._layerStorageKey = storage._storagePrefix + 'layer';
 
@@ -69,9 +74,9 @@ storage.saveTokenFromRequest = function() {
 
 storage.saveToken = function(api, token) {
     if (! storage._localStorageAvailable()) { return; }
-    var key = storage._apiStoragePrefix + api
+    var key = storage._apiStoragePrefix + api;
     window.localStorage.setItem(key, token);
-    setSaveTokenButtonStatus();
+    request.setSaveTokenButtonStatus();
 };
 
 storage.getToken = function(api) {

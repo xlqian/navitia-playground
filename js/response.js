@@ -18,6 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+'use strict';
+
+// fake includes
+var summary;
+var extended;
+var map;
+var storage;
+var autocomplete;
+var utils;
+var request;
+
 var response = {};
 
 response.setStatus = function(xhr, start_time) {
@@ -27,7 +38,7 @@ response.setStatus = function(xhr, start_time) {
         status += sprintf(', duration of the request: %sms', duration);
     }
     $('#status').text(status);
-}
+};
 
 response.responseCollectionName = function(json) {
     if (! (json instanceof Object)) { return null; }
@@ -44,7 +55,7 @@ response.responseCollectionName = function(json) {
         key = 'disruptions';
     }
     return key;
-}
+};
 
 response.makeObjectButton = function(name, handle) {
     // TODO call handle on toggle
@@ -52,7 +63,7 @@ response.makeObjectButton = function(name, handle) {
         .addClass('objectButton')
         .append($('<input type="checkbox">').change(handle))
         .append($('<span>').html(name));
-}
+};
 
 response.makeObjectButtonHandle = function(selector, renderHandle) {
     return function() {
@@ -69,7 +80,7 @@ response.makeObjectButtonHandle = function(selector, renderHandle) {
             });
         }
     };
-}
+};
 
 response.render = function(context, json, type, key, idx) {
     var name = key;
@@ -119,7 +130,7 @@ response.render = function(context, json, type, key, idx) {
     result.append(head);
     result.append(data);
     return result;
-}
+};
 
 response.Context = function(data) {
     // the token, used to create links
@@ -137,7 +148,7 @@ response.Context = function(data) {
             if (! link.templated) { return; }
             if (link.type === 'related') { return; }
             if (! link.href.match(templateRegex)) { return; }
-            self.links[getType(link.type)] = link.href;
+            self.links[utils.getType(link.type)] = link.href;
         });
     }
 
@@ -150,7 +161,7 @@ response.Context = function(data) {
     };
 
     this.makeLink = function(k, obj, name) {
-        var key = getType(k);
+        var key = utils.getType(k);
         if (! (key in this.links) || ! ('id' in obj)) {
             return $('<span/>').html(name);
         }
@@ -165,22 +176,22 @@ response.Context = function(data) {
         var scale = max_isochrone > 1 ? max_isochrone - 1 : 1;
         for (var i = 0; i < max_isochrone; i ++) {
             var ratio = i / scale;
-            this.min_duration_color[min_duration[i]] = findColor(ratio);
+            this.min_duration_color[min_duration[i]] = utils.findColor(ratio);
         }
     }
-}
+};
 
 response.manageFile = function() {
-    function readSingleFile(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var files = e.target.files || e.originalEvent.dataTransfer.files;
+    function readSingleFile(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var files = event.target.files || event.originalEvent.dataTransfer.files;
         if (!files || !files[0]) { return; }
         var file = files[0];
         var reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function(event) {
             try {
-                var data = JSON.parse(e.target.result);
+                var data = JSON.parse(event.target.result);
                 $('#status').text(sprintf('Status: file "%s" loaded', file.name));
                 $('#data').html(response.render(new response.Context(data), data, 'response', 'response'));
                 $('#data input').first().click();
@@ -191,7 +202,7 @@ response.manageFile = function() {
             }
         };
         reader.readAsText(file);
-        this.value = null;// be sure to have next change
+        $('#file-input').val(null);// be sure to have next change
     }
 
     $('#file-input').change(readSingleFile);
@@ -199,18 +210,18 @@ response.manageFile = function() {
         .on('dragover', false)
         .on('dragleave', false)
         .on('drop', readSingleFile);
-}
+};
 
 response.manageUrl = function() {
-    var request = parseUrl();
-    if (request === null) {
+    var req = request.parseUrl();
+    if (req === null) {
         $('#status').html('Status: no request');
         return;
     }
     var start_time = new Date().getTime();
     $.ajax({
-        headers: manageToken(request.token),
-        url: request.request,
+        headers: utils.manageToken(req.token),
+        url: req.request,
         dataType: 'json',
     }).then(
         function(data, status, xhr) {
@@ -218,8 +229,8 @@ response.manageUrl = function() {
             $('#data').html(response.render(new response.Context(data), data, 'response', 'response'));
             $('#data input').first().click();
             $('html, body').animate({ scrollTop: $('#response').offset().top }, 600);
-            if (! storage.getToken(request.api)) {
-                storage.saveToken(request.api, request.token);
+            if (! storage.getToken(req.api)) {
+                storage.saveToken(req.api, req.token);
             }
             // update the drop list of autocompletion for API
             autocomplete.apiAutocomplete();
@@ -228,10 +239,10 @@ response.manageUrl = function() {
             response.setStatus(xhr, start_time);
             $('#data').html(response.render(new response.Context(xhr.responseJSON), xhr.responseJSON, 'response', 'response'));
             $('#data input').last().click();
-            notifyOnError(xhr, 'Response');
+            utils.notifyOnError('Response', xhr, status, error);
         }
     );
-}
+};
 
 // renderjson config
 $(document).ready(function() {

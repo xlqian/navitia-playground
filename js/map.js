@@ -18,6 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+'use strict';
+
+// fake includes
+var response;
+var storage;
+var summary;
+var utils;
+
 var map = {};
 
 map.DrawSectionOption = {
@@ -27,13 +35,13 @@ map.DrawSectionOption = {
     DRAWNEITHER: 0 // 00
 };
 map._should_draw_section_start = function(option) {
-    return option & 2;
+    return option & 2;// jshint ignore:line
 };
 map._should_draw_section_end = function(option) {
-    return option & 1;
+    return option & 1;// jshint ignore:line
 };
 map.STARTTEXT = 'Start';
-map.ENDTEXT = 'End',
+map.ENDTEXT = 'End';
 map.makeFeatures = {
     region: function(context, json) {
         if (json.shape) {
@@ -74,11 +82,15 @@ map.makeFeatures = {
         if (! ('sections' in json)) { return []; }
         var bind = function(s, i, array) {
             var draw_section_option = map.DrawSectionOption.DRAWNEITHER;
-            if ( i === 0) { draw_section_option |= map.DrawSectionOption.DRAWSTART; }
-            if ( i === (array.length -1) ) { draw_section_option |= map.DrawSectionOption.DRAWEND; }
+            if ( i === 0) {
+                draw_section_option |= map.DrawSectionOption.DRAWSTART;// jshint ignore:line
+            }
+            if ( i === (array.length -1) ) {
+                draw_section_option |= map.DrawSectionOption.DRAWEND;// jshint ignore:line
+            }
             return map.makeFeatures.section(context, s, draw_section_option);
         };
-        return flatMap(json.sections, bind);
+        return utils.flatMap(json.sections, bind);
     },
     isochrone: function(context, json) {
         if (! ('geojson' in json)) { return []; }
@@ -99,12 +111,12 @@ map.makeFeatures = {
             });
         });
         var local_map = [];
-        json.heat_matrix.lines.forEach(function(lines, i) {
+        json.heat_matrix.lines.forEach(function(lines/*, i*/) {
             lines.duration.forEach(function(duration, j) {
                 var color;
                 if (duration !== null) {
                     var ratio = duration / scale;
-                    color = findColor(ratio);
+                    color = utils.findColor(ratio);
                 } else {
                     color = { color: '000000' };
                     // for the moment, we don't want to print the null duration squares because
@@ -148,14 +160,14 @@ map.makeFeatures = {
         if (key === null) {
             return [];
         }
-        var type = getType(key);
+        var type = utils.getType(key);
         if (!(type in map.makeFeatures)) {
             return [];
         }
         var bind = function(s) {
             return map.makeFeatures[type](context, s);
         };
-        return flatMap(json[key], bind);
+        return utils.flatMap(json[key], bind);
     }
 };
 
@@ -169,8 +181,8 @@ map.getFeatures = function(context, type, json) {
     try {
         return map.makeFeatures[type](context, json);
     } catch (e) {
-        console.log(sprintf('map.makeFeatures[%s] thows an exception:', type));
-        console.log(e);
+        console.log(sprintf('map.makeFeatures[%s] thows an exception:', type));// jshint ignore:line
+        console.log(e);// jshint ignore:line
         return [];
     }
 };
@@ -294,12 +306,12 @@ map._makeString = function(context, type, json, colorJson) {
     var from = map._getCoordFromPlace(json.from);
     var to = map._getCoordFromPlace(json.to);
     var style1 = {
-        color: getTextColor(colorJson),
+        color: utils.getTextColor(colorJson),
         weight: 6,
         opacity: 1
     };
     var style2 = {
-        color: "#" + colorJson.color,
+        color: '#' + colorJson.color,
         weight: 5,
         opacity: 1
     };
@@ -319,7 +331,7 @@ map._makeString = function(context, type, json, colorJson) {
 };
 
 map._makeStopTimesMarker = function(context, json, color, draw_section_option) {
-    var stopTimes = json['stop_date_times'];
+    var stopTimes = json.stop_date_times;
     var markers = [];
     if (stopTimes) {
         // when section is PT
@@ -371,7 +383,7 @@ map._makeLink = function(context, type, obj, name) {
 map._makePixel = function(context, type, PolygonCoords, json, colorJson, duration) {
     var sum = 'not accessible';
     if (duration !== null) {
-        sum = sprintf('duration: %s', durationToString(duration));
+        sum = sprintf('duration: %s', utils.durationToString(duration));
     }
     return L.rectangle(PolygonCoords, {
         color:  '#555555',

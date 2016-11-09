@@ -18,6 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+'use strict';
+
+// fake includes
+var response;
+var modes;
+var utils;
+
 var summary = {};
 
 summary.make = {};
@@ -97,7 +104,7 @@ summary.make.journey = function(context, json) {
                 stayIn = false;
             } else {
                 add(summary.makePhysicalModesFromSection(s)
-                    .append(summary.makeLineCode(s.display_informations)))
+                    .append(summary.makeLineCode(s.display_informations)));
             }
         });
         if (last_section_mode) {
@@ -113,18 +120,18 @@ summary.make.journey = function(context, json) {
     add(summary.formatTime(json.arrival_date_time));
     if ('durations' in json) {
         if (json.durations.total) {
-            res.append(', duration: ' + durationToString(json.durations.total));
+            res.append(', duration: ' + utils.durationToString(json.durations.total));
         }
         if (json.durations.walking) {
             res.append(', ');
             res.append(modes.makeSnPicto('walking'));
-            res.append(durationToString(json.durations.walking));
+            res.append(utils.durationToString(json.durations.walking));
         }
     } else {
-        res.append(', duration: ' + durationToString(json.duration));
+        res.append(', duration: ' + utils.durationToString(json.duration));
     }
 
-    if (json.status) { res.append(', status: ' + htmlEncode(json.status)); }
+    if (json.status) { res.append(', status: ' + utils.htmlEncode(json.status)); }
 
     return res;
 };
@@ -132,15 +139,15 @@ summary.make.journey = function(context, json) {
 summary.make.isochrone = function(context, json) {
     var res = $('<span>');
     if ('from' in json) {
-      res.append(sprintf('from %s, ', htmlEncode(json.from.name)));
+      res.append(sprintf('from %s, ', utils.htmlEncode(json.from.name)));
     }
     if ('to' in json) {
-      res.append(sprintf('to %s, ', htmlEncode(json.to.name)));
+      res.append(sprintf('to %s, ', utils.htmlEncode(json.to.name)));
     }
     if ('min_duration' in json && 'max_duration' in json) {
         res.append(sprintf('duration: [%s, %s]',
-                          durationToString(json.min_duration),
-                          durationToString(json.max_duration)));
+                          utils.durationToString(json.min_duration),
+                          utils.durationToString(json.max_duration)));
     } else {
         res.text('no summary');
     }
@@ -150,9 +157,9 @@ summary.make.isochrone = function(context, json) {
 summary.make.heat_map = function(context, json) {
     var res = $('<span>');
     if ('from' in json) {
-      res.append(sprintf('from %s, ', htmlEncode(json.from.name)));
+      res.append(sprintf('from %s, ', utils.htmlEncode(json.from.name)));
     } else if ('to' in json) {
-      res.append(sprintf('to %s, ', htmlEncode(json.to.name)));
+      res.append(sprintf('to %s, ', utils.htmlEncode(json.to.name)));
     } else {
         res.text('no summary');
     }
@@ -182,7 +189,7 @@ summary.make.links = function(context, json) {
 
 summary.make.warning = function(context, json) {
     return $('<span>').text(json.message);
-}
+};
 
 summary.make.pt_object = summary.make.place = function(context, json) {
     var res = $('<span>')
@@ -219,6 +226,9 @@ summary.make.section = function(context, section) {
         break;
     case 'on_demand_transport':
         res.append(section.type + ' ');
+        pt = true;
+        res.append(summary.makeRoutePoint(context, section));
+        break;
     case 'public_transport':
         pt = true;
         res.append(summary.makeRoutePoint(context, section));
@@ -227,21 +237,21 @@ summary.make.section = function(context, section) {
     }
 
     if ('from' in section) {
-        res.append(sprintf(' from %s', htmlEncode(section.from.name)));
+        res.append(sprintf(' from %s', utils.htmlEncode(section.from.name)));
     }
     if (pt) {
         res.append(summary.makeSectionTime(section.departure_date_time,
                                            section.base_departure_date_time));
     }
     if ('to' in section) {
-        res.append(sprintf(' to %s', htmlEncode(section.to.name)));
+        res.append(sprintf(' to %s', utils.htmlEncode(section.to.name)));
     }
     if (pt) {
         res.append(summary.makeSectionTime(section.arrival_date_time,
                                            section.base_arrival_date_time));
     }
     if ('duration' in section) {
-        res.append(sprintf(' during %s', durationToString(section.duration)));
+        res.append(sprintf(' during %s', utils.durationToString(section.duration)));
     }
     return res;
 };
@@ -260,9 +270,9 @@ summary.make.region = function(context, region) {
     var end = makeDate(region.end_production_date);
     var remaining_days = Math.round((end - now) / 1000 / 60 / 60 / 24);
     if (region.error && region.error.value) {
-        res.append(sprintf(', <span class="error">error: %s</span>', htmlEncode(region.error.value)));
+        res.append(sprintf(', <span class="error">error: %s</span>', utils.htmlEncode(region.error.value)));
     } else if (region.status !== 'running') {
-        res.append(sprintf(', <span class="error">status: %s</span>', htmlEncode(region.status)));
+        res.append(sprintf(', <span class="error">status: %s</span>', utils.htmlEncode(region.status)));
     } else if (now < begin || end < now) {
         res.append(', <span class="outofdate">out-of-date</span>');
     } else if (remaining_days <= 21) {
@@ -287,7 +297,7 @@ summary.make.line = function(context, line) {
 };
 
 summary.make.stop_date_time = function(context, stop_time) {
-    var sum = summary.run(context, 'stop_point', stop_time.stop_point)
+    var sum = summary.run(context, 'stop_point', stop_time.stop_point);
     var res = $('<span>').append(summary.formatTime(stop_time.arrival_date_time))
                          .append(' > ')
                          .append(summary.formatTime(stop_time.departure_date_time))
@@ -335,9 +345,9 @@ summary.make.connection = function(context, json) {
     return $('<span/>').text(sprintf('%s > %s, duration: %s, display_duration: %s',
                                      json.origin.id,
                                      json.destination.id,
-                                     durationToString(json.duration),
-                                     durationToString(json.display_duration)));
-}
+                                     utils.durationToString(json.duration),
+                                     utils.durationToString(json.display_duration)));
+};
 
 summary.make.tags = function(context, json) {
     return $('<span/>').text(json.join(', '));
@@ -353,7 +363,7 @@ summary.make.contributor = function(context, json) {
         res.text(json.name);
     }
     if (json.license) {
-        res.append(', license: ' + htmlEncode(json.license));
+        res.append(', license: ' + utils.htmlEncode(json.license));
     }
     return res;
 };
@@ -380,9 +390,9 @@ summary.make.stands = function(context, json) {
 summary.make.disruption = function(context, json) {
     var res = $('<span/>');
     res.append($('<span/>').css('color', json.severity.color).text(json.severity.name));
-    if (json.status) { res.append(', status: ' + htmlEncode(json.status)); }
-    if (json.cause) { res.append(', cause: ' + htmlEncode(json.cause)); }
-    if (json.contributor) { res.append(', contributor: ' + htmlEncode(json.contributor)); }
+    if (json.status) { res.append(', status: ' + utils.htmlEncode(json.status)); }
+    if (json.cause) { res.append(', cause: ' + utils.htmlEncode(json.cause)); }
+    if (json.contributor) { res.append(', contributor: ' + utils.htmlEncode(json.contributor)); }
     return res;
 };
 
@@ -408,7 +418,7 @@ summary.make.impacted_stop = function(context, json) {
     res.append(summary.makeImpactedTime(json.amended_arrival_time, json.base_arrival_time));
     res.append(' > ');
     res.append(summary.makeImpactedTime(json.amended_departure_time, json.base_departure_time));
-    if (json.cause) { res.append(htmlEncode(', cause: ' + json.cause)); }
+    if (json.cause) { res.append(utils.htmlEncode(', cause: ' + json.cause)); }
     return res;
 };
 
@@ -418,7 +428,7 @@ summary.make.impacted_stop = function(context, json) {
 summary.setColors = function(elt, json) {
     if ('color' in json) {
         elt.css('background-color', '#' + json.color);
-        elt.css('color', getTextColor(json));
+        elt.css('color', utils.getTextColor(json));
     }
 };
 
@@ -473,7 +483,7 @@ summary.makeSectionTime = function(dt, baseDt) {
     }
     res.append(sprintf(' %s', summary.formatTime(dt)));
     return res;
-}
+};
 
 summary.makeImpactedTime = function(amended, base) {
     var res = $('<span/>');
@@ -481,7 +491,7 @@ summary.makeImpactedTime = function(amended, base) {
         res.append($('<span/>').addClass('old-datetime').text(summary.formatTime(base)));
         res.append(' ');
     }
-    res.append(htmlEncode(summary.formatTime(amended)));
+    res.append(utils.htmlEncode(summary.formatTime(amended)));
     return res;
 };
 
@@ -489,7 +499,7 @@ summary.makePhysicalModesFromSection = function(section) {
     if ('links' in section) {
         var pms = section.links
             .map(function(o) {
-                if (o.type == 'physical_mode') {
+                if (o.type === 'physical_mode') {
                     return { id: o.id, name: section.display_informations.physical_mode };
                 } else {
                     return null;
@@ -523,7 +533,7 @@ summary.makeRoutePoint = function(context, json) {
         res.append(summary.run(context, 'stop_point', json.stop_point));
     }
     return res;
-}
+};
 
 summary.run = function(context, type, json) {
     var res;
@@ -534,8 +544,8 @@ summary.run = function(context, type, json) {
             res = summary.defaultSummary(context, type, json);
         }
     } catch (e) {
-        console.log(sprintf('summary(%s) thows an exception:', type));
-        console.log(e);
+        console.log(sprintf('summary(%s) thows an exception:', type));// jshint ignore:line
+        console.log(e);// jshint ignore:line
         res = 'summary error';
     }
     if (res instanceof jQuery) {
