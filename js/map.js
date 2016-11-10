@@ -46,7 +46,7 @@ map.makeFeatures = {
     region: function(context, json) {
         if (json.shape) {
             var geoJsonShape = wkt2geojson(json.shape);
-            return map._makePolygon(context, 'region', geoJsonShape, json, {color : '008ACA'});
+            return map._makePolygon(context, 'region', geoJsonShape, json, '#008ACA');
         }
         return [];
     },
@@ -94,7 +94,7 @@ map.makeFeatures = {
     },
     isochrone: function(context, json) {
         if (! ('geojson' in json)) { return []; }
-        var color = context.min_duration_color[json.min_duration];
+        var color = context.getColorFromMinDuration(json.min_duration);
         var draw_section_option = map.DrawSectionOption.DRAWBOTH;
         var color_marker = '#000000';
         return map._makePolygon(context, 'isochrone', json.geojson, json, color)
@@ -118,7 +118,7 @@ map.makeFeatures = {
                     var ratio = duration / scale;
                     color = utils.findColor(ratio);
                 } else {
-                    color = { color: '000000' };
+                    color = '#000000';
                     // for the moment, we don't want to print the null duration squares because
                     // it impacts the performances of the navigator.
                     return;
@@ -363,7 +363,7 @@ map._makeStopTimesMarker = function(context, json, color, draw_section_option) {
     }
     return markers;
 };
-map._makePolygon = function(context, type, geoJsonCoords, json, colorJson) {
+map._makePolygon = function(context, type, geoJsonCoords, json, color) {
     var sum = summary.run(context, type, json);
     // TODO use link when navitia has debugged the ticket NAVITIAII-2133
     var link = map._makeLink(context, type, json, sum)[0];
@@ -372,7 +372,7 @@ map._makePolygon = function(context, type, geoJsonCoords, json, colorJson) {
             color:  '#555555',
             opacity: 1,
             weight: 0.5,
-            fillColor:  '#' + colorJson.color,
+            fillColor: color,
             fillOpacity: 0.25
         }).bindPopup(link)
     ];
@@ -380,7 +380,7 @@ map._makePolygon = function(context, type, geoJsonCoords, json, colorJson) {
 map._makeLink = function(context, type, obj, name) {
     return context.makeLink(type, obj, name);
 };
-map._makePixel = function(context, type, PolygonCoords, json, colorJson, duration) {
+map._makePixel = function(context, type, PolygonCoords, json, color, duration) {
     var sum = 'not accessible';
     if (duration !== null) {
         sum = sprintf('duration: %s', utils.durationToString(duration));
@@ -389,7 +389,7 @@ map._makePixel = function(context, type, PolygonCoords, json, colorJson, duratio
         color:  '#555555',
         opacity: 0,
         weight: 0,
-        fillColor:  '#' + colorJson.color,
+        fillColor: color,
         fillOpacity: 0.25
     }).bindPopup(sum);
 };

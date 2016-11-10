@@ -154,9 +154,13 @@ summary.make.isochrone = function(context, json) {
       res.append(sprintf('to %s, ', utils.htmlEncode(json.to.name)));
     }
     if ('min_duration' in json && 'max_duration' in json) {
-        res.append(sprintf('duration: [%s, %s]',
+        $('<span/>')
+            .addClass('with-bg-color')
+            .css('background-color', context.getColorFromMinDuration(json.min_duration, 0.25))
+            .text(sprintf('duration: [%s, %s]',
                           utils.durationToString(json.min_duration),
-                          utils.durationToString(json.max_duration)));
+                          utils.durationToString(json.max_duration)))
+            .appendTo(res);
     } else {
         res.text('no summary');
     }
@@ -305,7 +309,7 @@ summary.make.line = function(context, line) {
     var code = $('');
     if (line.code) {
         code = $('<span>')
-            .addClass('line_code')
+            .addClass('with-bg-color')
             .append(line.code);
         summary.setColors(code, line);
     }
@@ -532,7 +536,7 @@ summary.makePhysicalModesFromSection = function(section) {
 summary.makeLineCode = function(display_informations) {
     if (! display_informations.code) { return $(''); }
     var elt = $('<span>')
-        .addClass('line_code')
+        .addClass('with-bg-color')
         .append(display_informations.code);
     summary.setColors(elt, display_informations);
     return elt;
