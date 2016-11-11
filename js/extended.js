@@ -83,6 +83,9 @@ extended.make.journey = function(context, json) {
 
 extended.make.section = function(context, json) {
     var result = $('<div class="list"/>');
+    if (json.links) {
+        result.append(response.render(context, json.links, 'links', 'links'));
+    }
     if (json.from) {
         result.append(response.render(context, json.from, 'place', 'from'));
     }
@@ -99,6 +102,9 @@ extended.make.section = function(context, json) {
 
 extended.make.stop_schedule = function(context, json) {
     var result = $('<div class="list"/>');
+    if (json.links) {
+        result.append(response.render(context, json.links, 'links', 'links'));
+    }
     json.date_times.forEach(function(date_time, i) {
         result.append(response.render(context, date_time, 'date_time', 'date_times', i));
     });
@@ -106,13 +112,22 @@ extended.make.stop_schedule = function(context, json) {
 };
 
 extended.make.route_schedule = function(context, json) {
+    var result = $('<div class="list"/>');
+    if (json.links) {
+        result.append(response.render(context, json.links, 'links', 'links'));
+    }
+    result.append(response.render(context, json.table, 'table', 'table'));
+    return result;
+};
+
+extended.make.table = function(context, json) {
     var result = $('<div class="table"/>');
     var table = $('<table/>');
     // Add the data rows
-    json.table.rows.forEach(function(route_schedule) {
+    json.rows.forEach(function(route_schedule) {
         var row = $('<tr/>');
         var cellName = $('<td />').addClass('stop-point');
-        cellName.html(summary.run(context, 'stop_point', route_schedule.stop_point));
+        cellName.text(route_schedule.stop_point.name);
         row.append(cellName);
         route_schedule.date_times.forEach(function(route_schedule) {
             var cellValue = $('<td />').addClass('time');

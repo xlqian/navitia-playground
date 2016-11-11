@@ -176,10 +176,15 @@ summary.make.links = function(context, json) {
     }
     if ($.isArray(json)) {
         json.forEach(function(link) {
-            res.append(' ')
-                .append($('<a>')
-                        .attr('href', context.makeHref(link.href))
-                        .html(makeData(link)));
+            res.append(' ');
+            if (link.id) {
+                context.makeLink(link.type, link, link.type).appendTo(res);
+            } else {
+                $('<a>')
+                    .attr('href', context.makeHref(link.href))
+                    .text(makeData(link))
+                    .appendTo(res);
+            }
         });
     } else {
         res.append('Links is not an array!');
@@ -200,6 +205,12 @@ summary.make.pt_object = summary.make.place = function(context, json) {
         res.append(sprintf(' at %dm', json.distance));
     }
     return res;
+};
+
+summary.make.table = function(context, json) {
+    return $('<span>').text(sprintf('%d vehicle journeys, %d stop points',
+                                    json.headers.length,
+                                    json.rows.length));
 };
 
 summary.make.section = function(context, section) {
