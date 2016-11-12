@@ -219,13 +219,18 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, req, token) 
     });
 };
 
+autocomplete.getUrlWithCov = function() {
+    var url = $('#api input.api').val() + '/';
+    var cov = request.getCoverage();
+    url += cov ? ('coverage/' + cov) : '';
+    return url;
+};
+
 autocomplete.AbstractObject = function(types) {
     this.types = types || [];
 };
 autocomplete.AbstractObject.prototype.autocompleteUrl = function(term) {
-    var url = $('#api input.api').val() + '/';
-    var cov = request.getCoverage();
-    url += cov ? ('coverage/' + cov) : '';
+    var url = autocomplete.getUrlWithCov();
     url += '/' + this.api + '?display_geojson=false&q=' + encodeURIComponent(term);
     this.types.forEach(function(type) {
         url += '&type[]=' + type;
@@ -233,9 +238,7 @@ autocomplete.AbstractObject.prototype.autocompleteUrl = function(term) {
     return url;
 };
 autocomplete.AbstractObject.prototype.objectUrl = function(term) {
-    var url = $('#api input.api').val() + '/';
-    var cov = request.getCoverage();
-    url += cov ? ('coverage/' + cov) : '';
+    var url = autocomplete.getUrlWithCov();
     url += '/' + this.api + '/' + encodeURIComponent(term) + '?display_geojson=false';
     return url;
 };
@@ -251,15 +254,9 @@ autocomplete.AbstractObject.prototype.source = function(urlMethod) {
             headers: utils.manageToken(token),
             success: function (data) {
                 var result = [];
-                var search = null;
-                var type = null;
-                if ('places' in data) {
-                    search = data.places;
-                    type = 'place';
-                } else if ('pt_objects' in data) {
-                    search = data.pt_objects;
-                    type = 'pt_object';
-                }
+                var key = response.responseCollectionName(data);
+                var search = key ? data[key] : [];
+                var type = utils.getType(key);
                 if (search) {
                     search.forEach(function(s) {
                         var sum = summary.run(new response.Context(data), type, s);
@@ -286,8 +283,14 @@ autocomplete.PtObject = function(types) {
 };
 autocomplete.PtObject.prototype = Object.create(autocomplete.AbstractObject.prototype);
 autocomplete.PtObject.prototype.api = 'pt_objects';
-autocomplete.PtObject.prototype.objectUrl = function() {
-    // /pt_objects/{pt_object.id} is not supported yet by navitia
+autocomplete.PtObject.prototype.objectUrl = function(term) {
+    // /pt_objects/{pt_object.id} is not supported yet by navitia,
+    // using the type if there is no ambiguity.
+    if (this.types.length === 1) {
+        var url = autocomplete.getUrlWithCov();
+        url += '/' + this.types[0] + 's/' + encodeURIComponent(term) + '?display_geojson=false';
+        return url;
+    }
     return null;
 };
 
