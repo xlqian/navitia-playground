@@ -1,11 +1,14 @@
 .line_code {
     display: inline-block;
     border: none;
-    border-radius: 3em;// more than line-height + 2 * padding to have circle borders
-    line-height: 1.2em;
-    min-width: 1.2em;// min-width == line-height to have a circle if small enough
+    border-radius: 3em;// more than height/2 to have circle borders
     text-align: center;// to have the code centered if smaller than min-width
-    padding: 0.4em;
+
+    // min-width + 2 * horizontal padding == line-height + 2 * vertical padding
+    // to have a circle if small enough
+    line-height: 1.2em;
+    min-width: 1em;
+    padding: 0.2em 0.3em;
 }
 
 .old-datetime {
@@ -19,9 +22,22 @@
     color: $dark-orange;
 }
 
-img.mode {
+img.picto {
     vertical-align: middle;
-    height: 2em;
+    height: 1.6em;// height of line_code
+}
+
+.mode-and-code {
+    white-space: nowrap;
+}
+
+.section-additional-block {
+    white-space: nowrap;
+}
+.section-additional-block:before {
+    content: " ";
+    word-spacing: 2em;
+    white-space: normal;
 }
 
 div.object {
