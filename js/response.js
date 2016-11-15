@@ -169,16 +169,20 @@ response.Context = function(data) {
         return $('<a>').attr('href', this.makeHref(href)).text(name);
     };
 
-    this.min_duration_color = {};
+    var minDurationColor = {};
     if (data instanceof Object && 'isochrones' in data && $.isArray(data.isochrones)) {
         var min_duration = data.isochrones.map(function(isochrone) { return isochrone.min_duration; });
         var max_isochrone = data.isochrones.length;
         var scale = max_isochrone > 1 ? max_isochrone - 1 : 1;
         for (var i = 0; i < max_isochrone; i ++) {
             var ratio = i / scale;
-            this.min_duration_color[min_duration[i]] = utils.findColor(ratio);
+            minDurationColor[min_duration[i]] = utils.computeColorFromRatio(ratio);
         }
     }
+    this.getColorFromMinDuration = function(minDuration, alpha) {
+        var color = minDurationColor[minDuration] || {red: 0, green: 0, blue: 0};
+        return utils.toCssColor(color, alpha);
+    };
 };
 
 response.manageFile = function() {
