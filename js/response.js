@@ -163,10 +163,10 @@ response.Context = function(data) {
     this.makeLink = function(k, obj, name) {
         var key = utils.getType(k);
         if (! (key in this.links) || ! ('id' in obj)) {
-            return $('<span/>').html(name);
+            return $('<span/>').text(name);
         }
         var href = this.links[key].replace(templateRegex, obj.id);
-        return $('<a>').attr('href', this.makeHref(href)).html(name);
+        return $('<a>').attr('href', this.makeHref(href)).text(name);
     };
 
     this.min_duration_color = {};
