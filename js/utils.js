@@ -92,21 +92,32 @@ $.notify.addStyle('navitia', {
     }
 });
 
-utils.notifyOnError = function(typeError, xhr, status, error) {
-    if (xhr.status === 401) {
-        $('#token').addClass('templateInput');
-    }
+utils.errorMessage = function(url, xhr, status/*, error*/) {
     var message;
-    if (xhr.readyState === 0) {
-        message = $('<span>').text('network error');
+    if (url.startsWith('http:') && window.location.protocol === 'https:') {
+        message = $('<span>').text(
+            'You cannot request the API using http if ' +
+                'you are connected to navitia-playground ' +
+                'using https.  Please request the API using ' +
+                'https or connect to navitia-playground ' +
+                'using http.');
+    } else if (xhr.readyState === 0) {
+        message = $('<span>').text('Network error');
     } else if (xhr.responseJSON) {
-        message = $(summary.run(new response.Context(xhr.responseJSON), 'response', xhr.responseJSON));
+        message = $(summary.run(new response.Context(xhr.responseJSON),
+                                'response',
+                                xhr.responseJSON));
     } else {
         message = $('<span>').text(status);
     }
-    if (error) {
-        message.append('<br>Error: ').append(error);
+    return message;
+};
+
+utils.notifyOnError = function(typeError, url, xhr, status, error) {
+    if (xhr.status === 401) {
+        $('#token').addClass('templateInput');
     }
+    var message = utils.errorMessage(url, xhr, status, error);
     $.notify({
         text: $('<span/>').text(sprintf('%s error: ', typeError)).append(message)
     }, {
