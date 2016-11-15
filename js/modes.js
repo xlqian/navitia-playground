@@ -74,7 +74,7 @@ modes.makePtPicto = function(json) {
 
 modes.makeImg = function(img, name) {
     var tag = $('<img/>')
-        .addClass('mode')
+        .addClass('picto')
         .attr('src', sprintf('img/modes/%s.svg', img));
     if (name) { tag.attr('alt', name); }
     return tag;

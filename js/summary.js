@@ -59,7 +59,7 @@ summary.make.journey = function(context, json) {
     var res = $('<span>').append(summary.formatTime(json.departure_date_time));
     function add(s) {
         res.append(' > ');
-        res.append(s);
+        $('<span/>').addClass('mode-and-code').append(s).appendTo(res);
     }
 
     if ('sections' in json) {
@@ -116,22 +116,31 @@ summary.make.journey = function(context, json) {
         add(sprintf('%s transfer(s)', json.nb_transfers));
         add(summary.run(context, 'place', json.to));
     }
-
     add(summary.formatTime(json.arrival_date_time));
+
     if ('durations' in json) {
         if (json.durations.total) {
-            res.append(', duration: ' + utils.durationToString(json.durations.total));
+            $('<span/>')
+                .addClass('section-additional-block')
+                .append($('<img>').addClass('picto').attr('src', 'img/duration.svg'))
+                .append(' ' + utils.durationToString(json.durations.total))
+                .appendTo(res);
         }
         if (json.durations.walking) {
-            res.append(', ');
-            res.append(modes.makeSnPicto('walking'));
-            res.append(utils.durationToString(json.durations.walking));
+            $('<span/>')
+                .addClass('section-additional-block')
+                .append(modes.makeSnPicto('walking'))
+                .append(utils.durationToString(json.durations.walking))
+                .appendTo(res);
         }
-    } else {
-        res.append(', duration: ' + utils.durationToString(json.duration));
     }
 
-    if (json.status) { res.append(', status: ' + utils.htmlEncode(json.status)); }
+    if (json.status) {
+        $('<span/>')
+            .addClass('section-additional-block')
+            .append('status: ' + utils.htmlEncode(json.status))
+            .appendTo(res);
+    }
 
     return res;
 };
