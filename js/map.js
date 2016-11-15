@@ -116,7 +116,7 @@ map.makeFeatures = {
                 var color;
                 if (duration !== null) {
                     var ratio = duration / scale;
-                    color = utils.findColor(ratio);
+                    color = utils.getColorFromRatio(ratio);
                 } else {
                     color = '#000000';
                     // for the moment, we don't want to print the null duration squares because

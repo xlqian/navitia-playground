@@ -159,7 +159,7 @@ utils.getTextColor = function(json) {
     return 'black';
 };
 
-utils.computeColor = function(ratio) {
+utils.computeColorFromRatio = function(ratio) {
     var r = 255;
     var g = 255;
     if (ratio < 1/2) {
@@ -170,9 +170,16 @@ utils.computeColor = function(ratio) {
     return {red: r, green: g, blue: 0};
 };
 
-utils.findColor = function(ratio) {
-    var c = utils.computeColor(ratio);
-    return sprintf('#%02x%02x%02x', c.red, c.green, c.blue);
+utils.toCssColor = function(c, alpha) {
+    if (alpha) {
+        return sprintf('rgba(%s, %s, %s, %s)', c.red, c.green, c.blue, alpha);
+    } else {
+        return sprintf('#%02x%02x%02x', c.red, c.green, c.blue);
+    }
+};
+
+utils.getColorFromRatio = function(ratio) {
+    return utils.toCssColor(utils.computeColorFromRatio(ratio));
 };
 
 utils.manageToken = function(token) {

@@ -176,16 +176,12 @@ response.Context = function(data) {
         var scale = max_isochrone > 1 ? max_isochrone - 1 : 1;
         for (var i = 0; i < max_isochrone; i ++) {
             var ratio = i / scale;
-            minDurationColor[min_duration[i]] = utils.computeColor(ratio);
+            minDurationColor[min_duration[i]] = utils.computeColorFromRatio(ratio);
         }
     }
     this.getColorFromMinDuration = function(minDuration, alpha) {
-        var c = minDurationColor[minDuration] || {red: 0, green: 0, blue: 0};
-        if (alpha) {
-            return sprintf('rgba(%s, %s, %s, %s)', c.red, c.green, c.blue, alpha);
-        } else {
-            return sprintf('#%02x%02x%02x', c.red, c.green, c.blue);
-        }
+        var color = minDurationColor[minDuration] || {red: 0, green: 0, blue: 0};
+        return utils.toCssColor(color, alpha);
     };
 };
 
