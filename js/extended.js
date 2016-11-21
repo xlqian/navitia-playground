@@ -178,6 +178,9 @@ extended.make.impacted_object = function(context, json) {
 
 extended.defaultExtended = function(context, type, json) {
     var result = $('<div class="list"/>');
+    if (json.links) {
+        result.append(response.render(context, json.links, 'links', 'links'));
+    }
     for (var key in json) {
         if (! (utils.getType(key) in context.links)) { continue; }
         if ($.isArray(json[key])) {
@@ -203,6 +206,7 @@ extended.has.poi = function(context, type, json) {
 };
 extended.hasDefaultExtended = function(context, type, json) {
     if (! (json instanceof Object)) { return false; }
+    if (json.links) { return true; }
     for (var key in json) {
         if (utils.getType(key) in context.links) { return true; }
     }
