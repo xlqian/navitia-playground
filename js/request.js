@@ -242,10 +242,16 @@ request.setAutocomplete = function(){
 };
 
 request.manage = function() {
+    // save token
     request.setSaveTokenButtonStatus();
     $('input.token')
         .change(request.setSaveTokenButtonStatus)
         .on('input', request.setSaveTokenButtonStatus);
+
+    // hidden token management
+    $('input.token').focusin(function() { $(this).attr('type', 'text'); })
+        .focusout(function() { $(this).attr('type', 'password'); });
+
     // Manage add input/button
     $('button.add').prop('disabled', true);
     $('.addInput').on('input change', function() {
