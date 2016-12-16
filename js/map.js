@@ -167,7 +167,7 @@ map.makeFeatures = {
         var bind = function(s) {
             return map.makeFeatures[type](context, s);
         };
-        return utils.flatMap(json[key], bind);
+        return utils.flatMap(json[key].slice().reverse(), bind);
     }
 };
 
