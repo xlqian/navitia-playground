@@ -332,14 +332,18 @@ summary.make.stop_date_time = function(context, stop_time) {
 
 summary.make.departure = function(context, json) {
     var res = $('<span>');
-    res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.departure_date_time)));
+    res.append(summary.makeImpactedTime(json.stop_date_time.departure_date_time,
+                                        json.stop_date_time.base_departure_date_time));
+    res.append(': ');
     res.append(summary.makeRoutePoint(context, json));
     return res;
 };
 
 summary.make.arrival = function(context, json) {
     var res = $('<span>');
-    res.append(sprintf('%s : ', summary.formatTime(json.stop_date_time.arrival_date_time)));
+    res.append(summary.makeImpactedTime(json.stop_date_time.arrival_date_time,
+                                        json.stop_date_time.base_arrival_date_time));
+    res.append(': ');
     res.append(summary.makeRoutePoint(context, json));
     return res;
 };
