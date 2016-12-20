@@ -155,6 +155,11 @@ map.makeFeatures = {
     poi: function(context, json) {
         return map._makeMarker(context, 'poi', json);
     },
+    connection: function(context, json) {
+        return utils.flatMap([json.origin, json.destination], function(json) {
+            return map._makeMarker(context, 'stop_point', json);
+        });
+    },
     response: function(context, json) {
         var key = response.responseCollectionName(json);
         if (key === null) {
