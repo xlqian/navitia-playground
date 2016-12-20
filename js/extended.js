@@ -173,6 +173,12 @@ extended.make.impacted_object = function(context, json) {
     return res;
 };
 
+extended.make.connection = function(context, json) {
+    return $('<div class="list"/>')
+        .append(response.render(context, json.origin, 'stop_point', 'origin'))
+        .append(response.render(context, json.destination, 'stop_point', 'destination'));
+};
+
 // add your extended view by addind:
 //   extended.make.{type} = function(context, json) { ... }
 
