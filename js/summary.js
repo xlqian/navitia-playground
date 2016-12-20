@@ -515,7 +515,7 @@ summary.makeSectionTime = function(dt, baseDt) {
 
 summary.makeImpactedTime = function(amended, base) {
     var res = $('<span/>');
-    if (base !== amended) {
+    if (base && base !== amended) {
         res.append($('<span/>').addClass('old-datetime').text(summary.formatTime(base)));
         res.append(' ');
     }
