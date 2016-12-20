@@ -336,6 +336,7 @@ summary.make.departure = function(context, json) {
                                         json.stop_date_time.base_departure_date_time));
     res.append(': ');
     res.append(summary.makeRoutePoint(context, json));
+    res.append(' (' + json.stop_date_time.data_freshness + ')');
     return res;
 };
 
@@ -345,6 +346,7 @@ summary.make.arrival = function(context, json) {
                                         json.stop_date_time.base_arrival_date_time));
     res.append(': ');
     res.append(summary.makeRoutePoint(context, json));
+    res.append(' (' + json.stop_date_time.data_freshness + ')');
     return res;
 };
 
