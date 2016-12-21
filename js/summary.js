@@ -205,6 +205,13 @@ summary.make.links = function(context, json) {
     return res;
 };
 
+summary.make.codes = function(context, json) {
+    var text = json.map(function(code) {
+        return sprintf('%s: %s', code.type, code.value);
+    }).join(', ');
+    return $('<span>').text(text);
+};
+
 summary.make.warning = function(context, json) {
     return $('<span>').text(json.message);
 };

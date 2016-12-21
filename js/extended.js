@@ -192,6 +192,9 @@ extended.defaultExtended = function(context, type, json) {
     if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
+    if (Array.isArray(json.codes) && json.codes.length) {
+        result.append(response.render(context, json.codes, 'codes', 'codes'));
+    }
     for (var key in json) {
         if (! (utils.getType(key) in context.links)) { continue; }
         if ($.isArray(json[key])) {
@@ -218,6 +221,7 @@ extended.has.poi = function(context, type, json) {
 extended.hasDefaultExtended = function(context, type, json) {
     if (! (json instanceof Object)) { return false; }
     if (Array.isArray(json.links) && json.links.length) { return true; }
+    if (Array.isArray(json.codes) && json.codes.length) { return true; }
     for (var key in json) {
         if (utils.getType(key) in context.links) { return true; }
     }
