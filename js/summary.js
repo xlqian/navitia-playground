@@ -336,6 +336,7 @@ summary.make.departure = function(context, json) {
                                         json.stop_date_time.base_departure_date_time));
     res.append(': ');
     res.append(summary.makeRoutePoint(context, json));
+    res.append(' (' + json.stop_date_time.data_freshness + ')');
     return res;
 };
 
@@ -345,6 +346,7 @@ summary.make.arrival = function(context, json) {
                                         json.stop_date_time.base_arrival_date_time));
     res.append(': ');
     res.append(summary.makeRoutePoint(context, json));
+    res.append(' (' + json.stop_date_time.data_freshness + ')');
     return res;
 };
 
@@ -420,7 +422,17 @@ summary.make.disruption = function(context, json) {
     res.append($('<span/>').css('color', json.severity.color).text(json.severity.name));
     if (json.status) { res.append(', status: ' + utils.htmlEncode(json.status)); }
     if (json.cause) { res.append(', cause: ' + utils.htmlEncode(json.cause)); }
-    if (json.contributor) { res.append(', contributor: ' + utils.htmlEncode(json.contributor)); }
+    return res;
+};
+
+summary.make.message = function(context, json) {
+    var res = $('<span/>');
+    if (json.channel.content_type === 'text/html') {
+        res.html(json.text);
+    } else {
+        res.text(json.text);
+    }
+    res.prepend(sprintf('%s: ', utils.htmlEncode(json.channel.name)));
     return res;
 };
 
@@ -515,7 +527,7 @@ summary.makeSectionTime = function(dt, baseDt) {
 
 summary.makeImpactedTime = function(amended, base) {
     var res = $('<span/>');
-    if (base !== amended) {
+    if (base && base !== amended) {
         res.append($('<span/>').addClass('old-datetime').text(summary.formatTime(base)));
         res.append(' ');
     }

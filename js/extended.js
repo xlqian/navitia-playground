@@ -156,6 +156,11 @@ extended.make.disruption = function(context, json) {
                                    'application_periods',
                                    'application_periods'));
     }
+    if (json.messages) {
+        json.messages.forEach(function(obj, i) {
+            res.append(response.render(context, obj, 'message', 'messages', i));
+        });
+    }
     json.impacted_objects.forEach(function(obj, i) {
         res.append(response.render(context, obj, 'impacted_object', 'impacted_objects', i));
     });
