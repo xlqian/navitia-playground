@@ -195,7 +195,7 @@ map.getFeatures = function(context, type, json) {
 map._makeTileLayers = function() {
     var copyOSM = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
     var courtesy = function(name) {
-        return sprintf('Tiles courtesy of %s &mdash; Map data %s', name, copyOSM);
+        return sprintf('%s & %s', copyOSM, name);
     };
     var makeStamenTileLayer = function(name) {
         return L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/' + name + '/{z}/{x}/{y}.png', {
@@ -243,6 +243,7 @@ map.run = function(context, type, json) {
         tileLayers[map._getDefaultLayerName()].addTo(m);
         L.control.layers(tileLayers).addTo(m);
         m.on('baselayerchange', storage.saveLayer);
+        L.control.scale().addTo(m);
         var overlay = L.featureGroup(features).addTo(m);
         setTimeout(function() {
             m.invalidateSize();
