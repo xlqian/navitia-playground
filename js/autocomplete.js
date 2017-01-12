@@ -58,7 +58,7 @@ autocomplete._schedulesParams = [
 ].concat(autocomplete._paramValueEverywhere);
 
 autocomplete._placesParams = [
-    'q', 'type[]', 'admin_uri[]'
+    'q', 'type[]', 'admin_uri[]', 'from'
 ].concat(autocomplete._paramValueEverywhere);
 
 autocomplete._fallbackMode = ['walking', 'car', 'bike', 'bss'];
