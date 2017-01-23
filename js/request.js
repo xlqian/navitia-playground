@@ -136,6 +136,7 @@ request.makeKeyValue = function(key, val, cls) {
          .attr('placeholder', 'type your value here')
         .addClass('value')
         .addClass(cls)
+        .focus(function() { this.select(); })
         .val(val);
 
     autocomplete.valueAutoComplete(valueElt, key);
@@ -263,6 +264,8 @@ request.manage = function() {
         }
     });
     $('#featureInput').focusout(request.updateAddParamAC);
+
+    $('#request input').focus(function() { this.select(); });
 
     var req = request.parseUrl();
 
