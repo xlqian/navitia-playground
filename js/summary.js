@@ -295,6 +295,10 @@ summary.make.region = function(context, region) {
         var day = + d.slice(6, 8);
         return new Date(year, month, day);
     }
+    function formatDate(d) {
+        if (!(d instanceof Date)) { return '???'; }
+        return sprintf('%04d-%02d-%02d', d.getFullYear(), d.getMonth() + 1, d.getDate());
+    }
     var res = $('<span/>').text(region.id + (region.name ? sprintf(' (%s)', region.name) : ''));
     var now = new Date();
     var begin = makeDate(region.start_production_date);
@@ -305,7 +309,9 @@ summary.make.region = function(context, region) {
     } else if (region.status !== 'running') {
         res.append(sprintf(', <span class="error">status: %s</span>', utils.htmlEncode(region.status)));
     } else if (now < begin || end < now) {
-        res.append(', <span class="outofdate">out-of-date</span>');
+        res.append(sprintf(', <span class="outofdate">out-of-date [%s, %s]</span>',
+                           formatDate(begin),
+                           formatDate(end)));
     } else if (remaining_days <= 21) {
         res.append(sprintf(', <span class="almost_outofdate">%sd remaining</span>', remaining_days));
     }
