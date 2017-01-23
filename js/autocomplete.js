@@ -203,8 +203,6 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, req, token) 
                 minLength: 0,
                 scroll: true,
                 delay: 0
-            }).focus(function() {
-                this.select();
             }).autocomplete('instance')._renderItem = function(ul, item) {
                 return $('<li>').append(item.desc).appendTo(ul);
             };
@@ -324,7 +322,6 @@ autocomplete.dynamicAutocomplete = function (elt, dynamicType) {
         close: function() { request.updateUrl($(elt)[0]); },
         source: object.source()
     }).focus(function() {
-        this.select();
         object.describe(this);
     }).hover(function() {
         if (! $(this).is(':focus')) { object.describe(this); }
@@ -354,7 +351,6 @@ autocomplete._customAutocompleteHelper = function(input, source, customOptions) 
     };
     if (customOptions) { $.extend(true, options, customOptions); }
     $(input).autocomplete(options).focus(function() {
-        this.select();
         $(this).autocomplete('search', '');
     });
 };
