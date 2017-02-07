@@ -51,7 +51,7 @@
 				<h3><img class="pictofeatures" src='img/auto_complete.png'></h3>
 				<a href="play.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fpt_objects%3Fq%3D%257Btext%257D%26">Auto complete transportation object</a>
 				<a href="play.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fplaces%3Fq%3D%257Btext%257D%26">Auto complete places</a>
-				<a href="play.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fpt_objects%3Fq%3D%257Btext%257D%26type%255B%255D%3Dnetwork%26type%255B%255D%3Dline%26">Auto complete only on stop area</a>
+				<a href="play.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fplaces%3Fq%3D%257Btext%257D%26type%255B%255D%3Dstop_area%26">Auto complete only on stop area</a>
 			</div>
 
 			<div class="rubriques">	
@@ -63,9 +63,7 @@
 			<div class="rubriques">	
 				<h3><img class="pictofeatures" src='img/isochrons.png'></h3>
                                 <a href="play.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fisochrones%3Ffrom%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26boundary_duration%255B%255D%3D600%26boundary_duration%255B%255D%3D1200%26boundary_duration%255B%255D%3D1800%26boundary_duration%255B%255D%3D2400%26boundary_duration%255B%255D%3D3000%26boundary_duration%255B%255D%3D3600%26">Graphical isochrons with coverage</a>
-                                <!-- TODO: uncomment when heat_maps are activated in prodution
-                                <a href="play.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fheat_maps%3Ffrom%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26max_duration%3D3600%26">Heat map with coverage</a>
-                                -->
+                                <a href="play.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fheat_maps%3Ffrom%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26max_duration%3D3600%26resolution%3D200%26">Heat map with coverage</a>
 				<a href="play.html?request=https%3A%2F%2Fapi.navitia.io%2Fv1%2Fcoverage%2F%257Bregion.id%257D%2Fjourneys%3Ffrom%3D%257Bplace.id%257D%26datetime%3D%257Bdatetime%257D%26max_duration%3D1200%26">Stop point isochrons with coverage</a>
                         </div>
 		</div><!-- ferme col -->
