@@ -27,8 +27,11 @@
     }
 
     @mixin request-parts($color) {
+        .key {
+            background-color: very-light($color);
+        }
         .inputDiv {
-            border-color: light($color);
+            border-color: dark($color);
             border-radius: 0.25em 0.25em 0 0;
         }
         .templateInput {
@@ -44,7 +47,7 @@
     #credentials { @include request-parts($orange); }
     #path { @include request-parts($green); }
     #parameters { @include request-parts($blue); }
-    #feature.inputDiv { border-color: $light-purple; }
+    #feature.inputDiv { border-color: $dark-purple; }
 
     #urlDiv {
         width: 100%;
