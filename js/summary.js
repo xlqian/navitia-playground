@@ -335,11 +335,14 @@ summary.make.line = function(context, line) {
 
 summary.make.stop_date_time = function(context, stop_time) {
     var sum = summary.run(context, 'stop_point', stop_time.stop_point);
-    var res = $('<span>').append(summary.formatTime(stop_time.arrival_date_time))
-                         .append(' > ')
-                         .append(summary.formatTime(stop_time.departure_date_time))
-                         .append(' ')
-                         .append(sum);
+    var res = $('<span>')
+        .append(summary.makeImpactedTime(stop_time.arrival_date_time,
+                                         stop_time.base_arrival_date_time))
+        .append(' > ')
+        .append(summary.makeImpactedTime(stop_time.departure_date_time,
+                                         stop_time.base_departure_date_time))
+        .append(' ')
+        .append(sum);
     return res;
 };
 
