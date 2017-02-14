@@ -1,6 +1,9 @@
 @function set-lightness($color, $lightness) {
     @return hsl(hue($color), saturation($color), $lightness)
 }
+@function very-light($color) {
+    @return set-lightness($color, 93%)
+}
 @function light($color) {
     @return set-lightness($color, 80%)
 }

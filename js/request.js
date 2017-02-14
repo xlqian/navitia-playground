@@ -307,4 +307,10 @@ request.manage = function() {
     }
     request.setAutocomplete();
     request.updateUrl(null);
+    $(document).keydown(function(event) {
+        // control+enter, or option+enter on OS X
+        if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+            request.submit();
+        }
+    });
 };

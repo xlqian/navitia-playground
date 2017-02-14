@@ -125,7 +125,7 @@ div.object {
 @mixin object-color($color) {
     border-color: dark($color);
     div.name {
-        background-color: set-lightness($color, 95%);
+        background-color: very-light($color);
     }
 }
 
