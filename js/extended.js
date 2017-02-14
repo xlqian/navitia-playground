@@ -37,7 +37,7 @@ extended.make.response = function(context, json) {
         result.append(response.render(context, json.full_response, 'response', 'full_response'));
     }
 
-    if ('links' in json) {
+    if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
 
@@ -83,7 +83,7 @@ extended.make.journey = function(context, json) {
 
 extended.make.section = function(context, json) {
     var result = $('<div class="list"/>');
-    if (json.links) {
+    if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
     if (json.from) {
@@ -102,7 +102,7 @@ extended.make.section = function(context, json) {
 
 extended.make.stop_schedule = function(context, json) {
     var result = $('<div class="list"/>');
-    if (json.links) {
+    if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
     json.date_times.forEach(function(date_time, i) {
@@ -113,7 +113,7 @@ extended.make.stop_schedule = function(context, json) {
 
 extended.make.route_schedule = function(context, json) {
     var result = $('<div class="list"/>');
-    if (json.links) {
+    if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
     result.append(response.render(context, json.table, 'table', 'table'));
