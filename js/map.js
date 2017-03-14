@@ -205,6 +205,10 @@ map._makeTileLayers = function() {
         });
     };
     return {
+        'Bright': L.tileLayer('http://vip-plan-ihm.mutu.prod.canaltp.fr/osm_bright/{z}/{x}/{y}.png', {
+            attribution: courtesy('<a href="http://www.kisio.org/">Kisio</a>'),
+            detectRetina: true
+        }),
         'HOT': L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: courtesy('<a href="http://hot.openstreetmap.org/">Humanitarian OpenStreetMap Team</a>'),
