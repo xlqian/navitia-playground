@@ -71,14 +71,13 @@ response.makeObjectButtonHandle = function(selector, renderHandle) {
         var div = $(this).closest('div.object').children('div.data').children(selector);
         if ($(this).is(':checked')) {
             div.hide();
-            div.removeClass('not_filled');
             div.html(renderHandle());
             div.slideDown(600);
+            if (! $(this).hasClass('noAnimation')) {
+                $('html, body').animate({ scrollTop: div.offset().top }, 600);
+            }
         } else {
-            div.slideUp(600, function() {
-                div.addClass('not_filled');
-                div.empty();
-            });
+            div.slideUp(600, function() { div.empty(); });
         }
     };
 };
@@ -123,9 +122,9 @@ response.render = function(context, json, type, key, idx) {
     head.append(button);
 
     var data = $('<div class="data">')
-        .append($('<div class="extended not_filled">'))
-        .append($('<div class="map not_filled">'))
-        .append($('<div class="code not_filled">'));
+        .append($('<div class="extended">').hide())
+        .append($('<div class="map">').hide())
+        .append($('<div class="code">').hide());
 
     var result = $('<div class="object">');
     result.append(head);
@@ -233,6 +232,7 @@ response.manageUrl = function() {
         function(data, status, xhr) {
             response.setStatus(xhr.statusText, xhr.status, start_time);
             $('#data').html(response.render(new response.Context(data), data, 'response', 'response'));
+            $('#data input').first().addClass('noAnimation');
             $('#data input').first().click();
             $('html, body').animate({ scrollTop: $('#response').offset().top }, 600);
             if (! storage.getToken(req.api)) {
