@@ -75,6 +75,9 @@ extended.make.journey = function(context, json) {
     if ('tags' in json && json.tags.length > 0) {
         result.append(response.render(context, json.tags, 'tags', 'tags'));
     }
+    if (json.co2_emission && json.co2_emission.value) {
+        result.append(response.render(context, json.co2_emission, 'co2_emission', 'co2_emission'));
+    }
     json.sections.forEach(function(section, i) {
         result.append(response.render(context, section, 'section', 'sections', i));
     });
@@ -91,6 +94,9 @@ extended.make.section = function(context, json) {
     }
     if (json.to) {
         result.append(response.render(context, json.to, 'place', 'to'));
+    }
+    if (json.co2_emission && json.co2_emission.value) {
+        result.append(response.render(context, json.co2_emission, 'co2_emission', 'co2_emission'));
     }
     if (json.stop_date_times) {
         json.stop_date_times.forEach(function(stop_date_time, i) {
