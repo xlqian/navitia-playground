@@ -478,6 +478,10 @@ summary.make.impacted_stop = function(context, json) {
     return res;
 };
 
+summary.make.co2_emission = function(context, json) {
+    return $('<span/>').html(sprintf('CO<sub>2</sub>:&nbsp;%s&nbsp;%s', json.value, json.unit));
+};
+
 // add your summary view by adding:
 //   summary.make.{type} = function(context, json) { ... }
 

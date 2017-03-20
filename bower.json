@@ -22,10 +22,9 @@
     "jquery-ui": "=1.11.4",
     "jqueryui-timepicker-addon": "^1.6.3",
     "sprintf": "^1.0.3",
-    "leaflet": "^0.7.7",
+    "leaflet": "^1.0.3",
     "notifyjs": "^0.4.2",
-    "wkt2geojson": "https://github.com/CanalTP/wkt2geojson.git#gh-pages",
-    "leaflet.label": "https://github.com/Leaflet/Leaflet.label.git#gh-pages"
+    "wkt2geojson": "https://github.com/CanalTP/wkt2geojson.git#gh-pages"
   },
   "devDependencies": {}
 }
