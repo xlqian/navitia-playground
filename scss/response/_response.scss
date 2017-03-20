@@ -2,10 +2,17 @@
     margin: 0 0 3em 0;
     text-align: center;
 }
-.map-marker-label {
-	background: rgb(53, 53, 53);
-	border-color: rgb(53, 53, 53);
-	color: white;
+.leaflet-tooltip {
+    background: $dark-gray;
+    border-color: $dark-gray;
+    color: white;
+    font-weight: bold;
+}
+.leaflet-tooltip-left::before {
+    border-left-color: $dark-gray;
+}
+.leaflet-tooltip-right::before {
+    border-right-color: $dark-gray;
 }
 .leaflet-control-layers-toggle {
     background-image: url(../lib/img/leaflet/dist/images/layers.png);

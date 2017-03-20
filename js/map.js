@@ -242,7 +242,7 @@ map.run = function(context, type, json) {
     var features = [];
     if ((features = map.getFeatures(context, type, json)).length) {
         div.addClass('leaflet');
-        var m = L.map(div.get(0)).setView([48.843693, 2.373303], 13);
+        var m = L.map(div.get(0), {renderer: L.canvas()});
         var tileLayers = map._makeTileLayers();
         tileLayers[map._getDefaultLayerName()].addTo(m);
         L.control.layers(tileLayers).addTo(m);
@@ -291,7 +291,7 @@ map._makeMarker = function(context, type, json, colorJson, useCustomMarker, labe
         marker.setRadius(5);
     }
     if (label) {
-        marker.bindLabel(label, {noHide: true, className: 'map-marker-label'});
+        marker.bindTooltip(label, {permanent: true, opacity: 1});
     }
     return [marker.bindPopup(map._makeLink(context, t, obj, sum)[0])];
 };
@@ -396,6 +396,7 @@ map._makePixel = function(context, type, PolygonCoords, json, color, duration) {
         sum = sprintf('duration: %s', utils.durationToString(duration));
     }
     return L.rectangle(PolygonCoords, {
+        smoothFactor: 0,
         color:  '#555555',
         opacity: 0,
         weight: 0,
