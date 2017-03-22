@@ -238,7 +238,7 @@ map._getDefaultLayerName = function() {
 map.run = function(context, type, json) {
     var div = $('<div/>');
     // setting for default path of images used by leaflet
-    L.Icon.Default.imagePath = 'lib/img/leaflet/dist/images';
+    L.Icon.Default.imagePath = 'lib/img/leaflet/dist/images/';
     var features = [];
     if ((features = map.getFeatures(context, type, json)).length) {
         div.addClass('leaflet');
