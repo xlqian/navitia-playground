@@ -316,8 +316,8 @@ map._makeString = function(context, type, json, colorJson) {
     var from = map._getCoordFromPlace(json.from);
     var to = map._getCoordFromPlace(json.to);
     var style1 = {
-        color: utils.getTextColor(colorJson),
-        weight: 6,
+        color: 'white',
+        weight: 7,
         opacity: 1
     };
     var style2 = {
