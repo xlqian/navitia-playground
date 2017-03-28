@@ -72,6 +72,9 @@ extended.make.response = function(context, json) {
 
 extended.make.journey = function(context, json) {
     var result = $('<div class="list"/>');
+    if (Array.isArray(json.links) && json.links.length) {
+        result.append(response.render(context, json.links, 'links', 'links'));
+    }
     if ('tags' in json && json.tags.length > 0) {
         result.append(response.render(context, json.tags, 'tags', 'tags'));
     }
