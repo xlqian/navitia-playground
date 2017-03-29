@@ -46,7 +46,7 @@ autocomplete._additionalFeatures = [
 
 autocomplete._paramJourneyCommon = [
     'from', 'to', 'datetime','traveler_type', 'data_freshness',
-    'first_section_mode[]', 'last_section_mode[]'
+    'first_section_mode[]', 'last_section_mode[]', 'allowed_id[]'
 ].concat(autocomplete._paramValueEverywhere);
 
 autocomplete._depArrParams = [
@@ -304,6 +304,7 @@ autocomplete.dynamicAutocompleteTypes = {
     'commercial_modes': new autocomplete.PtObject(['commercial_mode']),
     'coord': new autocomplete.Place(['address']),
     'forbidden_uris[]': new autocomplete.PtObject(),
+    'allowed_id[]': new autocomplete.PtObject(),
     'lines': new autocomplete.PtObject(['line']),
     'networks': new autocomplete.PtObject(['network']),
     'places': new autocomplete.Place(),
