@@ -22,7 +22,7 @@
 
 // fake includes
 var response;
-var modes;
+var pictos;
 var utils;
 
 var summary = {};
@@ -91,7 +91,7 @@ summary.make.journey = function(context, json) {
         });
 
         if (first_section_mode) {
-            add(modes.makeSnPicto(first_section_mode));
+            add(pictos.makeSnPicto(first_section_mode));
         }
         var stayIn = false;
         json.sections.forEach(function(s) {
@@ -108,7 +108,7 @@ summary.make.journey = function(context, json) {
             }
         });
         if (last_section_mode) {
-            add(modes.makeSnPicto(last_section_mode));
+            add(pictos.makeSnPicto(last_section_mode));
         }
     } else {
         // isochron
@@ -129,7 +129,7 @@ summary.make.journey = function(context, json) {
         if (json.durations.walking) {
             $('<span/>')
                 .addClass('section-additional-block')
-                .append(modes.makeSnPicto('walking'))
+                .append(pictos.makeSnPicto('walking'))
                 .append(utils.durationToString(json.durations.walking))
                 .appendTo(res);
         }
@@ -238,19 +238,19 @@ summary.make.section = function(context, section) {
     var pt = false;
 
     switch (section.type) {
-    case 'street_network': res.append(modes.makeSnPicto(section.mode)); break;
+    case 'street_network': res.append(pictos.makeSnPicto(section.mode)); break;
     case 'bss_rent':
-        res.append(modes.makeSnPicto('bss')).append(' rent');
+        res.append(pictos.makeSnPicto('bss')).append(' rent');
         break;
     case 'bss_put_back':
-        res.append(modes.makeSnPicto('bss')).append(' put back');
+        res.append(pictos.makeSnPicto('bss')).append(' put back');
         break;
     case 'leave_parking':
-        res.append(modes.makeSnPicto('car')).append(' leave parking');
+        res.append(pictos.makeSnPicto('car')).append(' leave parking');
         break;
     case 'transfer':
         if (section.transfer_type === 'walking') {
-            res.append(modes.makeSnPicto('walking'));
+            res.append(pictos.makeSnPicto('walking'));
         } else {
             res.append(document.createTextNode(section.transfer_type));
         }
@@ -268,14 +268,14 @@ summary.make.section = function(context, section) {
     }
 
     if ('from' in section) {
-        res.append(sprintf(' from %s', utils.htmlEncode(section.from.name)));
+        res.append(sprintf(' from <strong>%s</strong>', utils.htmlEncode(section.from.name)));
     }
     if (pt) {
         res.append(summary.makeSectionTime(section.departure_date_time,
                                            section.base_departure_date_time));
     }
     if ('to' in section) {
-        res.append(sprintf(' to %s', utils.htmlEncode(section.to.name)));
+        res.append(sprintf(' to <strong>%s</strong>', utils.htmlEncode(section.to.name)));
     }
     if (pt) {
         res.append(summary.makeSectionTime(section.arrival_date_time,
@@ -327,7 +327,7 @@ summary.make.line = function(context, line) {
         summary.setColors(code, line);
     }
     return $('<span>')
-        .append(modes.makePtPicto(line.physical_modes))
+        .append(pictos.makePtPicto(line.physical_modes))
         .append(code)
         .append(' ')
         .append(document.createTextNode(line.name));
@@ -383,7 +383,7 @@ summary.make.route_schedule = function(context, json) {
 
 summary.make.physical_mode = function(context, json) {
     return $('<span/>')
-        .append(modes.makePtPicto(json))
+        .append(pictos.makePtPicto(json))
         .append(document.createTextNode(' ' + json.name));
 };
 
@@ -482,6 +482,15 @@ summary.make.co2_emission = function(context, json) {
     return $('<span/>').html(sprintf('CO<sub>2</sub>:&nbsp;%s&nbsp;%s', json.value, json.unit));
 };
 
+summary.make.equipments = function(context, json) {
+    var res = $('<span/>');
+    json.forEach(function(equipment) {
+        pictos.makeEquipmentPicto(equipment).appendTo(res);
+        res.append(' ');
+    });
+    return res;
+};
+
 // add your summary view by adding:
 //   summary.make.{type} = function(context, json) { ... }
 
@@ -498,7 +507,7 @@ summary.defaultSummary = function(context, type, json) {
     var res = $('<span/>');
     if ('physical_modes' in json && $.isArray(json.physical_modes)) {
         json.physical_modes.forEach(function(mode) {
-            res.append(modes.makePtPicto(mode));
+            res.append(pictos.makePtPicto(mode));
         });
     }
     if ('label' in json) {
@@ -565,7 +574,7 @@ summary.makePhysicalModesFromSection = function(section) {
                     return null;
                 }
             });
-        return modes.makePtPicto(pms);
+        return pictos.makePtPicto(pms);
     }
 };
 
@@ -581,7 +590,7 @@ summary.makeLineCode = function(display_informations) {
 summary.makeRoutePoint = function(context, json) {
     var res = $('<span/>');
     if ('route' in json) {
-        res.append(modes.makePtPicto(json.route.physical_modes));
+        res.append(pictos.makePtPicto(json.route.physical_modes));
     } else if ('links' in json && 'display_informations' in json) {
         res.append(summary.makePhysicalModesFromSection(json));
     }
