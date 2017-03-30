@@ -81,9 +81,17 @@ extended.make.journey = function(context, json) {
     if (json.co2_emission && json.co2_emission.value) {
         result.append(response.render(context, json.co2_emission, 'co2_emission', 'co2_emission'));
     }
-    json.sections.forEach(function(section, i) {
-        result.append(response.render(context, section, 'section', 'sections', i));
-    });
+    if (json.from) {
+        result.append(response.render(context, json.from, 'place', 'from'));
+    }
+    if (json.to) {
+        result.append(response.render(context, json.to, 'place', 'to'));
+    }
+    if (json.sections) {
+        json.sections.forEach(function(section, i) {
+            result.append(response.render(context, section, 'section', 'sections', i));
+        });
+    }
     return result;
 };
 
@@ -92,14 +100,22 @@ extended.make.section = function(context, json) {
     if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
+    if (json.display_informations &&
+        Array.isArray(json.display_informations.equipments) &&
+        json.display_informations.equipments.length) {
+        result.append(response.render(context,
+                                      json.display_informations.equipments,
+                                      'equipments',
+                                      'display_informations.equipments'));
+    }
+    if (json.co2_emission && json.co2_emission.value) {
+        result.append(response.render(context, json.co2_emission, 'co2_emission', 'co2_emission'));
+    }
     if (json.from) {
         result.append(response.render(context, json.from, 'place', 'from'));
     }
     if (json.to) {
         result.append(response.render(context, json.to, 'place', 'to'));
-    }
-    if (json.co2_emission && json.co2_emission.value) {
-        result.append(response.render(context, json.co2_emission, 'co2_emission', 'co2_emission'));
     }
     if (json.stop_date_times) {
         json.stop_date_times.forEach(function(stop_date_time, i) {
@@ -153,6 +169,14 @@ extended.make.poi = function(context, json) {
     var result = extended.defaultExtended(context, 'poi', json);
     if (json.stands) {
         result.append(response.render(context, json.stands, 'stands', 'stands'));
+    }
+    return result;
+};
+
+extended.make.stop_point = function(context, json) {
+    var result = extended.defaultExtended(context, 'stop_point', json);
+    if (Array.isArray(json.equipments) && json.equipments.length) {
+        result.append(response.render(context, json.equipments, 'equipments', 'equipments'));
     }
     return result;
 };
@@ -218,9 +242,6 @@ extended.defaultExtended = function(context, type, json) {
 };
 
 extended.has = {};
-extended.has.journey = function(context, type, json) {
-    return Boolean(json.sections);
-};
 extended.has.section = function(context, type, json) {
     return Boolean(json.from) || Boolean(json.to) || Boolean(json.stop_date_times);
 };

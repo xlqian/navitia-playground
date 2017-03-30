@@ -20,13 +20,13 @@
 
 'use strict';
 
-var modes = {};
+var pictos = {};
 
-modes.makePtPicto = function(json) {
+pictos.makePtPicto = function(json) {
     if ($.isArray(json)) {
         var res = $('<span/>');
         json.forEach(function(elt) {
-            res.append(modes.makePtPicto(elt));
+            res.append(pictos.makePtPicto(elt));
         });
         return res;
     }
@@ -69,18 +69,18 @@ modes.makePtPicto = function(json) {
         break;
     }
 
-    return modes.makeImg(img, json.name);
+    return pictos.makeImg(img, json.name);
 };
 
-modes.makeImg = function(img, name) {
+pictos.makeImg = function(img, name) {
     var tag = $('<img/>')
         .addClass('picto')
-        .attr('src', sprintf('img/modes/%s.svg', img));
-    if (name) { tag.attr('alt', name); }
+        .attr('src', sprintf('img/pictos/%s.svg', img));
+    if (name) { tag.attr('alt', name); tag.attr('title', name); }
     return tag;
 };
 
-modes.makeSnPicto = function(mode) {
+pictos.makeSnPicto = function(mode) {
     var img = 'Unknown';
     if (mode === 'walking') {
         img = 'Walking';
@@ -91,5 +91,27 @@ modes.makeSnPicto = function(mode) {
     } else if (mode === 'car' || mode === 'park' || mode === 'leave_parking') {
         img = 'Car';
     }
-    return modes.makeImg(img, mode);
+    return pictos.makeImg(img, mode);
+};
+
+pictos.makeEquipmentPicto = function(equipment) {
+    var img = 'Unknown';
+    switch (equipment) {
+    case 'has_wheelchair_accessibility':
+    case 'has_wheelchair_boarding':
+        img = 'Wheelchair'; break;
+    case 'has_bike_accepted':
+    case 'has_bike_depot':
+        img = 'BikeAccepted'; break;
+    case 'has_air_conditioned': img = 'AirCoditioning'; break;
+    case 'has_visual_announcement': img = 'HearingImpairment'; break;
+    case 'has_audible_announcement': img = 'VisualImpairment'; break;
+    case 'has_appropriate_escort': img = ''; break;
+    case 'has_appropriate_signage': img = 'MentalDisorder'; break;
+    case 'has_school_vehicle': img = 'SchoolBus'; break;
+    case 'has_elevator': img = 'Elevator'; break;
+    case 'has_escalator': img = 'Escalator'; break;
+    case 'has_sheltered': img = 'Shelter'; break;
+    }
+    return pictos.makeImg(img, equipment);
 };
