@@ -198,18 +198,18 @@ map._makeTileLayers = function() {
         return sprintf('%s & %s', copyOSM, name);
     };
     var makeStamenTileLayer = function(name) {
-        return L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/' + name + '/{z}/{x}/{y}.png', {
+        return L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/' + name + '/{z}/{x}/{y}.png', {
             subdomains: 'abcd',
             attribution: courtesy('<a href="http://maps.stamen.com">Stamen Design</a>'),
             detectRetina: true
         });
     };
     return {
-        'Bright': L.tileLayer('http://tile-{s}.navitia.io/osm_bright/{z}/{x}/{y}.png', {
+        'Bright': L.tileLayer('https://tile-{s}.navitia.io/osm_bright/{z}/{x}/{y}.png', {
             attribution: courtesy('<a href="https://www.navitia.io/">navitia</a>'),
             detectRetina: true
         }),
-        'HOT': L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        'HOT': L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: courtesy('<a href="http://hot.openstreetmap.org/">Humanitarian OpenStreetMap Team</a>'),
             detectRetina: true
@@ -218,7 +218,7 @@ map._makeTileLayers = function() {
             attribution: courtesy('<a href="http://openstreetmap.se/">OpenStreetMap Sweden</a>'),
             detectRetina: true
         }),
-        'Mapnik': L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        'Mapnik': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: copyOSM,
             detectRetina: true
@@ -235,49 +235,58 @@ map._getDefaultLayerName = function() {
     return 'Hydda';
 };
 
-map.run = function(context, type, json) {
+map.createMap = function(handle) {
     var div = $('<div/>');
     // setting for default path of images used by leaflet
     L.Icon.Default.imagePath = 'lib/img/leaflet/dist/images/';
+    div.addClass('leaflet');
+    var m = L.map(div.get(0), {renderer: L.canvas()});
+    var tileLayers = map._makeTileLayers();
+    tileLayers[map._getDefaultLayerName()].addTo(m);
+    L.control.layers(tileLayers).addTo(m);
+    m.on('baselayerchange', storage.saveLayer);
+    L.control.scale().addTo(m);
+    var bounds = handle(m);
+
+    // Cleanly destroying the map
+    div.on('npg:remove', function() { m.remove(); });
+
+    // GPS location
+    var circle = L.circle([0,0], {radius: 1});
+    m.on('locationfound', function(e) {
+        circle.setRadius(e.accuracy / 2)
+            .setStyle({color: '#3388ff'})
+            .setLatLng(e.latlng)
+            .bindPopup(sprintf('%.5f;%.5f ±%dm', e.latlng.lng, e.latlng.lat, e.accuracy))
+            .addTo(m);
+    });
+    m.on('locationerror', function(e) {
+        circle.setStyle({color: 'red'}).bindPopup(e.message);
+    });
+    m.on('unload', function() { m.stopLocate(); });
+    m.locate({enableHighAccuracy: true, watch: true});
+
+    m.on('moveend', function() { storage.saveBounds(m.getBounds()); });
+
+    setTimeout(function() {
+        if (bounds) { m.fitBounds(bounds); } else { m.fitWorld(); }
+    }, 100);
+
+    return div;
+};
+
+map.run = function(context, type, json) {
     var features = [];
     if ((features = map.getFeatures(context, type, json)).length) {
-        div.addClass('leaflet');
-        var m = L.map(div.get(0), {renderer: L.canvas()});
-        var tileLayers = map._makeTileLayers();
-        tileLayers[map._getDefaultLayerName()].addTo(m);
-        L.control.layers(tileLayers).addTo(m);
-        m.on('baselayerchange', storage.saveLayer);
-        L.control.scale().addTo(m);
-        var overlay = L.featureGroup(features).addTo(m);
-
-        // Cleanly destroying the map
-        div.on('npg:remove', function() { m.remove(); });
-
-        // GPS location
-        var circle = L.circle([0,0], {radius: 1});
-        m.on('locationfound', function(e) {
-            circle.setRadius(e.accuracy / 2)
-                .setStyle({color: '#3388ff'})
-                .setLatLng(e.latlng)
-                .bindPopup(sprintf('%.5f;%.5f ±%dm', e.latlng.lng, e.latlng.lat, e.accuracy))
-                .addTo(m);
+        return map.createMap(function(m) {
+            return L.featureGroup(features).addTo(m).getBounds();
         });
-        m.on('locationerror', function(e) {
-            circle.setStyle({color: 'red'});
-            console.log(e);// jshint ignore:line
-        });
-        m.on('unload', function() { m.stopLocate(); });
-        m.locate({enableHighAccuracy: true, watch: true});
-
-        setTimeout(function() {
-            m.invalidateSize();
-            m.fitBounds(overlay.getBounds());
-        }, 100);
     } else {
+        var div = $('<div/>');
         div.addClass('noMap');
         div.append('No map');
+        return div;
     }
-    return div;
 };
 
 map._makeMarker = function(context, type, json, colorJson, useCustomMarker, label) {

@@ -26,6 +26,7 @@ var summary;
 var response;
 var request;
 var utils;
+var map;
 
 var autocomplete = {};
 
@@ -314,7 +315,29 @@ autocomplete.Place = function(types) {
 autocomplete.Place.prototype = Object.create(autocomplete.AbstractObject.prototype);
 autocomplete.Place.prototype.api = 'places';
 autocomplete.Place.prototype.autocomplete = function(elt) {
-    if ('geolocation' in navigator && (!this.types.length || this.types.indexOf('address') !== -1)) {
+    if (!this.types.length || this.types.indexOf('address') !== -1) {
+        $('<button/>')
+            .html('<img src="img/pictos/Map.svg" alt="map">')
+            .click(function() {
+                var div = $('<div/>').appendTo('body');
+                map.createMap(function(m) {
+                    m.on('click', function(e) {
+                        var coord = sprintf('%.5f;%.5f', e.latlng.lng, e.latlng.lat);
+                        $(elt).val(coord).select();
+                        div.children().trigger('npg:remove');
+                        div.remove();
+                    });
+                    return storage.getBounds();
+                }).css({
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    height: '100%',
+                    width: '100%',
+                }).appendTo(div);
+                utils.notifyInfo('Click on the map to set the location.');
+            }).insertAfter(elt);
+
         $('<button/>')
             .html('<img src="img/pictos/Location.svg" alt="location">')
             .click(function() {
@@ -327,7 +350,8 @@ autocomplete.Place.prototype.autocomplete = function(elt) {
                     utils.notifyWarn(sprintf('geolocation error: %s', error.message));
                 }, {
                     enableHighAccuracy: false,
-                    timeout: 10000,
+                    timeout: 60000,//1min
+                    maximumAge: 300000,//5min
                 });
             }).insertAfter(elt);
     }

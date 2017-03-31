@@ -28,30 +28,17 @@ var storage = {};
 storage._storagePrefix = 'navitia-playground.';
 storage._apiStoragePrefix = storage._storagePrefix + 'api.';
 storage._layerStorageKey = storage._storagePrefix + 'layer';
+storage._boundsStorageKey = storage._storagePrefix + 'bounds';
 
 storage._localStorageAvailable = function() {
     try {
 	var x = '__storage_test__';
 	window.localStorage.setItem(x, x);
 	window.localStorage.removeItem(x);
-        storage._upgrade();
 	return true;
     }
     catch(e) {
 	return false;
-    }
-};
-
-// TODO: remove this upgrade in 2017
-storage._oldApiStoragePrefix = 'navitiaPlayground.';
-storage._upgrade = function() {
-    for (var elt in window.localStorage) {
-        if (elt.indexOf(storage._oldApiStoragePrefix) === 0 ) {
-            window.localStorage.setItem(
-                storage._apiStoragePrefix + elt.slice(storage._oldApiStoragePrefix.length),
-                window.localStorage[elt]);
-            window.localStorage.removeItem(elt);
-        }
     }
 };
 
@@ -92,4 +79,18 @@ storage.saveLayer = function(data) {
 storage.getLayer = function() {
     if (! storage._localStorageAvailable()) { return null; }
     return window.localStorage.getItem(storage._layerStorageKey);
+};
+
+storage.saveBounds = function(bounds) {
+    if (! storage._localStorageAvailable()) { return; }
+    var data = [
+        [bounds.getSouth(), bounds.getWest()],
+        [bounds.getNorth(), bounds.getEast()]
+    ];
+    window.localStorage.setItem(storage._boundsStorageKey, JSON.stringify(data));
+};
+
+storage.getBounds = function() {
+    if (! storage._localStorageAvailable()) { return null; }
+    return JSON.parse(window.localStorage.getItem(storage._boundsStorageKey));
 };
