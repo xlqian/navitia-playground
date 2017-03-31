@@ -249,6 +249,26 @@ map.run = function(context, type, json) {
         m.on('baselayerchange', storage.saveLayer);
         L.control.scale().addTo(m);
         var overlay = L.featureGroup(features).addTo(m);
+
+        // Cleanly destroying the map
+        div.on('npg:remove', function() { m.remove(); });
+
+        // GPS location
+        var circle = L.circle([0,0], {radius: 1});
+        m.on('locationfound', function(e) {
+            circle.setRadius(e.accuracy / 2)
+                .setStyle({color: '#3388ff'})
+                .setLatLng(e.latlng)
+                .bindPopup(sprintf("%.5f;%.5f ±%dm", e.latlng.lng, e.latlng.lat, e.accuracy))
+                .addTo(m);
+        });
+        m.on('locationerror', function(e) {
+            circle.setStyle({color: 'red'});
+            console.log(e);// jshint ignore:line
+        });
+        m.on('unload', function(e) { m.stopLocate(); });
+        m.locate({enableHighAccuracy: true, watch: true});
+
         setTimeout(function() {
             m.invalidateSize();
             m.fitBounds(overlay.getBounds());

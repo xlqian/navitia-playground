@@ -77,7 +77,10 @@ response.makeObjectButtonHandle = function(selector, renderHandle) {
                 $('html, body').animate({ scrollTop: div.offset().top }, 600);
             }
         } else {
-            div.slideUp(600, function() { div.empty(); });
+            div.slideUp(600, function() {
+                div.children().trigger('npg:remove');
+                div.empty();
+            });
         }
     };
 };
