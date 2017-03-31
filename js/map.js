@@ -259,14 +259,14 @@ map.run = function(context, type, json) {
             circle.setRadius(e.accuracy / 2)
                 .setStyle({color: '#3388ff'})
                 .setLatLng(e.latlng)
-                .bindPopup(sprintf("%.5f;%.5f ±%dm", e.latlng.lng, e.latlng.lat, e.accuracy))
+                .bindPopup(sprintf('%.5f;%.5f ±%dm', e.latlng.lng, e.latlng.lat, e.accuracy))
                 .addTo(m);
         });
         m.on('locationerror', function(e) {
             circle.setStyle({color: 'red'});
             console.log(e);// jshint ignore:line
         });
-        m.on('unload', function(e) { m.stopLocate(); });
+        m.on('unload', function() { m.stopLocate(); });
         m.locate({enableHighAccuracy: true, watch: true});
 
         setTimeout(function() {

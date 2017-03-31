@@ -275,6 +275,22 @@ autocomplete.AbstractObject.prototype.describe = function(elt) {
     $(elt).autocomplete('search');
     $(elt).autocomplete('option', 'source', this.source());
 };
+autocomplete.AbstractObject.prototype.autocomplete = function (elt) {
+    var self = this;
+    $(elt).autocomplete({
+        delay: 200,
+        close: function() { request.updateUrl($(elt)[0]); },
+        source: self.source()
+    }).focus(function() {
+        self.describe(this);
+    }).hover(function() {
+        if (! $(this).is(':focus')) { self.describe(this); }
+    }, function() {
+        if (! $(this).is(':focus')) { $(this).autocomplete('close'); }
+    }).autocomplete('instance')._renderItem = function(ul, item) {
+        return $('<li>').append(item.label).appendTo(ul);
+    };
+};
 
 autocomplete.PtObject = function(types) {
     autocomplete.AbstractObject.call(this, types);
@@ -297,6 +313,26 @@ autocomplete.Place = function(types) {
 };
 autocomplete.Place.prototype = Object.create(autocomplete.AbstractObject.prototype);
 autocomplete.Place.prototype.api = 'places';
+autocomplete.Place.prototype.autocomplete = function(elt) {
+    if ('geolocation' in navigator && (!this.types.length || this.types.indexOf('address') !== -1)) {
+        $('<button/>')
+            .html('<img src="img/pictos/Location.svg" alt="location">')
+            .click(function() {
+                utils.notifyInfo('Getting current position...');
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    var coord = sprintf('%.5f;%.5f', pos.coords.longitude, pos.coords.latitude);
+                    utils.notifyInfo('Got location: ' + coord);
+                    $(elt).val(coord).select();
+                }, function(error) {
+                    utils.notifyWarn(sprintf('geolocation error: %s', error.message));
+                }, {
+                    enableHighAccuracy: false,
+                    timeout: 10000,
+                });
+            }).insertAfter(elt);
+    }
+    return autocomplete.AbstractObject.prototype.autocomplete.call(this, elt);
+};
 
 autocomplete.dynamicAutocompleteTypes = {
     'addresses': new autocomplete.Place(['address']),
@@ -317,20 +353,7 @@ autocomplete.dynamicAutocompleteTypes = {
 };
 
 autocomplete.dynamicAutocomplete = function (elt, dynamicType) {
-    var object = autocomplete.dynamicAutocompleteTypes[dynamicType];
-    $(elt).autocomplete({
-        delay: 200,
-        close: function() { request.updateUrl($(elt)[0]); },
-        source: object.source()
-    }).focus(function() {
-        object.describe(this);
-    }).hover(function() {
-        if (! $(this).is(':focus')) { object.describe(this); }
-    }, function() {
-        if (! $(this).is(':focus')) { $(this).autocomplete('close'); }
-    }).autocomplete('instance')._renderItem = function(ul, item) {
-        return $('<li>').append(item.label).appendTo(ul);
-    };
+    autocomplete.dynamicAutocompleteTypes[dynamicType].autocomplete(elt);
 };
 
 autocomplete._customAutocompleteHelper = function(input, source, customOptions) {
