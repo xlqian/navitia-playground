@@ -138,5 +138,12 @@ a {
     button:disabled {
         color: $gray;
     }
+    button img {
+        vertical-align: text-top;
+        height: 1.2em;
+    }
+    button:disabled img {
+        opacity: 0.2;
+    }
 }
 

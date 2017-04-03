@@ -136,6 +136,16 @@ utils.notifyWarn = function(message) {
     });
 };
 
+utils.notifyInfo = function(message) {
+    $.notify({
+        text: message
+    }, {
+        position: 'right bottom',
+        className: 'info',
+        style: 'navitia',
+    });
+};
+
 utils.getType = function(key) {
     if (!key || typeof key !== 'string') {
         return null;

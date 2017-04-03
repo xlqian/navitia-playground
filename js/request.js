@@ -96,13 +96,12 @@ request.updateUrl = function(focusedElem) {
 
 request.makeDeleteButton = function() {
     return $('<button/>')
-        .addClass('delete')
+        .html('<img src="img/delete.svg">')
         .click(function() {
             $(this).closest('.toDelete').remove();
             request.updateAddPathAC(this);
             request.updateUrl(this);
-        })
-        .html('<img src="img/delete.svg" class="deleteButton" alt="delete">');
+        });
 };
 
 request.makeTemplatePath = function(val, input) {
@@ -137,13 +136,13 @@ request.makeKeyValue = function(key, val, cls) {
         .addClass('value')
         .addClass(cls)
         .focus(function() { this.select(); })
-        .val(val);
+        .val(val)
+        .appendTo(res);
 
     autocomplete.valueAutoComplete(valueElt, key);
 
     valueElt.on('input', function() { request.updateUrl(this); });
     valueElt.focus(function() { request.updateUrl(this); });
-    res.append(valueElt);
     res.append(request.makeDeleteButton());
 
     // valueElt must be attached to res to call this
