@@ -317,7 +317,7 @@ autocomplete.Place.prototype.api = 'places';
 autocomplete.Place.prototype.autocomplete = function(elt) {
     if (!this.types.length || this.types.indexOf('address') !== -1) {
         $('<button/>')
-            .html('<img src="img/pictos/Map.svg" alt="map">')
+            .html('<img src="img/pictos/MapMarker.svg" alt="map">')
             .click(function() {
                 var div = $('<div/>').appendTo('body');
                 map.createMap(function(m) {
