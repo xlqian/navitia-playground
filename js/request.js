@@ -171,9 +171,12 @@ request.updateAddParamAC = function() {
 };
 
 request.submit = function() {
+    var url = '?request=' + encodeURIComponent(request.finalUrl());
     var token = $('#token input.token').val();
-    var f = request.finalUrl();
-    window.location = sprintf('?request=%s&token=%s', encodeURIComponent(f), encodeURIComponent(token));
+    if (storage.getToken($('#api input.api').val()) !== token) {
+        url += '&token=' + encodeURIComponent(token);
+    }
+    window.location = url;
 };
 
 request.getCoverage = function() {
