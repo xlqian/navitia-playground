@@ -74,13 +74,16 @@ summary.make.journey = function(context, json) {
                 }
                 last_section_mode = null;
                 break;
+            case 'crow_fly':
             case 'street_network':
-                switch (s.mode) {
-                case 'bike': last_section_mode = 'bike'; break;
-                case 'car': last_section_mode = 'car'; break;
-                case 'walking':
-                    if (! last_section_mode) { last_section_mode = 'walking'; }
-                    break;
+                if (s.duration) {
+                    switch (s.mode) {
+                    case 'bike': last_section_mode = 'bike'; break;
+                    case 'car': last_section_mode = 'car'; break;
+                    case 'walking':
+                        if (! last_section_mode) { last_section_mode = 'walking'; }
+                        break;
+                    }
                 }
                 break;
             case 'bss_rent':
@@ -182,10 +185,10 @@ summary.make.heat_map = function(context, json) {
 summary.make.links = function(context, json) {
     var res = $('<span>');
     function makeData(link) {
-        if (link.templated) {
-            return sprintf('{%s}', link.type);
-        }
-        return link.type;
+        var name = link.type;
+        if (link.rel) { name = link.rel; }
+        if (link.templated) { return sprintf('{%s}', name); }
+        return name;
     }
     if ($.isArray(json)) {
         json.forEach(function(link) {
@@ -263,6 +266,14 @@ summary.make.section = function(context, section) {
     case 'public_transport':
         pt = true;
         res.append(summary.makeRoutePoint(context, section));
+        break;
+    case 'crow_fly':
+        if (section.duration) {
+            res.append(pictos.makeSnPicto(section.mode));
+            res.append(sprintf(' (%s)', section.type));
+        } else {
+            res.append(section.type);
+        }
         break;
     default: res.append(section.type); break;
     }
