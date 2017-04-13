@@ -51,29 +51,32 @@ map.makeFeatures = {
         return [];
     },
     section: function(context, json, draw_section_option) {
-        var color = json.display_informations;
+        var style = {};
+        if (json.display_informations && json.display_informations.color) {
+            style.color = '#' + json.display_informations.color;
+        }
         switch (json.type) {
         case 'street_network':
             switch (json.mode) {
-            case 'bike': color = map.bikeColor; break;
-            case 'car': color = map.carColor; break;
-            case 'walking': color = map.walkingColor; break;
+            case 'bike': style = map.bikeStyle; break;
+            case 'car': style = map.carStyle; break;
+            case 'walking': style = map.walkingStyle; break;
             }
             break;
         case 'transfer':
             switch (json.transfer_type) {
-            case 'guaranteed': color = map.carColor; break;
-            case 'extension': color = map.bikeColor; break;
-            case 'walking': color = map.walkingColor; break;
+            case 'guaranteed': style = map.carStyle; break;
+            case 'extension': style = map.bikeStyle; break;
+            case 'walking': style = map.walkingStyle; break;
             }
             break;
-        case 'crow_fly': color = map.crowFlyColor; break;
+        case 'crow_fly': style = map.crowFlyStyle; break;
         }
         if (draw_section_option === undefined) {
             draw_section_option = map.DrawSectionOption.DRAWBOTH;
         }
-        return map._makeString(context, 'section', json, color)
-            .concat(map._makeStopTimesMarker(context, json, color, draw_section_option));
+        return map._makeString(context, 'section', json, style)
+            .concat(map._makeStopTimesMarker(context, json, style, draw_section_option));
     },
     line: function(context, json) {
         return map._makeString(context, 'line', json, json);
@@ -138,7 +141,7 @@ map.makeFeatures = {
         return map._makeMarker(context, 'address', json);
     },
     administrative_region: function(context, json) {
-        return map._makeMarker('administrative_region', json);
+        return map._makeMarker(context, 'administrative_region', json);
     },
     stop_area: function(context, json) {
         return map._makeMarker(context, 'stop_area', json);
@@ -252,13 +255,15 @@ map.createMap = function(handle) {
     div.on('npg:remove', function() { m.remove(); });
 
     // GPS location
-    var circle = L.circle([0,0], {radius: 1});
+    var circle = L.circle([0,0], {
+        radius: 100,
+        renderer: L.svg()// workaround for https://github.com/Leaflet/Leaflet/pull/5454
+    }).addTo(m);
     m.on('locationfound', function(e) {
         circle.setRadius(e.accuracy / 2)
             .setStyle({color: '#3388ff'})
             .setLatLng(e.latlng)
-            .bindPopup(sprintf('%.5f;%.5f ±%dm', e.latlng.lng, e.latlng.lat, e.accuracy))
-            .addTo(m);
+            .bindPopup(sprintf('%.5f;%.5f ±%dm', e.latlng.lng, e.latlng.lat, e.accuracy));
     });
     m.on('locationerror', function(e) {
         circle.setStyle({color: 'red'}).bindPopup(e.message);
@@ -289,7 +294,7 @@ map.run = function(context, type, json) {
     }
 };
 
-map._makeMarker = function(context, type, json, colorJson, useCustomMarker, label) {
+map._makeMarker = function(context, type, json, style, label) {
     var lat, lon;
     var obj = json;
     switch (type){
@@ -309,14 +314,17 @@ map._makeMarker = function(context, type, json, colorJson, useCustomMarker, labe
     var sum = summary.run(context, type, json);
     var t = type === 'place' ? json.embedded_type : type;
     var marker;
-    if (! useCustomMarker) {
+    if (! style) {
         marker = L.marker([lat, lon]);
     } else {
-        var color = '#000000';
-        if (colorJson  && colorJson instanceof Object && colorJson.color) {
-            color = '#' + colorJson.color;
-        }
-        marker = L.circleMarker([lat, lon], {color: color, opacity: 1, fillColor: 'white', fillOpacity: 1});
+        style = utils.deepClone(style || {});
+        delete style.dashArray;
+        if (! style.color) { style.color = '#000000'; }
+        style.opacity = 1;
+        style.fillColor = 'white';
+        style.fillOpacity = 1;
+        style.renderer = L.svg();// workaround for https://github.com/Leaflet/Leaflet/pull/5454
+        marker = L.circleMarker([lat, lon], style);
         marker.setRadius(5);
     }
     if (label) {
@@ -325,10 +333,10 @@ map._makeMarker = function(context, type, json, colorJson, useCustomMarker, labe
     return [marker.bindPopup(map._makeLink(context, t, obj, sum)[0])];
 };
 
-map.bikeColor = { color: 'CED480' };
-map.carColor = { color: 'EFBF8F' };
-map.walkingColor = { color: '89C6E5' };
-map.crowFlyColor = { color: 'CBB6E4' };
+map.bikeStyle = { color: '#CED480', dashArray: '0, 8' };
+map.carStyle = { color: '#EFBF8F', dashArray: '0, 8' };
+map.walkingStyle = { color: '#89C6E5', dashArray: '0, 8' };
+map.crowFlyStyle = { color: '#CBB6E4', dashArray: '0, 8' };
 
 map._getCoordFromPlace = function(place) {
     if (place && place[place.embedded_type] && place[place.embedded_type].coord) {
@@ -337,23 +345,21 @@ map._getCoordFromPlace = function(place) {
     return null;
 };
 
-map._makeString = function(context, type, json, colorJson) {
-    if (! (colorJson instanceof Object) || ! (colorJson.color)) {
-        colorJson = { color: '000000' };
-    }
+map._makeString = function(context, type, json, style) {
+    style = utils.deepClone(style || {});
+    if (! style.color) { style.color = '#000000'; }
     var sum = summary.run(context, type, json);
     var from = map._getCoordFromPlace(json.from);
     var to = map._getCoordFromPlace(json.to);
-    var style1 = {
-        color: 'white',
-        weight: 7,
-        opacity: 1
-    };
-    var style2 = {
-        color: '#' + colorJson.color,
-        weight: 5,
-        opacity: 1
-    };
+
+    var style1 = utils.deepClone(style);
+    style1.color = 'white';
+    style1.weight = 7;
+    style1.opacity = 1;
+    var style2 = utils.deepClone(style);
+    style2.weight = 5;
+    style2.opacity = 1;
+
     if (json.geojson && json.geojson.coordinates.length) {
         return [
             L.geoJson(json.geojson, { style: style1 }),
@@ -369,7 +375,7 @@ map._makeString = function(context, type, json, colorJson) {
     }
 };
 
-map._makeStopTimesMarker = function(context, json, color, draw_section_option) {
+map._makeStopTimesMarker = function(context, json, style, draw_section_option) {
     var stopTimes = json.stop_date_times;
     var markers = [];
     if (stopTimes) {
@@ -383,7 +389,7 @@ map._makeStopTimesMarker = function(context, json, color, draw_section_option) {
                       map._should_draw_section_end(draw_section_option)) {
                 label = map.ENDTEXT;
             }
-            markers = markers.concat(map._makeMarker(context, 'stop_date_time', st, color, true, label));
+            markers = markers.concat(map._makeMarker(context, 'stop_date_time', st, style, label));
         });
     } else {
         // when section is Walking
@@ -393,11 +399,11 @@ map._makeStopTimesMarker = function(context, json, color, draw_section_option) {
         var label_to = null;
         if (from && map._should_draw_section_start(draw_section_option)) {
             label_from = map.STARTTEXT;
-            markers.push(map._makeMarker(context, 'place', from, color, true, label_from)[0]);
+            markers.push(map._makeMarker(context, 'place', from, style, label_from)[0]);
         }
         if (to && map._should_draw_section_end(draw_section_option)) {
             label_to = map.ENDTEXT;
-            markers.push(map._makeMarker(context, 'place', to, color, true, label_to)[0]);
+            markers.push(map._makeMarker(context, 'place', to, style, label_to)[0]);
         }
     }
     return markers;
