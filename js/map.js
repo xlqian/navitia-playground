@@ -333,10 +333,10 @@ map._makeMarker = function(context, type, json, style, label) {
     return [marker.bindPopup(map._makeLink(context, t, obj, sum)[0])];
 };
 
-map.bikeStyle = { color: '#CED480', dashArray: '0, 8' };
-map.carStyle = { color: '#EFBF8F', dashArray: '0, 8' };
-map.walkingStyle = { color: '#89C6E5', dashArray: '0, 8' };
-map.crowFlyStyle = { color: '#CBB6E4', dashArray: '0, 8' };
+map.bikeStyle = { color: '#a3ab3a', dashArray: '0, 8' };
+map.carStyle = { color: '#c9731d', dashArray: '0, 8' };
+map.walkingStyle = { color: '#298bbc', dashArray: '0, 8' };
+map.crowFlyStyle = { color: '#6e3ea8', dashArray: '0, 8' };
 
 map._getCoordFromPlace = function(place) {
     if (place && place[place.embedded_type] && place[place.embedded_type].coord) {
