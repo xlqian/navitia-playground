@@ -98,10 +98,8 @@ map.makeFeatures = {
     isochrone: function(context, json) {
         if (! ('geojson' in json)) { return []; }
         var color = context.getColorFromMinDuration(json.min_duration);
-        var draw_section_option = map.DrawSectionOption.DRAWBOTH;
-        var color_marker = '#000000';
         return map._makePolygon(context, 'isochrone', json.geojson, json, color)
-            .concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
+            .concat(map._makeStopTimesMarker(context, json, {}, map.DrawSectionOption.DRAWBOTH));
     },
     heat_map: function(context, json) {
         if (! ('heat_matrix' in json)) { return []; }
@@ -134,8 +132,7 @@ map.makeFeatures = {
             });
         });
         var draw_section_option = map.DrawSectionOption.DRAWBOTH;
-        var color_marker = '#000000';
-        return local_map.concat(map._makeStopTimesMarker(context, json, color_marker, draw_section_option));
+        return local_map.concat(map._makeStopTimesMarker(context, json, {}, draw_section_option));
     },
     address: function(context, json) {
         return map._makeMarker(context, 'address', json);
@@ -348,6 +345,7 @@ map._getCoordFromPlace = function(place) {
 map._makeString = function(context, type, json, style) {
     style = utils.deepClone(style || {});
     if (! style.color) { style.color = '#000000'; }
+    if (style.color.match(/[0-9A-Fa-f]{6}/)) { style.color = '#' + style.color; }
     var sum = summary.run(context, type, json);
     var from = map._getCoordFromPlace(json.from);
     var to = map._getCoordFromPlace(json.to);
