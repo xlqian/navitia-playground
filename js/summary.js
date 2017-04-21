@@ -571,7 +571,9 @@ summary.makeImpactedTime = function(amended, base) {
         res.append($('<span/>').addClass('old-datetime').text(summary.formatTime(base)));
         res.append(' ');
     }
-    res.append(utils.htmlEncode(summary.formatTime(amended)));
+    if (amended) {
+        res.append(utils.htmlEncode(summary.formatTime(amended)));
+    }
     return res;
 };
 
