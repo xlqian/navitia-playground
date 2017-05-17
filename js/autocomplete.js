@@ -219,9 +219,9 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, req, token) 
 };
 
 autocomplete.getUrlWithCov = function() {
-    var url = $('#api input.api').val() + '/';
+    var url = $('#api input.api').val();
     var cov = request.getCoverage();
-    url += cov ? ('coverage/' + cov) : '';
+    url += cov ? ('/coverage/' + cov) : '';
     return url;
 };
 
