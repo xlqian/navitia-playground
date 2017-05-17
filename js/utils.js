@@ -94,7 +94,7 @@ $.notify.addStyle('navitia', {
 
 utils.errorMessage = function(url, xhr, status/*, error*/) {
     var message;
-    if (url.startsWith('http:') && window.location.protocol === 'https:') {
+    if (url.lastIndexOf('http:', 0) === 0 && window.location.protocol === 'https:') {
         message = $('<span>').text(
             'You cannot request the API using http if ' +
                 'you are connected to navitia-playground ' +
