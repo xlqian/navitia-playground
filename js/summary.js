@@ -502,6 +502,14 @@ summary.make.equipments = function(context, json) {
     return res;
 };
 
+summary.make.poi = function(context, json) {
+    var type = '';
+    if (json.poi_type && json.poi_type.name) {
+        type = json.poi_type.name + ': ';
+    }
+    return type + json.label;
+};
+
 // add your summary view by adding:
 //   summary.make.{type} = function(context, json) { ... }
 
@@ -534,6 +542,7 @@ summary.defaultSummary = function(context, type, json) {
 };
 
 summary.formatDatetime = function(datetime) {
+    if (typeof datetime !== 'string') { return 'none'; }
     var formated = datetime.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/,
                                     '$1-$2-$3 $4:$5:$6');
     if (formated.slice(-2) === '00') {
