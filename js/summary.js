@@ -510,6 +510,19 @@ summary.make.poi = function(context, json) {
     return type + json.label;
 };
 
+summary.make.traffic_report = function(elt, json) {
+    var r = $.map(json, function(obj, key) {
+        if (obj.length) {
+            return sprintf('%d %s', obj.length, key);
+        }
+    });
+    if (r.length) {
+        return sprintf('network %s: %s', json.network.name, r.join(', '));
+    } else {
+        return sprintf('network %s: no disruption', json.network.name);
+    }
+};
+
 // add your summary view by adding:
 //   summary.make.{type} = function(context, json) { ... }
 

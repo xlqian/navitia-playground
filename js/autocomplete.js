@@ -42,7 +42,7 @@ autocomplete._collections = [
 
 autocomplete._additionalFeatures = [
     'departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules',
-    'stop_schedules', 'arrivals', 'isochrones', 'heat_maps'
+    'stop_schedules', 'arrivals', 'isochrones', 'heat_maps', 'traffic_reports'
 ];
 
 autocomplete._paramJourneyCommon = [
