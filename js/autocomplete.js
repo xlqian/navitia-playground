@@ -413,3 +413,8 @@ autocomplete._makeDatetime = function(elt) {
         oneLine: true,
     });
 };
+
+$(document).ready(function() {
+    // We want to do whatever we want by hand!
+    $.datepicker._doKeyPress = function () { return true; };
+});
