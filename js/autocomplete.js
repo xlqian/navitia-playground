@@ -131,13 +131,68 @@ autocomplete.valueAutoComplete = function (input, key) {
     }
 };
 
+autocomplete.get_swagger_params = function(swagger) {
+    return $.map(swagger.get.parameters, function (p) {
+        return p.name;
+    });
+}
+
+autocomplete.paramKey = function(input, type) {
+    // navitia returns partial Swagger schema when called with OPTIONS
+    // uses this feature to get an autocomplete on the parameters
+    var old_req = '';
+    var old_token = '';
+    var handle = function() {
+        var token = $('#token input.token').val();
+        var req = request.finalUrl() + 'schema=true';
+        if (req !== old_req || token !== old_token) {
+            old_req = req;
+            old_token = token;
+            $.ajax({
+                headers: utils.manageToken(token),
+                dataType: 'json',
+                method: 'OPTIONS',
+                url: req,
+                success: function(data) {
+                    var res = autocomplete.get_swagger_params(data);
+                    $(input).autocomplete({
+                        close: function() { request.updateUrl($(input)[0]); },
+                        source: res,
+                        minLength: 0,
+                        scroll: true,
+                        delay: 0
+                    });
+                    $(input).autocomplete('enable');
+                    if ($(input).is(':focus') && $(input).autocomplete('instance')) {
+                        $(input).autocomplete('search', '');
+                    }
+                },
+                error: function(data, status, error) {
+                    utils.notifyOnError('Autocomplete', req, data, status, error);
+                    console.log('error on swagger call', data);// jshint ignore:line
+                    // if no autocomplete is avaiblable, we use the old static autocomplete system
+                    var feature = $('#featureInput').val();
+                    var source = autocomplete.autocompleteTree[type][feature] || autocomplete.autocompleteTree[type].empty || [];
+                    autocomplete._customAutocompleteHelper(input, source, {
+                        select: function(event, ui) { $(input).val(ui.item.value).change(); }
+                    });
+                }
+            });
+        } else if ($(input).is(':focus') && $(input).autocomplete('instance')) {
+            $(input).autocomplete('search', '');
+        }
+    };
+    handle();
+    $(input).focus(handle);
+
+};
+
 autocomplete.addKeyAutocomplete = function(input, type) {
     var source;
     if (type === 'pathKey' && ! $('#pathFrame').find('.value').length) {
         source = this.autocompleteTree[type].empty;
     } else if (type === 'paramKey'){
-        var feature = $('#featureInput').val();
-        source = this.autocompleteTree[type][feature] || this.autocompleteTree[type].empty;
+        return autocomplete.paramKey(input, type);
     } else {
         source = this.autocompleteTree[type].all;
     }
