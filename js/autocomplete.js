@@ -534,8 +534,13 @@ autocomplete._customAutocompleteHelper = function(input, source, customOptions) 
     };
     if (customOptions) { $.extend(true, options, customOptions); }
     $(input).autocomplete(options).focus(function() {
-        $(this).autocomplete('search', '');
+        if ($(input).autocomplete('instance')) {
+            $(this).autocomplete('search', '');
+        }
     });
+    if ($(input).is(':focus')) {
+        $(input).focus();
+    }
 };
 
 autocomplete._makeDatetime = function(elt) {

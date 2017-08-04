@@ -170,10 +170,6 @@ request.insertParam = function() {
     $('#addParam').prev().find('input').first().focus();
 };
 
-request.updateAddParamAC = function() {
-    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
-};
-
 request.submit = function() {
     var url = '?request=' + encodeURIComponent(request.finalUrl());
     var token = $('#token input.token').val();
@@ -269,7 +265,6 @@ request.manage = function() {
             $(this).parent().find('button.add').click();
         }
     });
-    $('#featureInput').focusout(request.updateAddParamAC);
 
     $('#request input').focus(function() { this.select(); });
 
