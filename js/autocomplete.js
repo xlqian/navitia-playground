@@ -119,14 +119,14 @@ autocomplete.apiAutocomplete = function() {
     });
 };
 
-autocomplete.get_param_format = function (param) {
+autocomplete.getParamFormat = function (param) {
     if (param.type === 'array') {
         return param.items.format;
     }
     return param.format;
 };
 
-autocomplete.get_param_type = function (param) {
+autocomplete.getParamType = function (param) {
     if (param.type === 'array') {
         return param.items.type;
     }
@@ -158,8 +158,8 @@ autocomplete.valueAutoComplete = function (input, key) {
                 manualFallback();
                 return null;
             }
-            var format = autocomplete.get_param_format(param);
-            var type = autocomplete.get_param_type(param);
+            var format = autocomplete.getParamFormat(param);
+            var type = autocomplete.getParamType(param);
             if (format === 'date-time' || format === 'navitia-date-time') {
                 autocomplete._makeDatetime(input);
                 return null;
@@ -175,7 +175,7 @@ autocomplete.valueAutoComplete = function (input, key) {
                 new autocomplete.PtObject().autocomplete(input);
                 return null;
             }
-            if (param.enum !== undefined) {
+            if ('enum' in param) {
                 return param.enum;
             }
 
@@ -221,11 +221,7 @@ autocomplete.swaggerAutocomplete = function(args) {
                         //nothing to do
                         return;
                     }
-                    res = res.sort(function(a, b) {
-                        if (a < b) { return -1; }
-                        if (a > b) { return 1; }
-                        return 0;
-                    });
+                    res = res.sort();
                     $(input).autocomplete({
                         close: function() { request.updateUrl($(input)[0]); },
                         source: res,

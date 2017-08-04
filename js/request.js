@@ -54,7 +54,6 @@ request.getFocusedElemValue = function(elemToTest, focusedElem, noEncoding) {
     }
 };
 
-
 request.urlElements = function(focusedElem) {
     var api = request.getFocusedElemValue($('#api input.api')[0], focusedElem, true);
     if (api.slice(-1) === '/') { api = api.slice(0, -1); }
