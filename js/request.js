@@ -54,7 +54,8 @@ request.getFocusedElemValue = function(elemToTest, focusedElem, noEncoding) {
     }
 };
 
-request.finalUrl = function(focusedElem) {
+
+request.urlElements = function(focusedElem) {
     var api = request.getFocusedElemValue($('#api input.api')[0], focusedElem, true);
     if (api.slice(-1) === '/') { api = api.slice(0, -1); }
 
@@ -74,17 +75,21 @@ request.finalUrl = function(focusedElem) {
             parameters += '&';
         }
     });
+    return {'api': api, 'path': path, 'parameters': parameters, 'feature': feature};
+}
 
+request.finalUrl = function(focusedElem) {
+    var elements = request.urlElements(focusedElem);
     if (focusedElem === undefined) {
         // called without arg, we want pure text
-        return api + path + '/' + feature + parameters;
+        return elements.api + elements.path + '/' + elements.feature + elements.parameters;
     } else {
         // with arg, we want a rendering thing
         return sprintf('<span class="api">%s</span>' +
                        '<span class="path">%s</span>' +
                        '<span class="feature">/%s</span>' +
                        '<span class="parameters">%s</span>',
-                       api, path, feature, parameters);
+                       elements.api, elements.path, elements.feature, elements.parameters);
     }
 };
 
