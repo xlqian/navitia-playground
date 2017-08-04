@@ -239,8 +239,10 @@ autocomplete.swaggerAutocomplete = function(args) {
                     }
                 }
             ).fail(function(data, status, error) {
-                utils.notifyOnError('Autocomplete', req, data, status, error);
-                console.warn('error on swagger call for req ' + req, data, error);// jshint ignore:line
+                if (data.responseText !== '') {
+                    utils.notifyOnError('Autocomplete', req, data, status, error);
+                    console.warn('error on swagger call for req ' + req, data, error);// jshint ignore:line
+                }
                 args.onError(data);
             });
         } else if ($(input).is(':focus') && $(input).autocomplete('instance')) {
