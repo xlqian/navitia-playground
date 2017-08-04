@@ -76,7 +76,7 @@ request.urlElements = function(focusedElem) {
         }
     });
     return {'api': api, 'path': path, 'parameters': parameters, 'feature': feature};
-}
+};
 
 request.finalUrl = function(focusedElem) {
     var elements = request.urlElements(focusedElem);
