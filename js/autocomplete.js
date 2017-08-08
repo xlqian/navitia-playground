@@ -210,6 +210,7 @@ autocomplete.swaggerAutocomplete = function(args) {
                 // be sure that out-of-date autocompletion will not be active
                 $(input).autocomplete('destroy');
             }
+            $(input).parent().find('.tooltips').empty();
             $.ajax({
                 headers: utils.manageToken(token),
                 dataType: 'json',
@@ -317,6 +318,7 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, req, token) 
         // be shure that out-of-date autocompletion will not be active
         $(input).autocomplete('destroy');
     }
+    $(input).parent().find('.tooltips').empty();
     $.ajax({
         headers: utils.manageToken(token),
         dataType: 'json',
@@ -451,6 +453,8 @@ autocomplete.Place.prototype = Object.create(autocomplete.AbstractObject.prototy
 autocomplete.Place.prototype.api = 'places';
 autocomplete.Place.prototype.autocomplete = function(elt) {
     if (!this.types.length || this.types.indexOf('address') !== -1) {
+        var tooltips = $(elt).parent().find('.tooltips');
+
         $('<button/>')
             .html('<img src="img/pictos/MapMarker.svg" alt="map">')
             .click(function() {
@@ -471,7 +475,7 @@ autocomplete.Place.prototype.autocomplete = function(elt) {
                     width: '100%',
                 }).appendTo(div);
                 utils.notifyInfo('Click on the map to set the location.');
-            }).insertAfter(elt);
+            }).prependTo(tooltips);
 
         $('<button/>')
             .html('<img src="img/pictos/Location.svg" alt="location">')
@@ -488,7 +492,7 @@ autocomplete.Place.prototype.autocomplete = function(elt) {
                     timeout: 60000,//1min
                     maximumAge: 300000,//5min
                 });
-            }).insertAfter(elt);
+            }).prependTo(tooltips);
     }
     return autocomplete.AbstractObject.prototype.autocomplete.call(this, elt);
 };

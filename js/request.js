@@ -135,21 +135,19 @@ request.makeKeyValue = function(key, val, cls) {
     res.append($('<span/>').addClass('key').text(key));
 
     var valueElt = $('<input/>')
-         .attr('type', 'text')
-         .attr('placeholder', 'type your value here')
+        .attr('type', 'text')
+        .attr('placeholder', 'type your value here')
         .addClass('value')
         .addClass(cls)
         .focus(function() { this.select(); })
         .val(val)
         .appendTo(res);
-
-    autocomplete.valueAutoComplete(valueElt, key);
-
-    valueElt.on('input', function() { request.updateUrl(this); });
-    valueElt.focus(function() { request.updateUrl(this); });
+    res.append($('<span class="tooltips">'));
     res.append(request.makeDeleteButton());
 
-    // valueElt must be attached to res to call this
+    autocomplete.valueAutoComplete(valueElt, key);
+    valueElt.on('input', function() { request.updateUrl(this); });
+    valueElt.focus(function() { request.updateUrl(this); });
     if (utils.isTemplate(val)) { request.makeTemplatePath(val, valueElt); }
 
     return res;
