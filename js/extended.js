@@ -56,17 +56,18 @@ extended.make.response = function(context, json) {
         });
     }
 
-    if ($.isArray(json.feed_publishers)) {
-        json.feed_publishers.forEach(function(feed_publisher, i) {
-            result.append(response.render(context, feed_publisher, 'contributor', 'feed_publishers', i));
-        });
-    }
+    (json.notes || []).forEach(function(note, i) {
+        result.append(response.render(context, note, 'note', 'notes', i));
+    });
 
-    if ('warnings' in json) {
-        json.warnings.forEach(function(warning, i) {
-            result.append(response.render(context, warning, 'warning', 'warnings', i));
-        });
-    }
+    (json.feed_publishers || []).forEach(function(feed_publisher, i) {
+        result.append(response.render(context, feed_publisher, 'contributor', 'feed_publishers', i));
+    });
+
+    (json.warnings || []).forEach(function(warning, i) {
+        result.append(response.render(context, warning, 'warning', 'warnings', i));
+    });
+
     return result;
 };
 
@@ -189,12 +190,10 @@ extended.make.disruption = function(context, json) {
                                    'application_periods',
                                    'application_periods'));
     }
-    if (json.messages) {
-        json.messages.forEach(function(obj, i) {
-            res.append(response.render(context, obj, 'message', 'messages', i));
-        });
-    }
-    json.impacted_objects.forEach(function(obj, i) {
+    (json.messages || []).forEach(function(obj, i) {
+        res.append(response.render(context, obj, 'message', 'messages', i));
+    });
+    (json.impacted_objects || []).forEach(function(obj, i) {
         res.append(response.render(context, obj, 'impacted_object', 'impacted_objects', i));
     });
     return res;
@@ -202,6 +201,9 @@ extended.make.disruption = function(context, json) {
 
 extended.make.impacted_object = function(context, json) {
     var res = $('<div class="list"/>');
+    if (json.impacted_section) {
+        res.append(response.render(context, json.impacted_section, 'impacted_section', 'impacted_section'));
+    }
     res.append(response.render(context, json.pt_object, 'pt_object', 'pt_object'));
     if ($.isArray(json.impacted_stops)) {
         json.impacted_stops.forEach(function(obj, i) {
@@ -211,13 +213,30 @@ extended.make.impacted_object = function(context, json) {
     return res;
 };
 
+extended.make.impacted_section = function(context, json) {
+    return $('<div class="list"/>')
+        .append(response.render(context, json.from, 'pt_object', 'from'))
+        .append(response.render(context, json.to, 'pt_object', 'to'));
+};
+
 extended.make.connection = function(context, json) {
     return $('<div class="list"/>')
         .append(response.render(context, json.origin, 'stop_point', 'origin'))
         .append(response.render(context, json.destination, 'stop_point', 'destination'));
 };
 
-// add your extended view by addind:
+extended.make.links = function(context, json) {
+    var res = $('<div class="list"/>');
+    json.forEach(function(link) {
+        var obj = context.followInternalLink(link);
+        if (obj) {
+            res.append(response.render(context, obj.obj, utils.getType(link.rel), '> ' + obj.path));
+        }
+    });
+    return res;
+};
+
+// add your extended view by adding:
 //   extended.make.{type} = function(context, json) { ... }
 
 extended.defaultExtended = function(context, type, json) {
@@ -242,13 +261,21 @@ extended.defaultExtended = function(context, type, json) {
 };
 
 extended.has = {};
-extended.has.section = function(context, type, json) {
+extended.has.section = function(context, json) {
     return Boolean(json.from) || Boolean(json.to) || Boolean(json.stop_date_times);
 };
-extended.has.poi = function(context, type, json) {
-    return extended.hasDefaultExtended(context, type, json);
+extended.has.poi = function(context, json) {
+    return extended.hasDefaultExtended(context, 'poi', json);
 };
-extended.hasDefaultExtended = function(context, type, json) {
+extended.has.links = function(context, json) {
+    for (var i = 0; i < json.length; ++i) {
+        if (context.followInternalLink(json[i])) {
+            return true;
+        }
+    }
+    return false;
+};
+extended.hasDefaultExtended = function(context, json) {
     if (! (json instanceof Object)) { return false; }
     if (Array.isArray(json.links) && json.links.length) { return true; }
     if (Array.isArray(json.codes) && json.codes.length) { return true; }
@@ -262,11 +289,11 @@ extended.hasExtended = function(context, type, json) {
     try {
         if (type in extended.make) {
             if (type in extended.has) {
-                return extended.has[type](context, type, json);
+                return extended.has[type](context, json);
             }
             return true;
         }
-        return extended.hasDefaultExtended(context, type, json);
+        return extended.hasDefaultExtended(context, json);
     } catch (e) {
         console.log(sprintf('hasExtended(%s) thows an exception:', type));// jshint ignore:line
         console.log(e);// jshint ignore:line

@@ -184,9 +184,11 @@ summary.make.heat_map = function(context, json) {
 
 summary.make.links = function(context, json) {
     var res = $('<span>');
-    function makeData(link) {
+    function makeName(link) {
         var name = link.type;
         if (link.rel) { name = link.rel; }
+        var internal = context.followInternalLink(link);
+        if (internal) { name = internal.path; }
         if (link.templated) { return sprintf('{%s}', name); }
         return name;
     }
@@ -194,12 +196,14 @@ summary.make.links = function(context, json) {
         json.forEach(function(link) {
             res.append(' ');
             if (link.id) {
-                context.makeLink(link.type, link, link.type).appendTo(res);
-            } else {
+                context.makeLink(link.type, link, makeName(link)).appendTo(res);
+            } else if (link.href) {
                 $('<a>')
                     .attr('href', context.makeHref(link.href))
-                    .text(makeData(link))
+                    .text(makeName(link))
                     .appendTo(res);
+            } else {
+                res.append(makeName(link));
             }
         });
     } else {
@@ -475,7 +479,36 @@ summary.make.application_periods = function(context, json) {
 };
 
 summary.make.impacted_object = function(context, json) {
-    return summary.run(context, 'pt_object', json.pt_object);
+    var res = $('<span>');
+    if (json.impacted_section && json.pt_object.line && json.pt_object.line.code) {
+        res.append('line section: ');
+        var code = $('<span>')
+            .addClass('with-bg-color')
+            .append(json.pt_object.line.code);
+        summary.setColors(code, json.pt_object.line);
+        res.append(code);
+        res.append(' ');
+        res.append(utils.htmlEncode(json.impacted_section.from.name));
+        res.append(' > ');
+        res.append(utils.htmlEncode(json.impacted_section.to.name));
+    } else if (json.impacted_section) {
+        res.append('line section: ');
+        res.append(summary.run(context, 'pt_object', json.pt_object));
+        res.append(', impacted section: ');
+        res.append(summary.run(context, 'impacted_section', json.impacted_section));
+    } else {
+        res.append(summary.run(context, 'pt_object', json.pt_object));
+    }
+    return res;
+};
+
+summary.make.impacted_section = function(context, json) {
+    var res = $('<span>');
+    res.append(summary.run(context, 'pt_object', json.from));
+    res.append(' > ');
+    res.append(summary.run(context, 'pt_object', json.to));
+
+    return res;
 };
 
 summary.make.impacted_stop = function(context, json) {
@@ -526,6 +559,10 @@ summary.make.traffic_report = function(elt, json) {
     } else {
         return sprintf('network %s: no disruption', json.network.name);
     }
+};
+
+summary.make.note = function(elt, json) {
+    return json.value;
 };
 
 // add your summary view by adding:
