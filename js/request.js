@@ -54,7 +54,7 @@ request.getFocusedElemValue = function(elemToTest, focusedElem, noEncoding) {
     }
 };
 
-request.finalUrl = function(focusedElem) {
+request.urlElements = function(focusedElem) {
     var api = request.getFocusedElemValue($('#api input.api')[0], focusedElem, true);
     if (api.slice(-1) === '/') { api = api.slice(0, -1); }
 
@@ -74,17 +74,21 @@ request.finalUrl = function(focusedElem) {
             parameters += '&';
         }
     });
+    return {'api': api, 'path': path, 'parameters': parameters, 'feature': feature};
+};
 
+request.finalUrl = function(focusedElem) {
+    var elements = request.urlElements(focusedElem);
     if (focusedElem === undefined) {
         // called without arg, we want pure text
-        return api + path + '/' + feature + parameters;
+        return elements.api + elements.path + '/' + elements.feature + elements.parameters;
     } else {
         // with arg, we want a rendering thing
         return sprintf('<span class="api">%s</span>' +
                        '<span class="path">%s</span>' +
                        '<span class="feature">/%s</span>' +
                        '<span class="parameters">%s</span>',
-                       api, path, feature, parameters);
+                       elements.api, elements.path, elements.feature, elements.parameters);
     }
 };
 
@@ -131,21 +135,19 @@ request.makeKeyValue = function(key, val, cls) {
     res.append($('<span/>').addClass('key').text(key));
 
     var valueElt = $('<input/>')
-         .attr('type', 'text')
-         .attr('placeholder', 'type your value here')
+        .attr('type', 'text')
+        .attr('placeholder', 'type your value here')
         .addClass('value')
         .addClass(cls)
         .focus(function() { this.select(); })
         .val(val)
         .appendTo(res);
-
-    autocomplete.valueAutoComplete(valueElt, key);
-
-    valueElt.on('input', function() { request.updateUrl(this); });
-    valueElt.focus(function() { request.updateUrl(this); });
+    res.append($('<span class="tooltips">'));
     res.append(request.makeDeleteButton());
 
-    // valueElt must be attached to res to call this
+    autocomplete.valueAutoComplete(valueElt, key);
+    valueElt.on('input', function() { request.updateUrl(this); });
+    valueElt.focus(function() { request.updateUrl(this); });
     if (utils.isTemplate(val)) { request.makeTemplatePath(val, valueElt); }
 
     return res;
@@ -164,10 +166,6 @@ request.insertParam = function() {
     $('#addParam').before(request.makeKeyValue(key, '', 'parameters'));
     $('#addParamInput').val('').change();
     $('#addParam').prev().find('input').first().focus();
-};
-
-request.updateAddParamAC = function() {
-    autocomplete.addKeyAutocomplete($('#addParamInput'), 'paramKey');
 };
 
 request.submit = function() {
@@ -265,7 +263,6 @@ request.manage = function() {
             $(this).parent().find('button.add').click();
         }
     });
-    $('#featureInput').focusout(request.updateAddParamAC);
 
     $('#request input').focus(function() { this.select(); });
 

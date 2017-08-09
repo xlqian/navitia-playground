@@ -119,16 +119,153 @@ autocomplete.apiAutocomplete = function() {
     });
 };
 
-autocomplete.valueAutoComplete = function (input, key) {
-    if (utils.isDatetimeType(key)) {
-        autocomplete._makeDatetime(input);
-    } else if (key in this.autocompleteTree.paramValue){
-        autocomplete._customAutocompleteHelper(input, this.autocompleteTree.paramValue[key]);
-    } else if (this.staticAutocompleteTypes.indexOf(key) > -1) {
-        this.staticAutocomplete(input, key);
-    } else if (key in this.dynamicAutocompleteTypes) {
-        this.dynamicAutocomplete(input, key);
+autocomplete.getParamFormat = function (param) {
+    if (param.type === 'array') {
+        return param.items.format;
     }
+    return param.format;
+};
+
+autocomplete.getParamType = function (param) {
+    if (param.type === 'array') {
+        return param.items.type;
+    }
+    return param.type;
+};
+
+autocomplete.valueAutoComplete = function (input, key) {
+    var manualFallback = function() {
+        // if no autocomplete is available, we use the old static autocomplete system
+        if (utils.isDatetimeType(key)) {
+            autocomplete._makeDatetime(input);
+        } else if (key in autocomplete.autocompleteTree.paramValue){
+            autocomplete._customAutocompleteHelper(input, autocomplete.autocompleteTree.paramValue[key]);
+        } else if (autocomplete.staticAutocompleteTypes.indexOf(key) > -1) {
+            autocomplete.staticAutocomplete(input, key);
+        } else if (key in autocomplete.dynamicAutocompleteTypes) {
+            autocomplete.dynamicAutocomplete(input, key);
+        }
+    };
+    // we use the swagger definition only for the parameters
+    if (! $(input).hasClass('parameters')) {
+        return manualFallback();
+    }
+    autocomplete.swaggerAutocomplete({
+        input: input,
+        extractResult: function(swagger_response) {
+            var param = swagger_response.get.parameters.find(function(e) { return e.name === key; });
+            if (! param) {
+                manualFallback();
+                return null;
+            }
+            var format = autocomplete.getParamFormat(param);
+            var type = autocomplete.getParamType(param);
+            if (format === 'date-time' || format === 'navitia-date-time') {
+                autocomplete._makeDatetime(input);
+                return null;
+            }
+            if (type === 'boolean') {
+                return autocomplete._booleanValues;
+            }
+            if (format === 'place') {
+                new autocomplete.Place().autocomplete(input);
+                return null;
+            }
+            if (format === 'pt-object') {
+                new autocomplete.PtObject().autocomplete(input);
+                return null;
+            }
+            if ('enum' in param) {
+                return param.enum;
+            }
+
+            manualFallback();
+            return null;
+        },
+        onError: manualFallback
+    });
+};
+
+autocomplete.getSwaggerParams = function(swagger) {
+    return $.map(swagger.get.parameters, function (p) {
+        if (p.in !== 'query') {
+            return null;
+        }
+        return p.name;
+    });
+};
+
+autocomplete.swaggerAutocomplete = function(args) {
+    var input = args.input;
+    var old_req = '';
+    var old_token = '';
+    var handle = function() {
+        var token = $('#token input.token').val();
+        var urlElements = request.urlElements();
+        var req = urlElements.api + urlElements.path + '/' + urlElements.feature + '?schema=true';
+        if (req !== old_req || token !== old_token) {
+            old_req = req;
+            old_token = token;
+            if ($(input).autocomplete('instance')) {
+                // be sure that out-of-date autocompletion will not be active
+                $(input).autocomplete('destroy');
+            }
+            $(input).parent().find('.tooltips').empty();
+            $.ajax({
+                headers: utils.manageToken(token),
+                dataType: 'json',
+                method: 'OPTIONS',
+                url: req
+            }).done(function(data) {
+                    var res = args.extractResult(data);
+                    if (res === null) {
+                        //nothing to do
+                        return;
+                    }
+                    res = res.sort();
+                    $(input).autocomplete({
+                        close: function() { request.updateUrl($(input)[0]); },
+                        source: res,
+                        minLength: 0,
+                        scroll: true,
+                        delay: 0
+                    });
+                    $(input).autocomplete('enable');
+                    if ($(input).is(':focus') && $(input).autocomplete('instance')) {
+                        $(input).autocomplete('search', '');
+                    }
+                }
+            ).fail(function(data, status, error) {
+                if (data.responseText !== '') {
+                    utils.notifyOnError('Autocomplete', req, data, status, error);
+                    console.warn('error on swagger call for req ' + req, data, error);// jshint ignore:line
+                }
+                args.onError(data);
+            });
+        } else if ($(input).is(':focus') && $(input).autocomplete('instance')) {
+            $(input).autocomplete('search', '');
+        }
+    };
+    handle();
+    $(input).focus(handle);
+};
+
+autocomplete.paramKey = function(input, type) {
+    autocomplete.swaggerAutocomplete({
+        input: input, 
+        extractResult: function(swagger_response) {
+            return autocomplete.getSwaggerParams(swagger_response);
+        },
+        onError: function() {
+            // if no autocomplete is available, we use the old static autocomplete system
+            // TODO: when all navitia api are defined by swagger, we can remove this
+            var feature = $('#featureInput').val();
+            var source = autocomplete.autocompleteTree[type][feature] || autocomplete.autocompleteTree[type].empty || [];
+            autocomplete._customAutocompleteHelper(input, source, {
+                select: function(event, ui) { $(input).val(ui.item.value).change(); }
+            });
+        }
+    });
 };
 
 autocomplete.addKeyAutocomplete = function(input, type) {
@@ -136,8 +273,7 @@ autocomplete.addKeyAutocomplete = function(input, type) {
     if (type === 'pathKey' && ! $('#pathFrame').find('.value').length) {
         source = this.autocompleteTree[type].empty;
     } else if (type === 'paramKey'){
-        var feature = $('#featureInput').val();
-        source = this.autocompleteTree[type][feature] || this.autocompleteTree[type].empty;
+        return autocomplete.paramKey(input, type);
     } else {
         source = this.autocompleteTree[type].all;
     }
@@ -182,6 +318,7 @@ autocomplete.updateStaticAutocomplete = function(input, staticType, req, token) 
         // be shure that out-of-date autocompletion will not be active
         $(input).autocomplete('destroy');
     }
+    $(input).parent().find('.tooltips').empty();
     $.ajax({
         headers: utils.manageToken(token),
         dataType: 'json',
@@ -316,6 +453,8 @@ autocomplete.Place.prototype = Object.create(autocomplete.AbstractObject.prototy
 autocomplete.Place.prototype.api = 'places';
 autocomplete.Place.prototype.autocomplete = function(elt) {
     if (!this.types.length || this.types.indexOf('address') !== -1) {
+        var tooltips = $(elt).parent().find('.tooltips');
+
         $('<button/>')
             .html('<img src="img/pictos/MapMarker.svg" alt="map">')
             .click(function() {
@@ -336,7 +475,7 @@ autocomplete.Place.prototype.autocomplete = function(elt) {
                     width: '100%',
                 }).appendTo(div);
                 utils.notifyInfo('Click on the map to set the location.');
-            }).insertAfter(elt);
+            }).prependTo(tooltips);
 
         $('<button/>')
             .html('<img src="img/pictos/Location.svg" alt="location">')
@@ -353,7 +492,7 @@ autocomplete.Place.prototype.autocomplete = function(elt) {
                     timeout: 60000,//1min
                     maximumAge: 300000,//5min
                 });
-            }).insertAfter(elt);
+            }).prependTo(tooltips);
     }
     return autocomplete.AbstractObject.prototype.autocomplete.call(this, elt);
 };
@@ -399,8 +538,13 @@ autocomplete._customAutocompleteHelper = function(input, source, customOptions) 
     };
     if (customOptions) { $.extend(true, options, customOptions); }
     $(input).autocomplete(options).focus(function() {
-        $(this).autocomplete('search', '');
+        if ($(input).autocomplete('instance')) {
+            $(this).autocomplete('search', '');
+        }
     });
+    if ($(input).is(':focus')) {
+        $(input).focus();
+    }
 };
 
 autocomplete._makeDatetime = function(elt) {
@@ -412,6 +556,10 @@ autocomplete._makeDatetime = function(elt) {
         controlType: 'select',
         oneLine: true,
     });
+    if ($(elt).is(':focus')) {
+        // we need to get the focus again to update the datepicker
+        $(elt).focus();
+    }
 };
 
 $(document).ready(function() {

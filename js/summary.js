@@ -503,11 +503,16 @@ summary.make.equipments = function(context, json) {
 };
 
 summary.make.poi = function(context, json) {
-    var type = '';
+    var res = $('<span/>');
     if (json.poi_type && json.poi_type.name) {
-        type = json.poi_type.name + ': ';
+        res.append(json.poi_type.name + ': ');
     }
-    return type + json.label;
+    res.append(json.label);
+    if (json.stands) {
+        res.append(', stands: ');
+        res.append(summary.run(context, 'stands', json.stands));
+    }
+    return res;
 };
 
 summary.make.traffic_report = function(elt, json) {

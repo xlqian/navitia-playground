@@ -35,6 +35,9 @@
         .inputDiv button:disabled {
             color: $gray;
         }
+        .tooltips {
+            white-space: nowrap;
+        }
     }
     #credentials { @include request-parts($orange); }
     #path { @include request-parts($green); }
