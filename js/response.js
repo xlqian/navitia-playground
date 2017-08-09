@@ -187,6 +187,17 @@ response.Context = function(data) {
         var color = minDurationColor[minDuration] || {red: 0, green: 0, blue: 0};
         return utils.toCssColor(color, alpha);
     };
+
+    this.followInternalLink = function(link) {
+        if (link.internal !== true) { return null; }
+        if (!(link.rel in data)) { return null; }
+        var index = data[link.rel].findIndex(function(elt) { return elt.id === link.id; });
+        if (index === -1) { return null; }
+        return {
+            path: sprintf('response.%s[%i]', link.rel, index),
+            obj: data[link.rel][index],
+        };
+    };
 };
 
 response.manageFile = function() {
