@@ -448,6 +448,17 @@ summary.make.stands = function(context, json) {
     ));
 };
 
+summary.make.parking_places = function(context, json) {
+    return  $('<span/>').text(sprintf(
+        'available: %d, occupied: %d, available disabled: %d, occupied disabled: %d, total: %d',
+        json.available_places,
+        json.occupied_places,
+        json.available_disabled || 0,
+        json.occupied_disabled || 0,
+        json.total_stands
+    ));
+};
+
 summary.make.disruption = function(context, json) {
     var res = $('<span/>');
     res.append($('<span/>').css('color', json.severity.color).text(json.severity.name));
@@ -544,6 +555,10 @@ summary.make.poi = function(context, json) {
     if (json.stands) {
         res.append(', stands: ');
         res.append(summary.run(context, 'stands', json.stands));
+    }
+    if (json.parking_places) {
+        res.append(', Parking: ');
+        res.append(summary.run(context, 'parking_places', json.parking_places));
     }
     return res;
 };
