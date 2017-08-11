@@ -447,14 +447,21 @@ summary.make.stands = function(context, json) {
         json.total_stands
     ));
 };
-
+    var console;
 summary.make.parking_places = function(context, json) {
+
+    var PRM_parking = '';
+    if (json.available_PRM != null && json.occupied_PRM != null) {
+        PRM_parking = sprintf('available_PRM: %d, occupied_PRM: %d',
+        json.available_PRM,
+        json.occupied_PRM
+    );
+    }
     return  $('<span/>').text(sprintf(
-        'available: %d, occupied: %d, available disabled: %d, occupied disabled: %d, total: %d',
-        json.available_places,
-        json.occupied_places,
-        json.available_disabled || 0,
-        json.occupied_disabled || 0,
+        'available: %d, occupied: %d, %s total: %d',
+        json.available,
+        json.occupied,
+        PRM_parking,
         json.total_stands
     ));
 };
