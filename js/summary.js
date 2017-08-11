@@ -451,7 +451,7 @@ summary.make.stands = function(context, json) {
 summary.make.parking_places = function(context, json) {
 
     var PRM_parking = '';
-    if (json.available_PRM != null && json.occupied_PRM != null) {
+    if (json.available_PRM !== null && json.occupied_PRM !== null) {
         PRM_parking = sprintf('available_PRM: %d, occupied_PRM: %d',
         json.available_PRM,
         json.occupied_PRM

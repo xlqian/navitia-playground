@@ -171,6 +171,9 @@ extended.make.poi = function(context, json) {
     if (json.stands) {
         result.append(response.render(context, json.stands, 'stands', 'stands'));
     }
+    if (json.parking_places) {
+        result.append(response.render(context, json.parking_places, 'parking_places', 'parking_places'));
+    }
     return result;
 };
 
@@ -265,7 +268,7 @@ extended.has.section = function(context, json) {
     return Boolean(json.from) || Boolean(json.to) || Boolean(json.stop_date_times);
 };
 extended.has.poi = function(context, json) {
-    return extended.hasDefaultExtended(context, 'poi', json);
+    return extended.hasDefaultExtended(context, json);
 };
 extended.has.links = function(context, json) {
     for (var i = 0; i < json.length; ++i) {
