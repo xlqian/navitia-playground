@@ -236,6 +236,15 @@ extended.make.links = function(context, json) {
     return res;
 };
 
+extended.make.line_report = function(context, json) {
+    var res = $('<div class="list"/>');
+    res.append(response.render(context, json.line, 'line', 'line'));
+    json.pt_objects.forEach(function(obj, i) {
+        res.append(response.render(context, obj, 'pt_object', 'pt_objects', i));
+    });
+    return res;
+};
+
 // add your extended view by adding:
 //   extended.make.{type} = function(context, json) { ... }
 

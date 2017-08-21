@@ -548,7 +548,7 @@ summary.make.poi = function(context, json) {
     return res;
 };
 
-summary.make.traffic_report = function(elt, json) {
+summary.make.traffic_report = function(context, json) {
     var r = $.map(json, function(obj, key) {
         if (obj.length) {
             return sprintf('%d %s', obj.length, key);
@@ -561,7 +561,14 @@ summary.make.traffic_report = function(elt, json) {
     }
 };
 
-summary.make.note = function(elt, json) {
+summary.make.line_report = function(context, json) {
+    return $('<span>')
+        .append('line: ')
+        .append(summary.run(context, 'line', json.line))
+        .append(sprintf(', %d pt_objects', json.pt_objects.length));
+};
+
+summary.make.note = function(context, json) {
     return json.value;
 };
 
