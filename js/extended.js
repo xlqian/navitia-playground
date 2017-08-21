@@ -171,8 +171,8 @@ extended.make.poi = function(context, json) {
     if (json.stands) {
         result.append(response.render(context, json.stands, 'stands', 'stands'));
     }
-    if (json.parking_places) {
-        result.append(response.render(context, json.parking_places, 'parking_places', 'parking_places'));
+    if (json.car_park) {
+        result.append(response.render(context, json.car_park, 'car_park', 'car_park'));
     }
     return result;
 };

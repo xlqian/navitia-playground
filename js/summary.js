@@ -447,8 +447,8 @@ summary.make.stands = function(context, json) {
         json.total_stands
     ));
 };
-    var console;
-summary.make.parking_places = function(context, json) {
+
+summary.make.car_park = function(context, json) {
 
     var PRM_parking = '';
     if (json.available_PRM !== null && json.occupied_PRM !== null) {
@@ -462,7 +462,7 @@ summary.make.parking_places = function(context, json) {
         json.available,
         json.occupied,
         PRM_parking,
-        json.total_stands
+        json.total_places
     ));
 };
 
@@ -563,9 +563,9 @@ summary.make.poi = function(context, json) {
         res.append(', stands: ');
         res.append(summary.run(context, 'stands', json.stands));
     }
-    if (json.parking_places) {
-        res.append(', Parking: ');
-        res.append(summary.run(context, 'parking_places', json.parking_places));
+    if (json.car_park) {
+        res.append(', car park: ');
+        res.append(summary.run(context, 'car_park', json.car_park));
     }
     return res;
 };
