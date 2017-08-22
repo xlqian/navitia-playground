@@ -450,20 +450,29 @@ summary.make.stands = function(context, json) {
 
 summary.make.car_park = function(context, json) {
 
-    var PRM_parking = '';
-    if (json.available_PRM !== null && json.occupied_PRM !== null) {
-        PRM_parking = sprintf('available_PRM: %d, occupied_PRM: %d',
-        json.available_PRM,
-        json.occupied_PRM
-    );
+    var available = '';
+    var occupied = '';
+    var available_PRM = '';
+    var occupied_PRM = '';
+    var total_paces = '';
+    if (json.available !== null) {
+        available = sprintf('available: %d, ', json.available);
     }
-    return  $('<span/>').text(sprintf(
-        'available: %d, occupied: %d, %s total: %d',
-        json.available,
-        json.occupied,
-        PRM_parking,
-        json.total_places
-    ));
+    if (json.occupied !== null) {
+        occupied = sprintf('occupied: %d, ', json.occupied);
+    }
+    if (json.available_PRM !== null) {
+        available_PRM = sprintf('available PRM: %d, ', json.available_PRM);
+    }
+    if (json.occupied_PRM !== null) {
+        occupied_PRM = sprintf('occupied PRM: %d, ', json.occupied_PRM);
+    }
+    if (json.total_places !== null) {
+        total_paces = sprintf('total paces: %d', json.total_places);
+    }
+
+    return  $('<span/>').text(available + occupied +
+        available_PRM + occupied_PRM + total_paces);
 };
 
 summary.make.disruption = function(context, json) {
