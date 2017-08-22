@@ -449,30 +449,14 @@ summary.make.stands = function(context, json) {
 };
 
 summary.make.car_park = function(context, json) {
-
-    var available = '';
-    var occupied = '';
-    var available_PRM = '';
-    var occupied_PRM = '';
-    var total_paces = '';
-    if (json.available !== null) {
-        available = sprintf('available: %d, ', json.available);
-    }
-    if (json.occupied !== null) {
-        occupied = sprintf('occupied: %d, ', json.occupied);
-    }
-    if (json.available_PRM !== null) {
-        available_PRM = sprintf('available PRM: %d, ', json.available_PRM);
-    }
-    if (json.occupied_PRM !== null) {
-        occupied_PRM = sprintf('occupied PRM: %d, ', json.occupied_PRM);
-    }
-    if (json.total_places !== null) {
-        total_paces = sprintf('total paces: %d', json.total_places);
-    }
-
-    return  $('<span/>').text(available + occupied +
-        available_PRM + occupied_PRM + total_paces);
+    var park_summary = $('<span/>');
+    $.each(['available', 'occupied', 'available_PRM', 'occupied_PRM'],
+        function(_, value) {
+            if (value in json) {
+                park_summary.append(sprintf('%s: %d ', value, json[value]));
+            }
+    });
+    return park_summary;
 };
 
 summary.make.disruption = function(context, json) {
