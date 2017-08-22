@@ -120,20 +120,6 @@ autocomplete.apiAutocomplete = function() {
     });
 };
 
-autocomplete.getParamFormat = function (param) {
-    if (param.type === 'array') {
-        return param.items.format;
-    }
-    return param.format;
-};
-
-autocomplete.getParamType = function (param) {
-    if (param.type === 'array') {
-        return param.items.type;
-    }
-    return param.type;
-};
-
 autocomplete.valueAutoComplete = function (input, key) {
     var manualFallback = function() {
         // if no autocomplete is available, we use the old static autocomplete system
@@ -159,20 +145,19 @@ autocomplete.valueAutoComplete = function (input, key) {
                 manualFallback();
                 return null;
             }
-            var format = autocomplete.getParamFormat(param);
-            var type = autocomplete.getParamType(param);
-            if (format === 'date-time' || format === 'navitia-date-time') {
+            param = param.type === 'array' ? param.items : param;
+            if (param.format === 'date-time' || param.format === 'navitia-date-time') {
                 autocomplete._makeDatetime(input);
                 return null;
             }
-            if (type === 'boolean') {
+            if (param.type === 'boolean') {
                 return autocomplete._booleanValues;
             }
-            if (format === 'place') {
+            if (param.format === 'place') {
                 new autocomplete.Place().autocomplete(input);
                 return null;
             }
-            if (format === 'pt-object') {
+            if (param.format === 'pt-object') {
                 new autocomplete.PtObject().autocomplete(input);
                 return null;
             }
