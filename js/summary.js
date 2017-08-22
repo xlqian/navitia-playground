@@ -450,7 +450,8 @@ summary.make.stands = function(context, json) {
 
 summary.make.car_park = function(context, json) {
     var park_summary = $('<span/>');
-    $.each(['available', 'occupied', 'available_PRM', 'occupied_PRM'],
+    $.each(['available', 'occupied', 'available_PRM', 'occupied_PRM',
+            'total_places'],
         function(_, value) {
             if (value in json) {
                 park_summary.append(sprintf('%s: %d ', value, json[value]));
