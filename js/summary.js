@@ -448,6 +448,16 @@ summary.make.stands = function(context, json) {
     ));
 };
 
+summary.make.car_park = function(context, json) {
+    return $.map(['available', 'occupied', 'available_PRM', 'occupied_PRM',
+            'total_places'],
+        function(value) {
+            if (value in json) {
+                return sprintf('%s: %d', value, json[value]);
+            }
+    }).join(', ');
+};
+
 summary.make.disruption = function(context, json) {
     var res = $('<span/>');
     res.append($('<span/>').css('color', json.severity.color).text(json.severity.name));
@@ -544,6 +554,10 @@ summary.make.poi = function(context, json) {
     if (json.stands) {
         res.append(', stands: ');
         res.append(summary.run(context, 'stands', json.stands));
+    }
+    if (json.car_park) {
+        res.append(', car park: ');
+        res.append(summary.run(context, 'car_park', json.car_park));
     }
     return res;
 };
