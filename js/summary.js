@@ -449,15 +449,13 @@ summary.make.stands = function(context, json) {
 };
 
 summary.make.car_park = function(context, json) {
-    var park_summary = $('<span/>');
-    $.each(['available', 'occupied', 'available_PRM', 'occupied_PRM',
+    return $.map(['available', 'occupied', 'available_PRM', 'occupied_PRM',
             'total_places'],
-        function(_, value) {
+        function(value) {
             if (value in json) {
-                park_summary.append(sprintf('%s: %d ', value, json[value]));
+                return sprintf('%s: %d', value, json[value]);
             }
-    });
-    return park_summary;
+    }).join(', ');
 };
 
 summary.make.disruption = function(context, json) {
