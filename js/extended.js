@@ -134,6 +134,9 @@ extended.make.stop_schedule = function(context, json) {
     if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
+    if (Array.isArray(json.display_informations.links) && json.display_informations.links.length) {
+        result.append(response.render(context, json.display_informations.links, 'links', 'display_informations.links'));
+    }
     json.date_times.forEach(function(date_time, i) {
         result.append(response.render(context, date_time, 'date_time', 'date_times', i));
     });
@@ -144,6 +147,9 @@ extended.make.route_schedule = function(context, json) {
     var result = $('<div class="list"/>');
     if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
+    }
+    if (Array.isArray(json.display_informations.links) && json.display_informations.links.length) {
+        result.append(response.render(context, json.display_informations.links, 'links', 'display_informations.links'));
     }
     result.append(response.render(context, json.table, 'table', 'table'));
     return result;
