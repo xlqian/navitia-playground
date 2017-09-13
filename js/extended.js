@@ -149,6 +149,20 @@ extended.make.route_schedule = function(context, json) {
     return result;
 };
 
+extended.make.departure = function(context, json) {
+    var result = $('<div class="list"/>');
+    if (Array.isArray(json.links) && json.links.length) {
+        result.append(response.render(context, json.links, 'links', 'links'));
+    }
+    if (Array.isArray(json.display_informations.links) && json.display_informations.links.length) {
+        result.append(response.render(context, json.display_informations.links, 'links', 'display_informations.links'));
+    }
+    result.append(response.render(context, json.route, 'route', 'route'));
+    result.append(response.render(context, json.stop_point, 'stop_point', 'stop_point'));
+    return result;
+};
+extended.make.arrival = extended.make.departure;
+
 extended.make.table = function(context, json) {
     var result = $('<div class="table"/>');
     var table = $('<table/>');
