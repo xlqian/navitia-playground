@@ -461,6 +461,9 @@ summary.make.car_park = function(context, json) {
 summary.make.disruption = function(context, json) {
     var res = $('<span/>');
     res.append($('<span/>').css('color', json.severity.color).text(json.severity.name));
+    if (json.severity && json.severity.effect) {
+        res.append(', effect: ' + utils.htmlEncode(json.severity.effect));
+    }
     if (json.status) { res.append(', status: ' + utils.htmlEncode(json.status)); }
     if (json.cause) { res.append(', cause: ' + utils.htmlEncode(json.cause)); }
     return res;
