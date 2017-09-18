@@ -101,7 +101,9 @@ extended.make.section = function(context, json) {
     if (Array.isArray(json.links) && json.links.length) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
-    if (Array.isArray(json.display_informations.links) && json.display_informations.links.length) {
+    if (json.display_informations &&
+        Array.isArray(json.display_informations.links) &&
+        json.display_informations.links.length) {
         result.append(response.render(context, json.display_informations.links, 'links', 'display_informations.links'));
     }
     if (json.display_informations &&
