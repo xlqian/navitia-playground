@@ -299,6 +299,9 @@ summary.make.section = function(context, section) {
     if ('duration' in section) {
         res.append(sprintf(' during %s', utils.durationToString(section.duration)));
     }
+    if (section.data_freshness && section.data_freshness !== 'base_schedule') {
+        res.append(sprintf(' (%s)', section.data_freshness));
+    }
     return res;
 };
 
@@ -387,7 +390,7 @@ summary.make.stop_schedule = function(context, json) {
 
 summary.make.date_time = function(context, json) {
     var res = $('<span>');
-    res.append(summary.formatTime(json.date_time));
+    res.append(summary.makeImpactedTime(json.date_time, json.base_date_time));
     res.append(' (' + json.data_freshness + ')');
     return res;
 };
