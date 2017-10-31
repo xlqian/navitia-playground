@@ -273,6 +273,14 @@ extended.make.line_report = function(context, json) {
     return res;
 };
 
+extended.make.vehicle_journey = function(context, json) {
+    var res = extended.defaultExtended(context, 'vehicle_journey', json);
+    (json.stop_times || []).forEach(function(obj, i) {
+        res.append(response.render(context, obj, 'stop_time', 'stop_times', i));
+    });
+    return res;
+};
+
 // add your extended view by adding:
 //   extended.make.{type} = function(context, json) { ... }
 
