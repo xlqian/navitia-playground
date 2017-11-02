@@ -364,6 +364,17 @@ summary.make.stop_date_time = function(context, stop_time) {
     return res;
 };
 
+summary.make.stop_time = function(context, stop_time) {
+    var sum = summary.run(context, 'stop_point', stop_time.stop_point);
+    var res = $('<span>')
+        .append(summary.formatTime(stop_time.arrival_time))
+        .append(' > ')
+        .append(summary.formatTime(stop_time.departure_time))
+        .append(' ')
+        .append(sum);
+    return res;
+};
+
 summary.make.departure = function(context, json) {
     var res = $('<span>');
     res.append(summary.makeImpactedTime(json.stop_date_time.departure_date_time,
