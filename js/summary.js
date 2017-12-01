@@ -550,7 +550,7 @@ summary.make.impacted_stop = function(context, json) {
 };
 
 summary.make.co2_emission = function(context, json) {
-    return $('<span/>').html(sprintf('CO<sub>2</sub>:&nbsp;%s&nbsp;%s', json.value, json.unit));
+    return $('<span/>').html(sprintf('CO<sub>2</sub>:&nbsp;%.0f&nbsp;%s', json.value, json.unit));
 };
 
 summary.make.equipments = function(context, json) {
@@ -601,6 +601,17 @@ summary.make.line_report = function(context, json) {
 
 summary.make.note = function(context, json) {
     return json.value;
+};
+
+summary.make.context = function(context, json) {
+    var res = $('<span>').text(sprintf('current datetime: %s, timezone: %s',
+                                       summary.formatDatetime(json.current_datetime),
+                                       json.timezone));
+    if (json.car_direct_path && json.car_direct_path.co2_emission.value) {
+        res.append(sprintf(', car '));
+        res.append(summary.run(context, 'co2_emission', json.car_direct_path.co2_emission));
+    }
+    return res;
 };
 
 // add your summary view by adding:
