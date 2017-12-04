@@ -68,6 +68,10 @@ extended.make.response = function(context, json) {
         result.append(response.render(context, warning, 'warning', 'warnings', i));
     });
 
+    if (json.context) {
+        result.append(response.render(context, json.context, 'context', 'context'));
+    }
+
     return result;
 };
 
@@ -242,9 +246,13 @@ extended.make.impacted_object = function(context, json) {
 };
 
 extended.make.impacted_section = function(context, json) {
-    return $('<div class="list"/>')
+    var res = $('<div class="list"/>')
         .append(response.render(context, json.from, 'pt_object', 'from'))
         .append(response.render(context, json.to, 'pt_object', 'to'));
+    (json.routes || []).forEach(function(obj, i) {
+        res.append(response.render(context, obj, 'route', 'routes', i));
+    });
+    return res;
 };
 
 extended.make.connection = function(context, json) {
