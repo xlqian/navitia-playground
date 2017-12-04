@@ -87,6 +87,11 @@ button {
     font-weight: bold;
 }
 
+:focus {
+    outline: 0.05em dotted $dark-gray;
+    outline-offset: -0.05em;
+}
+
 a {
     color: $dark-blue;
     text-decoration: underline;
@@ -114,9 +119,6 @@ a {
         font: inherit;
         text-overflow: ellipsis;
     }
-    input:focus {
-        outline: 0;
-    }
     .key {
         margin: 0;
         padding: 0.5em;
@@ -128,7 +130,7 @@ a {
         background-color: transparent;
         width: auto;
         height: auto;
-        padding: 0.5em 0.5em 0.5em 0;
+        padding: 0.5em 0.25em;
         margin: 0;
         font: inherit;
         font-weight: bold;
