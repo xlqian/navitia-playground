@@ -25,7 +25,7 @@
         <form action="play.html" method="get">
           <div id="urlDiv" class="inputDiv">
             <div class="key">URL</div>
-            <input id="urlinput" name="request" type="text" placeholder="Insert your url">
+            <input id="urlinput" name="request" type="url" placeholder="Insert your url">
             <button>go</button>
           </div>
         </form>
@@ -42,14 +42,15 @@
               <div id="api" class="inputDiv">
                 <span class="key">API</span>
                 <input placeholder="API"
-                       type="text"
+                       type="url"
+                       autocomplete="off"
                        class="api"
                        onfocus="request.updateUrl(this)"
                        oninput="request.updateUrl(this)">
               </div>
               <div id="token" class="inputDiv">
                 <span class="key">Token</span>
-                <input placeholder="Token" type="password" class="token">
+                <input placeholder="Token" type="password" autocomplete="off" class="token">
                 <button class="save" onclick="storage.saveTokenFromRequest()">
                   <img class="saveButton" src="img/save.svg"
                        alt="save token" title="save token">
@@ -64,12 +65,14 @@
                 <input id="addPathInput"
                        class="addInput"
                        type="text"
+                       autocomplete="off"
                        placeholder="type a key to add a path element">
                 <button class="add" onclick="request.insertPathElt()">Add</button>
               </div>
               <div id="feature" class="inputDiv">
                 <input id="featureInput"
                        type="text"
+                       autocomplete="off"
                        onfocus="request.updateUrl(this)"
                        oninput="request.updateUrl(this)"
                        placeholder="empty feature">
@@ -83,6 +86,7 @@
                 <input id="addParamInput"
                        class="addInput"
                        type="text"
+                       autocomplete="off"
                        placeholder="type a key to add a parameter">
                 <button class="add" onclick="request.insertParam()">Add</button>
               </div>
