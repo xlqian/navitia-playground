@@ -212,7 +212,7 @@ utils.deepClone = function(obj) {
 };
 
 utils.makeDistanceSummary = function(d) {
-  var format = ' %s %s ';
-  if ( d >= 1000 ) return sprintf(format, d / 1000.0, 'km');
+  var format = '%f&nbsp;%s';
+  if (d >= 1000) { return sprintf(format, d / 1000.0, 'km'); }
   return sprintf(format, d, 'm');
-}
+};

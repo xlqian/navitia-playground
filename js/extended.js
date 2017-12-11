@@ -86,7 +86,7 @@ extended.make.journey = function(context, json) {
     if (json.co2_emission && json.co2_emission.value) {
         result.append(response.render(context, json.co2_emission, 'co2_emission', 'co2_emission'));
     }
-    if (json.distances && json.distances) {
+    if (json.distances) {
         result.append(response.render(context, json.distances, 'distances', 'distances'));
     }
 
@@ -267,7 +267,6 @@ extended.make.connection = function(context, json) {
 
 extended.make.links = function(context, json) {
     var res = $('<div class="list"/>');
-    console.log(json); 
     json.forEach(function(link) {
         var obj = context.followInternalLink(link);
         if (obj) {

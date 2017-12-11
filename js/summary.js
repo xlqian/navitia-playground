@@ -569,10 +569,14 @@ summary.make.co2_emission = function(context, json) {
 
 summary.make.distances = function(context, json) {
     var res = $('<span/>');
-    $.each(json, function(equipment, d) {
-        if(d) {
-            res.append(pictos.makeSnPicto(equipment));
-            res.append(utils.makeDistanceSummary(d));
+    var equipments = ['walking', 'bike', 'car'];
+    equipments.forEach(function(key) {
+        if(json[key]) {
+          $('<span>')
+              .addClass('section-additional-block')
+              .append(pictos.makeSnPicto(key))
+              .append(utils.makeDistanceSummary(json[key]))
+              .appendTo(res);
         }
     });
     return res;
