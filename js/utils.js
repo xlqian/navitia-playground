@@ -210,3 +210,9 @@ utils.manageToken = function(token) {
 utils.deepClone = function(obj) {
     return JSON.parse(JSON.stringify(obj));
 };
+
+utils.makeDistanceSummary = function(d) {
+  var format = ' %s %s ';
+  if ( d >= 1000 ) return sprintf(format, d / 1000.0, 'km');
+  return sprintf(format, d, 'm');
+}
