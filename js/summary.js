@@ -136,6 +136,20 @@ summary.make.journey = function(context, json) {
                 .append(utils.durationToString(json.durations.walking))
                 .appendTo(res);
         }
+        if (json.durations.bike) {
+            $('<span/>')
+                .addClass('section-additional-block')
+                .append(pictos.makeSnPicto('bike'))
+                .append(utils.durationToString(json.durations.bike))
+                .appendTo(res);
+        }
+        if (json.durations.car) {
+            $('<span/>')
+                .addClass('section-additional-block')
+                .append(pictos.makeSnPicto('car'))
+                .append(utils.durationToString(json.durations.car))
+                .appendTo(res);
+        }
     }
 
     if (json.status) {

@@ -136,6 +136,7 @@ request.makeKeyValue = function(key, val, cls) {
 
     var valueElt = $('<input/>')
         .attr('type', 'text')
+        .attr('autocomplete', 'off')
         .attr('placeholder', 'type your value here')
         .addClass('value')
         .addClass(cls)
