@@ -86,6 +86,10 @@ extended.make.journey = function(context, json) {
     if (json.co2_emission && json.co2_emission.value) {
         result.append(response.render(context, json.co2_emission, 'co2_emission', 'co2_emission'));
     }
+    if (json.distances) {
+        result.append(response.render(context, json.distances, 'distances', 'distances'));
+    }
+
     if (json.from) {
         result.append(response.render(context, json.from, 'place', 'from'));
     }

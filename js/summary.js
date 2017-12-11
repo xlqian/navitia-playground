@@ -567,6 +567,21 @@ summary.make.co2_emission = function(context, json) {
     return $('<span/>').html(sprintf('CO<sub>2</sub>:&nbsp;%.0f&nbsp;%s', json.value, json.unit));
 };
 
+summary.make.distances = function(context, json) {
+    var res = $('<span/>');
+    var equipments = ['walking', 'bike', 'car'];
+    equipments.forEach(function(key) {
+        if(json[key]) {
+          $('<span>')
+              .addClass('section-additional-block')
+              .append(pictos.makeSnPicto(key))
+              .append(utils.makeDistanceSummary(json[key]))
+              .appendTo(res);
+        }
+    });
+    return res;
+};
+
 summary.make.equipments = function(context, json) {
     var res = $('<span/>');
     json.forEach(function(equipment) {
