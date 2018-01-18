@@ -131,6 +131,9 @@ extended.make.section = function(context, json) {
     if (json.to) {
         result.append(response.render(context, json.to, 'place', 'to'));
     }
+    (json.ridesharing_journeys || []).forEach(function(j, i) {
+        result.append(response.render(context, j, 'journey', 'ridesharing_journeys', i));
+    });
     if (json.stop_date_times) {
         json.stop_date_times.forEach(function(stop_date_time, i) {
             result.append(response.render(context, stop_date_time, 'stop_date_time', 'stop_date_times', i));
