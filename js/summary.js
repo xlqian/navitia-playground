@@ -80,6 +80,7 @@ summary.make.journey = function(context, json) {
                     switch (s.mode) {
                     case 'bike': last_section_mode = 'bike'; break;
                     case 'car': last_section_mode = 'car'; break;
+                    case 'ridesharing': last_section_mode = 'ridesharing'; break;
                     case 'walking':
                         if (! last_section_mode) { last_section_mode = 'walking'; }
                         break;
@@ -98,6 +99,15 @@ summary.make.journey = function(context, json) {
         }
         var stayIn = false;
         json.sections.forEach(function(s) {
+            if (s.type === 'ridesharing') {
+                var ridesharing = $('<span>').append(pictos.makeSnPicto('ridesharing'));
+                var infos = s.ridesharing_informations;
+                if (infos.driver.image) {
+                    ridesharing.append(pictos.makeImgFromUrl(infos.driver.image, infos.driver.alias));
+                }
+                add(ridesharing);
+                return;
+            }
             if (s.type === 'transfer' && s.transfer_type === 'stay_in') {
                 stayIn = true;
             }
@@ -129,27 +139,14 @@ summary.make.journey = function(context, json) {
                 .append(' ' + utils.durationToString(json.durations.total))
                 .appendTo(res);
         }
-        if (json.durations.walking) {
+        ['walking', 'bike', 'car', 'ridesharing'].forEach(function(mode) {
+            if (!json.durations[mode]) { return; }
             $('<span/>')
                 .addClass('section-additional-block')
-                .append(pictos.makeSnPicto('walking'))
-                .append(utils.durationToString(json.durations.walking))
+                .append(pictos.makeSnPicto(mode))
+                .append(utils.durationToString(json.durations[mode]))
                 .appendTo(res);
-        }
-        if (json.durations.bike) {
-            $('<span/>')
-                .addClass('section-additional-block')
-                .append(pictos.makeSnPicto('bike'))
-                .append(utils.durationToString(json.durations.bike))
-                .appendTo(res);
-        }
-        if (json.durations.car) {
-            $('<span/>')
-                .addClass('section-additional-block')
-                .append(pictos.makeSnPicto('car'))
-                .append(utils.durationToString(json.durations.car))
-                .appendTo(res);
-        }
+        });
     }
 
     if (json.status) {
@@ -260,6 +257,7 @@ summary.make.section = function(context, section) {
 
     switch (section.type) {
     case 'street_network': res.append(pictos.makeSnPicto(section.mode)); break;
+    case 'ridesharing': res.append(pictos.makeSnPicto('ridesharing')); break;
     case 'bss_rent':
         res.append(pictos.makeSnPicto('bss')).append(' rent');
         break;
@@ -315,6 +313,25 @@ summary.make.section = function(context, section) {
     }
     if (section.data_freshness && section.data_freshness !== 'base_schedule') {
         res.append(sprintf(' (%s)', section.data_freshness));
+    }
+    if (section.ridesharing_informations) {
+        var infos = section.ridesharing_informations;
+        res.append(', driver: ');
+        if (infos.driver.image) {
+            res.append(pictos.makeImgFromUrl(infos.driver.image, infos.driver.alias));
+        }
+        if (infos.driver.gender === 'male') {
+            res.append(' Mr.&nbsp;');
+        } else if (infos.driver.gender === 'female') {
+            res.append(' Ms.&nbsp;');
+        }
+        res.append(utils.htmlEncode(infos.driver.alias));
+        res.append(sprintf(' %f/%f (%d reviews), ',
+                           infos.driver.rating.value - infos.driver.rating.scale_min,
+                           infos.driver.rating.scale_max - infos.driver.rating.scale_min,
+                           infos.driver.rating.count));
+        res.append(sprintf('available seats: %d/%d, ', infos.seats.available, infos.seats.total));
+        res.append(utils.htmlEncode(sprintf('network: %s, operator: %s', infos.network, infos.operator)));
     }
     return res;
 };
@@ -569,7 +586,7 @@ summary.make.co2_emission = function(context, json) {
 
 summary.make.distances = function(context, json) {
     var res = $('<span/>');
-    var equipments = ['walking', 'bike', 'car'];
+    var equipments = ['walking', 'bike', 'car', 'ridesharing'];
     equipments.forEach(function(key) {
         if(json[key]) {
           $('<span>')
