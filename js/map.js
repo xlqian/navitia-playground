@@ -254,8 +254,7 @@ map.createMap = function(handle) {
     // GPS location
     var circle = L.circle([0,0], {
         radius: 100,
-        renderer: L.svg()// workaround for https://github.com/Leaflet/Leaflet/pull/5454
-    }).addTo(m);
+    });
     m.on('locationfound', function(e) {
         circle.setRadius(e.accuracy / 2)
             .setStyle({color: '#3388ff'})
@@ -272,6 +271,7 @@ map.createMap = function(handle) {
 
     setTimeout(function() {
         if (bounds) { m.fitBounds(bounds); } else { m.fitWorld(); }
+        circle.addTo(m); // workaround for https://github.com/Leaflet/Leaflet/issues/4978
     }, 100);
 
     return div;
@@ -320,7 +320,6 @@ map._makeMarker = function(context, type, json, style, label) {
         style.opacity = 1;
         style.fillColor = 'white';
         style.fillOpacity = 1;
-        style.renderer = L.svg();// workaround for https://github.com/Leaflet/Leaflet/pull/5454
         marker = L.circleMarker([lat, lon], style);
         marker.setRadius(5);
     }
