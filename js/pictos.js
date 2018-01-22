@@ -73,9 +73,13 @@ pictos.makePtPicto = function(json) {
 };
 
 pictos.makeImg = function(img, name) {
+    return pictos.makeImgFromUrl(sprintf('img/pictos/%s.svg', img), name);
+};
+
+pictos.makeImgFromUrl = function(img, name) {
     var tag = $('<img/>')
         .addClass('picto')
-        .attr('src', sprintf('img/pictos/%s.svg', img));
+        .attr('src', img);
     if (name) { tag.attr('alt', name); tag.attr('title', name); }
     return tag;
 };
@@ -90,6 +94,8 @@ pictos.makeSnPicto = function(mode) {
         img = 'BikeSharingService';
     } else if (mode === 'car' || mode === 'park' || mode === 'leave_parking') {
         img = 'Car';
+    } else if (mode === 'ridesharing') {
+        img = 'RideSharing';
     }
     return pictos.makeImg(img, mode);
 };
