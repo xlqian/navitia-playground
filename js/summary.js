@@ -330,8 +330,11 @@ summary.make.section = function(context, section) {
                            infos.driver.rating.value - infos.driver.rating.scale_min,
                            infos.driver.rating.scale_max - infos.driver.rating.scale_min,
                            infos.driver.rating.count));
-        res.append(sprintf('available seats: %d/%d, ', infos.seats.available, infos.seats.total));
-        res.append(utils.htmlEncode(sprintf('network: %s, operator: %s', infos.network, infos.operator)));
+        res.append(sprintf('available seats: %d', infos.seats.available));
+        if (infos.seats.total) {
+            res.append(sprintf('/%d', infos.seats.total));
+        }
+        res.append(utils.htmlEncode(sprintf(', network: %s, operator: %s', infos.network, infos.operator)));
     }
     return res;
 };
