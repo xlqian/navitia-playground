@@ -61,6 +61,7 @@ map.makeFeatures = {
             case 'bike': style = map.bikeStyle; break;
             case 'car': style = map.carStyle; break;
             case 'walking': style = map.walkingStyle; break;
+            case 'ridesharing': style = map.ridesharingStyle; break;
             }
             break;
         case 'transfer':
@@ -70,6 +71,7 @@ map.makeFeatures = {
             case 'walking': style = map.walkingStyle; break;
             }
             break;
+        case 'ridesharing': style = map.ridesharingStyle; break;
         case 'crow_fly': style = map.crowFlyStyle; break;
         }
         if (draw_section_option === undefined) {
@@ -332,6 +334,7 @@ map._makeMarker = function(context, type, json, style, label) {
 map.bikeStyle = { color: '#a3ab3a', dashArray: '0, 8' };
 map.carStyle = { color: '#c9731d', dashArray: '0, 8' };
 map.walkingStyle = { color: '#298bbc', dashArray: '0, 8' };
+map.ridesharingStyle = { color: '#6e3ea8', dashArray: '0, 8' };
 map.crowFlyStyle = { color: '#6e3ea8', dashArray: '0, 8' };
 
 map._getCoordFromPlace = function(place) {
