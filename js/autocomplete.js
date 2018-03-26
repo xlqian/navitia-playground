@@ -211,6 +211,7 @@ autocomplete.swaggerAutocomplete = function(args) {
                     res = res.sort();
                     $(input).autocomplete({
                         close: function() { request.updateUrl($(input)[0]); },
+                        select: function(event, ui) { $(input).val(ui.item.value).change(); },
                         source: res,
                         minLength: 0,
                         scroll: true,
