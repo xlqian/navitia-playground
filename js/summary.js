@@ -619,7 +619,7 @@ summary.make.poi = function(context, json) {
     res.append(json.label);
     if (json.stands) {
         res.append(', stands: ');
-        if (!json.stands.status || json.stands.status == 'open') {
+        if (!json.stands.status || json.stands.status === 'open') {
             res.append(summary.run(context, 'stands', json.stands));
         } else {
             res.append($('<span/>')
