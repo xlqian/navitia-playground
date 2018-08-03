@@ -622,8 +622,10 @@ summary.make.poi = function(context, json) {
         if (!json.stands.status || json.stands.status == 'open') {
             res.append(summary.run(context, 'stands', json.stands));
         } else {
-            res.append(sprintf('<span id="stands-status" class="%s"> %s</span>',
-                json.stands.status, json.stands.status));
+            res.append($('<span/>')
+                        .addClass('stands-status')
+                        .addClass(json.stands.status)
+                        .text(json.stands.status));
         }
     }
 
