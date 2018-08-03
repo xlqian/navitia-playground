@@ -619,16 +619,11 @@ summary.make.poi = function(context, json) {
     res.append(json.label);
     if (json.stands) {
         res.append(', stands: ');
-        if (json.stands.status) {
-            switch (json.stands.status) {
-                case 'open':
-                    res.append(summary.run(context, 'stands', json.stands));
-                    break;
-                default:
-                    res.append(sprintf('<span id="stands-status" class="%s"> %s</span>',
-                        json.stands.status, json.stands.status));
-                    break;
-            }
+        if (!json.stands.status || json.stands.status == 'open') {
+            res.append(summary.run(context, 'stands', json.stands));
+        } else {
+            res.append(sprintf('<span id="stands-status" class="%s"> %s</span>',
+                json.stands.status, json.stands.status));
         }
     }
 
