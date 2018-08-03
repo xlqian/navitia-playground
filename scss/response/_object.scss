@@ -16,10 +16,18 @@
 }
 
 .outofdate, .error {
-    color: darken(red, 10%);
+    color: $dark-red;
 }
 .almost_outofdate {
     color: $dark-orange;
+}
+
+#stands-status.unavailable {
+    color: $dark-orange;
+}
+
+#stands-status.closed {
+    color: $dark-red;
 }
 
 img.picto {
