@@ -619,8 +619,16 @@ summary.make.poi = function(context, json) {
     res.append(json.label);
     if (json.stands) {
         res.append(', stands: ');
-        res.append(summary.run(context, 'stands', json.stands));
+        if (!json.stands.status || json.stands.status === 'open') {
+            res.append(summary.run(context, 'stands', json.stands));
+        } else {
+            res.append($('<span/>')
+                        .addClass('stands-status')
+                        .addClass(json.stands.status)
+                        .text(json.stands.status));
+        }
     }
+
     if (json.car_park) {
         res.append(', car park: ');
         res.append(summary.run(context, 'car_park', json.car_park));
