@@ -204,7 +204,7 @@ utils.getColorFromRatio = function(ratio) {
 };
 
 utils.manageToken = function(token) {
-  return token ? { Authorization: 'Basic ' + btoa(token) } : {};
+  return token ? { Authorization: 'Basic ' + btoa(token + ':') } : {};
 };
 
 utils.deepClone = function(obj) {
