@@ -150,6 +150,12 @@ extended.make.stop_schedule = function(context, json) {
     if (Array.isArray(json.display_informations.links) && json.display_informations.links.length) {
         result.append(response.render(context, json.display_informations.links, 'links', 'display_informations.links'));
     }
+    if (json.first_datetime) {
+        result.append(response.render(context, json.first_datetime, 'date_time', 'first_datetime'));
+    }
+    if (json.last_datetime) {
+        result.append(response.render(context, json.last_datetime, 'date_time', 'last_datetime'));
+    }
     json.date_times.forEach(function(date_time, i) {
         result.append(response.render(context, date_time, 'date_time', 'date_times', i));
     });
