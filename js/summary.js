@@ -514,6 +514,7 @@ summary.make.disruption = function(context, json) {
     }
     if (json.status) { res.append(', status: ' + utils.htmlEncode(json.status)); }
     if (json.cause) { res.append(', cause: ' + utils.htmlEncode(json.cause)); }
+    if (json.tags && json.tags.length) { res.append(', tags: ' + json.tags); }
     return res;
 };
 
