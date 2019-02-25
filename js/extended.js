@@ -41,19 +41,25 @@ extended.make.response = function(context, json) {
         result.append(response.render(context, json.links, 'links', 'links'));
     }
 
-    var key = response.responseCollectionName(json);
-    var objs = key ? json[key] : [];
-    var type = utils.getType(key);
-    if (type) {
-        objs.forEach(function(obj, i) {
-            result.append(response.render(context, obj, type, key, i));
-        });
-    }
-
-    if (type !== 'disruption' && $.isArray(json.disruptions)) {
-        json.disruptions.forEach(function(disruption, i) {
-            result.append(response.render(context, disruption, 'disruption', 'disruptions', i));
-        });
+    if(json.address) {
+        // We can have a single address if we use the '/coord/{long;lat}' endpoint
+        result.append(response.render(context, json.address, 'address', 'address'));
+    } else {
+        // Let's try to deduce the response type
+        var key = response.responseCollectionName(json);
+        var objs = key ? json[key] : [];
+        var type = utils.getType(key);
+        if (type) {
+            objs.forEach(function(obj, i) {
+                result.append(response.render(context, obj, type, key, i));
+            });
+        }
+        
+        if (type !== 'disruption' && $.isArray(json.disruptions)) {
+            json.disruptions.forEach(function(disruption, i) {
+                result.append(response.render(context, disruption, 'disruption', 'disruptions', i));
+            });
+        }
     }
 
     (json.notes || []).forEach(function(note, i) {
