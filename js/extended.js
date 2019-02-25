@@ -50,6 +50,10 @@ extended.make.response = function(context, json) {
         });
     }
 
+    if(json.address) {
+        result.append(response.render(context, json.address, 'address', 'address'));
+    }
+    
     if (type !== 'disruption' && $.isArray(json.disruptions)) {
         json.disruptions.forEach(function(disruption, i) {
             result.append(response.render(context, disruption, 'disruption', 'disruptions', i));
