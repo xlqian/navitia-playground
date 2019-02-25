@@ -126,13 +126,13 @@ function copy_vendor_image(env){
 gulp.task('dev:bowerImg', copy_vendor_image('dev'));
 gulp.task('prod:bowerImg', copy_vendor_image('prod'));
 
-gulp.task('dev:bower', function(cb){
-    runSequence(['dev:bowerJs', 'dev:bowerCss', 'dev:bowerImg'], cb);
-});
+gulp.task('dev:bower', 
+    gulp.parallel('dev:bowerJs', 'dev:bowerCss', 'dev:bowerImg')
+);
 
-gulp.task('prod:bower', function(cb){
-    runSequence(['prod:bowerJs', 'prod:bowerCss', 'prod:bowerImg'], cb);
-});
+gulp.task('prod:bower', 
+    gulp.parallel('prod:bowerJs', 'prod:bowerCss', 'prod:bowerImg')
+);
 
 // Compress img
 function compress_img(env) {
@@ -169,10 +169,10 @@ gulp.task('prod:minify_html', compile_html('prod'));
 // Watch Files For Changes
 function watch(env){
     return function() {
-        gulp.watch('js/**/*.js', [env + ':scripts']);
-        gulp.watch('scss/**/*.scss', [env + ':sass']);
-        gulp.watch('img/**', [env + ':img']);
-        gulp.watch('app/**', [env + ':minify_html']);
+        gulp.watch('js/**/*.js', gulp.series(env + ':scripts'));
+        gulp.watch('scss/**/*.scss', gulp.series(env + ':sass'));
+        gulp.watch('img/**', gulp.series(env + ':img'));
+        gulp.watch('app/**', gulp.series(env + ':minify_html'));
         browserSync.init(config.browsersync[env]);
     }
 }
@@ -181,34 +181,31 @@ gulp.task('prod:watch', watch('prod'));
 
 // build sequence
 function build(env) {
-    return function(cb){
-        runSequence(
-        env + ':scripts',
-        env + ':lint',
-        [env + ':sass',
-        env + ':bower',
-        env + ':img',
-        env + ':minify_html'], cb);
-    }
+    return gulp.series( env + ':scripts', env + ':lint',
+                        gulp.parallel(
+                            env + ':sass', 
+                            env + ':bower',
+                            env + ':img',
+                            env + ':minify_html')
+    );
 }
 gulp.task('dev:build', build('dev'));
 gulp.task('prod:build', build('prod'));
 
-gulp.task('dev', function (cb) {
-    runSequence('dev:build', 'dev:watch', cb);
-});
-gulp.task('prod', function (cb) {
-    runSequence('prod:build', 'prod:watch', cb);
-});
+gulp.task('dev', gulp.series('dev:build', 'dev:watch'));
+gulp.task('prod', gulp.series('prod:build', 'prod:watch'));
 
-gulp.task('all:clean', function(cb){
-    del(delConfig.all, cb);
+gulp.task('all:clean', function(cb) {
+    del(delConfig.all)
+    cb();
 })
 
 gulp.task('dev:clean', function(cb){
-    del(delConfig.dev, cb);
+    del(delConfig.dev);
+    cb();
 })
 
 gulp.task('prod:clean', function(cb){
-    del(delConfig.prod, cb);
+    del(delConfig.prod);
+    cb();
 })
