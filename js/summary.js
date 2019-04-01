@@ -81,6 +81,7 @@ summary.make.journey = function(context, json) {
                     case 'bike': last_section_mode = 'bike'; break;
                     case 'car': last_section_mode = 'car'; break;
                     case 'ridesharing': last_section_mode = 'ridesharing'; break;
+                    case 'taxi': last_section_mode = 'taxi'; break;
                     case 'walking':
                         if (! last_section_mode) { last_section_mode = 'walking'; }
                         break;
