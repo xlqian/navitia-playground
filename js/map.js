@@ -59,6 +59,7 @@ map.makeFeatures = {
         case 'street_network':
             switch (json.mode) {
             case 'bike': style = map.bikeStyle; break;
+            case 'taxi': style = map.taxiStyle; break;
             case 'car': style = map.carStyle; break;
             case 'walking': style = map.walkingStyle; break;
             case 'ridesharing': style = map.ridesharingStyle; break;
@@ -333,6 +334,7 @@ map._makeMarker = function(context, type, json, style, label) {
 
 map.bikeStyle = { color: '#a3ab3a', dashArray: '0, 8' };
 map.carStyle = { color: '#c9731d', dashArray: '0, 8' };
+map.taxiStyle = { color: '#297e52', dashArray: '0, 8' };
 map.walkingStyle = { color: '#298bbc', dashArray: '0, 8' };
 map.ridesharingStyle = { color: '#6e3ea8', dashArray: '0, 8' };
 map.crowFlyStyle = { color: '#6e3ea8', dashArray: '0, 8' };
