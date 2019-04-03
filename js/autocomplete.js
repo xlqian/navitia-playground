@@ -43,7 +43,7 @@ autocomplete._collections = [
 autocomplete._additionalFeatures = [
     'departures', 'journeys', 'places_nearby', 'pt_objects', 'route_schedules',
     'stop_schedules', 'arrivals', 'isochrones', 'heat_maps', 'traffic_reports',
-    'line_reports'
+    'line_reports', 'equipment_reports'
 ];
 
 autocomplete._paramJourneyCommon = [
@@ -239,7 +239,7 @@ autocomplete.swaggerAutocomplete = function(args) {
 
 autocomplete.paramKey = function(input, type) {
     autocomplete.swaggerAutocomplete({
-        input: input, 
+        input: input,
         extractResult: function(swagger_response) {
             return autocomplete.getSwaggerParams(swagger_response);
         },
