@@ -658,6 +658,55 @@ summary.make.line_report = function(context, json) {
         .append(sprintf(', %d pt_objects', json.pt_objects.length));
 };
 
+summary.make.equipment_report = function(context, json) {
+    return $('<span>')
+        .append('line: ')
+        .append(summary.run(context, 'line', json.line))
+        .append(sprintf(', %d stop_area_equipments', (json.stop_area_equipments || []).length));
+};
+
+summary.make.stop_area_equipment = function(context, json) {
+    var equip_details = (json.equipment_details || []);
+    var res = $('<span>')
+        .append('stop_area: ')
+        .append(summary.run(context, 'stop_area', json.stop_area))
+        .append(sprintf(', %d equipments', equip_details.length));
+
+    var unavailable_equipments = equip_details.filter(function(o){
+        return o.current_availability.status === 'unavailable';
+    }).length;
+    if(unavailable_equipments) {
+        res.append($('<span/>').css('color', 'red').text(' ('+unavailable_equipments+' unavailable)'));
+    }
+
+    return res;
+};
+
+summary.make.equipment_detail = function(context, json) {
+    var res = $('<span/>')
+        .append(json.name || json.id).append(', ')
+        .append('type: '+ json.embedded_type);
+
+    var cur_avail = json.current_availability;
+    if (cur_avail) {
+        if(cur_avail.status) {
+            var colours = {
+                'unavailable' : 'red',
+            };
+            var colour = (colours[cur_avail.status] || 'grey');
+            res.append(', status: ');
+            res.append($('<span/>').css('color', colour).text(cur_avail.status));
+        }
+        if(cur_avail.cause){
+            res.append('<br> Cause : ' + utils.htmlEncode(cur_avail.cause.label));
+        }
+        if(cur_avail.effect) {
+            res.append('<br> Effect : ' + utils.htmlEncode(cur_avail.effect.label));
+        }
+    }
+    return res;
+};
+
 summary.make.note = function(context, json) {
     return json.value;
 };

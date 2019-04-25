@@ -308,6 +308,23 @@ extended.make.vehicle_journey = function(context, json) {
     return res;
 };
 
+extended.make.equipment_report = function(context, json) {
+    var res = $('<div class="list"/>');
+    (json.stop_area_equipments || []).forEach(function(obj, i) {
+        res.append(response.render(context, obj, 'stop_area_equipment', 'stop_area_equipments', i));
+    });
+    return res;
+};
+
+extended.make.stop_area_equipment = function(context, json) {
+    var res = extended.defaultExtended(context, 'equipment_details', json);
+    (json.equipment_details || []).forEach(function(obj, i) {
+        res.append(response.render(context, obj, 'equipment_detail', 'equipment_details', i));
+    });
+    return res;
+};
+
+//
 // add your extended view by adding:
 //   extended.make.{type} = function(context, json) { ... }
 
