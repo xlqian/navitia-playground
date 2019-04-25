@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "bower": "^1.8.8",
-    "browser-sync": "^2.26.3",
+    "browser-sync": "^2.26.5",
     "del": "^2.2.0",
     "gulp": "^4.0.0",
     "gulp-bower-src": "^0.1.0",
