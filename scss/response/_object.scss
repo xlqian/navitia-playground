@@ -22,12 +22,20 @@
     color: $dark-orange;
 }
 
-.stands-status.unavailable {
+.unavailable {
     color: $dark-orange;
+}
+
+.available {
+  color: $light-green;
 }
 
 .stands-status.closed {
     color: $dark-red;
+}
+
+.unknown {
+  color: $dark-gray;
 }
 
 img.picto {
