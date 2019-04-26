@@ -695,10 +695,10 @@ summary.make.equipment_detail = function(context, json) {
             res.append($('<span/>').addClass(status_class).text(cur_avail.status));
         }
         if(cur_avail.cause){
-            res.append('<br> Cause : ' + utils.htmlEncode(cur_avail.cause.label));
+            res.append(', cause : ' + utils.htmlEncode(cur_avail.cause.label));
         }
         if(cur_avail.effect) {
-            res.append('<br> Effect : ' + utils.htmlEncode(cur_avail.effect.label));
+            res.append(', effect : ' + utils.htmlEncode(cur_avail.effect.label));
         }
     }
     return res;
