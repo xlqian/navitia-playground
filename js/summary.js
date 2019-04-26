@@ -676,7 +676,7 @@ summary.make.stop_area_equipment = function(context, json) {
         return o.current_availability.status === 'unavailable';
     }).length;
     if(unavailable_equipments) {
-        res.append($('<span/>').css('color', 'red').text(' ('+unavailable_equipments+' unavailable)'));
+        res.append($('<span/>').addClass('unavailable').text(' ('+unavailable_equipments+' unavailable)'));
     }
 
     return res;
@@ -690,12 +690,9 @@ summary.make.equipment_detail = function(context, json) {
     var cur_avail = json.current_availability;
     if (cur_avail) {
         if(cur_avail.status) {
-            var colours = {
-                'unavailable' : 'red',
-            };
-            var colour = (colours[cur_avail.status] || 'grey');
+            var status_class = ['unavailable', 'available'].find(function(o){ return o === cur_avail.status;}) || 'unknown';
             res.append(', status: ');
-            res.append($('<span/>').css('color', colour).text(cur_avail.status));
+            res.append($('<span/>').addClass(status_class).text(cur_avail.status));
         }
         if(cur_avail.cause){
             res.append('<br> Cause : ' + utils.htmlEncode(cur_avail.cause.label));
