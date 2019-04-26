@@ -309,7 +309,7 @@ extended.make.vehicle_journey = function(context, json) {
 };
 
 extended.make.equipment_report = function(context, json) {
-    var res = $('<div class="list"/>');
+    var res = $('<div/>');
     (json.stop_area_equipments || []).forEach(function(obj, i) {
         res.append(response.render(context, obj, 'stop_area_equipment', 'stop_area_equipments', i));
     });
