@@ -31,6 +31,24 @@ var request;
 
 var response = {};
 
+
+// Handle scroll-to-top button
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById('goTopButton').style.display = 'block';
+  } else {
+    document.getElementById('goTopButton').style.display = 'none';
+  }
+}
+
+window.onscroll = function() {scrollFunction();};
+
+response.topFunction = function() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+};
+
+
 response.setStatus = function(message, status, start_time) {
     var res = $('<span/>').text('Status: ').append(message);
     res.append(utils.htmlEncode(sprintf(' (%s)', status)));
