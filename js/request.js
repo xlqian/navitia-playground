@@ -243,12 +243,14 @@ request.setAutocomplete = function(){
     autocomplete.apiAutocomplete();
 };
 
-$(document).keydown(function(event) {
-    // control+enter, or option+enter on OS X
-    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-        request.submit();
-    }
-});
+request.keyboardSubmit = function() {
+    $(document).keydown(function(event) {
+        // control+enter, or option+enter on OS X
+        if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+            request.submit();
+        }
+    });
+};
 
 request.manage = function() {
     // save token
