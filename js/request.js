@@ -243,6 +243,15 @@ request.setAutocomplete = function(){
     autocomplete.apiAutocomplete();
 };
 
+request.keyboardSubmit = function() {
+    $(document).keydown(function(event) {
+        // control+enter, or option+enter on OS X
+        if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+            request.submit();
+        }
+    });
+};
+
 request.manage = function() {
     // save token
     request.setSaveTokenButtonStatus();
@@ -307,10 +316,4 @@ request.manage = function() {
     }
     request.setAutocomplete();
     request.updateUrl(null);
-    $(document).keydown(function(event) {
-        // control+enter, or option+enter on OS X
-        if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-            request.submit();
-        }
-    });
 };
